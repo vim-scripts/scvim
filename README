@@ -1,0 +1,15 @@
+This is a mirror of http://www.vim.org/scripts/script.php?script_id=1620
+
+See http://x37v.info/scvim/ for more details. [and the most up to date version].
+
+Hi, these are my supercollider interaction scripts and syntax highlighting for vim.
+
+It works on both linux and osx.
+
+So far I have:
+
+    * Syntax Highlighting
+    * The ability to single lines, visual blocks or supercollider blocks (ie surrounded by parens) to sclang
+    * key bindings for s.freeAll, thisProcess.stop() [cmd-. in the SC editor], TempoClock.clear()
+    * In-line Help
+    * In-line Class Look-up

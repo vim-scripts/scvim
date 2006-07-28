@@ -1,0 +1,38 @@
+"for scvim (supercollider vim)
+set runtimepath+=$SCVIM_DIR
+
+au BufWinEnter,BufNewFile,BufRead *.sc,*.scd   set filetype=supercollider |
+	\ let &iskeyword="@,48-57,_,192-255" | source $SCVIM_DIR/ftplugin/supercollider.vim |
+	\ set sw=4 ts=4 autoindent "this line can be changed however you like
+"source $SCVIM_DIR/indent/sc_indent.vim
+
+"required for matching
+source $VIMRUNTIME/macros/matchit.vim
+
+au BufEnter,BufWinEnter,BufNewFile,BufRead *.sc let b:match_skip = 's:scComment\|scString\|scSymbol'|
+	let b:match_words = '(:),[:],{:}'
+
+au BufEnter,BufWinEnter,BufNewFile,BufRead *.sc source $SCVIM_DIR/indent/sc_indent.vim
+
+
+"supercollider vim keybindings
+"^R" gives contents of register "
+
+au BufEnter,BufWinEnter,BufNewFile,BufRead *.sc nmap K yiw :call SChelp(""")|
+	imap  yiw :call SChelp(""")|
+	nmap  yiw :call SCdef(""")|
+	imap  yiw :call SCdef(""")|
+	nmap <F5> :call SClang_block()|
+	imap <F5> :call SClang_block()a|
+	vmap <F5> :call SClang_send()|
+	vmap <F6> :call SClang_send()|
+	nmap <F6> :call SClang_send()|
+	imap <F6> :call SClang_send()a|
+	nmap <F7> :call SClang_TempoClock_clear()|
+	imap <F7> :call SClang_TempoClock_clear()a|
+	nmap <F8> :call SClang_free("s")|
+	imap <F8> :call SClang_free("s")a|
+	nmap <F12> :call SClang_thisProcess_stop()|
+	imap <F12> :call SClang_thisProcess_stop()a
+
+"end of scvim (supercollider vim)
