@@ -1,51 +1,52 @@
+
 Array
 
 Superclass: ArrayedCollection
 
 Arrays are ArrayedCollections whose slots may contain any object. Arrays have a fixed maximum size beyond which they cannot grow. For expandable arrays, use the List class.
 
-An array can be created with a fixed maxiumum capacity:
- 
- z = Array.new(size);
+An array can be created with a fixed maximum capacity:
+	
+	z = Array.new(size);
 
 Which will return an array of size 0, but the capability to add up to 32
-objects. 
+objects.
 
- z = z.add(obj);
+	z = z.add(obj);
 
 z now has a size of 1.
 
 For Arrays, the 'add' method may or may not return the same Array object. It will add the argument to the receiver if there is space, otherwise it returns a new Array object with the argument added. Thus the proper usage of 'add' with an Array is to always assign the result as follows:
 
- z = z.add(obj);
+	z = z.add(obj);
 
 This allows an efficient use of resources, only growing the array when it needs to. The List class manages the Array for you, and in many cases in more suitable.
 
 An array can be created with all slots filled with nils:
 
- z = Array.newClear(size);
+	z = Array.newClear(size);
 
 Elements can be put into an existing slot:
 
- a.put(2,obj);
+	a.put(2,obj);
 
 And accessed :
 
- a.at(2); // these are equivalent
- a[2];
+	a.at(2); // these are equivalent
+	a[2];
 
-See [ArrayedCollection] for the principal methods:
- at
- put
- clipAt, wrapAt etc.
+See ArrayedCollection for the principal methods:
+	at
+	put
+	clipAt, wrapAt etc.
 
-Literal Arrays can be created at compile time, and are very efficient. See [Literals] for information.
+Literal Arrays can be created at compile time, and are very efficient. See Literals for information.
 
 Class Methods
 
 *with(... args)
 
-Create a new Array whose slots are filled with the given arguments. 
+Create a new Array whose slots are filled with the given arguments.
 This is the same as the method in ArrayedCollection, but is reimplemented here to be more efficient.
 
 Array.with(7, 'eight', 9).postln;
@@ -73,14 +74,14 @@ Returns a new Array whose elements have been scrambled. The receiver is unchange
 
 mirror
 
-Return a new Array which is the receiver made into a palindrome. 
+Return a new Array which is the receiver made into a palindrome.
 The receiver is unchanged.
 
 [1, 2, 3, 4].mirror.postln;
 
 mirror1
 
-Return a new Array which is the receiver made into a palindrome with the last element removed. 
+Return a new Array which is the receiver made into a palindrome with the last element removed.
 This is useful if the list will be repeated cyclically, the first element will not get played twice.
 The receiver is unchanged.
 
@@ -88,7 +89,7 @@ The receiver is unchanged.
 
 mirror2
 
-Return a new Array which is the receiver concatenated with a reversal of itself. 
+Return a new Array which is the receiver concatenated with a reversal of itself.
 The center element is duplicated. The receiver is unchanged.
 
 [1, 2, 3, 4].mirror2.postln;
@@ -119,7 +120,7 @@ The algorithms are numbered 1 through 10. Run the examples to see the algorithms
 
 (
 10.do({ arg i;
- [1, 2, 3, 4].pyramid(i + 1).asCompileString.postln;
+	[1, 2, 3, 4].pyramid(i + 1).asCompileString.postln;
 });
 )
 
@@ -168,7 +169,7 @@ y.postln;
 
 slide(windowLength, stepSize)
 
-Return a new Array whose elements are repeated subsequences from the receiver. 
+Return a new Array whose elements are repeated subsequences from the receiver.
 Easier to demonstrate than explain.
 
 [1, 2, 3, 4, 5, 6].slide(3, 1).asCompileString.postln;
@@ -186,6 +187,23 @@ Returns true if the receiver Array contains any instance of SequenceableCollecti
 
 [1, 2, [3], 4].containsSeqColl.postln
 
+powerset
+
+Returns all possible combinations of the array's elements.
+
+[1, 2, 3].powerset.postln
+
+[1, 2, 3].powerset.sort({ |a, b| a.size > b.size }); // sort by size, big first
+
+[1, 2, 3].powerset.sort({ |a, b| a.size > b.size }).reverse; // by size, small first
+
+powerset is also supported in Collection:
+
+Set[1, 2, 3].powerset;
+
+List[1, 2, 3].powerset
+
+(a: 1, b: 2, c: 3).powerset;
 
 multiChannelExpand
 
@@ -211,31 +229,31 @@ Used within Routines and assumes an array of functions, from which subroutines a
 // an array of routine functions:
 (
 a = [
- { 1.wait; \done_one.postln },
- { 0.5.wait; \done_two.postln },
- { 0.2.wait; \done_three.postln }
+	{ 1.wait; \done_one.postln },
+	{ 0.5.wait; \done_two.postln },
+	{ 0.2.wait; \done_three.postln }
 ];
 )
 
 // join after 0
 (
-Routine { 
- "join = 0.".postcln;
- a.fork(0); \doneAll.postln;
+Routine {
+	"join = 0.".postcln;
+	a.fork(0); \doneAll.postln;
 }.play;
 )
 // join after 1
 (
-Routine { 
- "join = 1.".postcln;
- a.fork(1); \doneAll.postln;
+Routine {
+	"join = 1.".postcln;
+	a.fork(1); \doneAll.postln;
 }.play;
 )
 // join after all
 (
-Routine { 
- "join = a.size (default).".postcln;
- a.fork; \doneAll.postln;
+Routine {
+	"join = a.size (default).".postcln;
+	a.fork; \doneAll.postln;
 }.play;
 )
 
@@ -255,7 +273,7 @@ Returns a short string representing the Array that only shows how many elements 
 
 asString
 
-Returns a string representing the Array. May not be compileable due to ellision (...) of excessive arguments. 
+Returns a string representing the Array. May not be compileable due to ellision (...) of excessive arguments.
 
 asCompileString
 
@@ -264,6 +282,8 @@ Returns a string that will compile to return an Array equal to the receiver.
 isValidUGenInput
 
 Returns true. Arrays are valid UGen inputs.
+
+
 
 
 

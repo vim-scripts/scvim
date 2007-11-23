@@ -1,17 +1,18 @@
-LinCongL linear congruential chaotic generator
+
+LinCongL		linear congruential chaotic generator
 
 LinCongL.ar(freq, a, c, m, xi, mul, add)
 
-freq - iteration frequency in Hertz
-a - multiplier amount
-c - increment amount
-m - modulus amount
-xi - initial value of x
+	freq - iteration frequency in Hertz
+	a - multiplier amount
+	c - increment amount
+	m - modulus amount
+	xi - initial value of x
 
 A linear-interpolating sound generator based on the difference equation:
- 
- xn+1 = (axn + c) % m
- 
+	
+	xn+1 = (axn + c) % m
+	
 The output signal is automatically scaled to a range of [-1, 1].
 
 
@@ -21,23 +22,25 @@ The output signal is automatically scaled to a range of [-1, 1].
 // randomly modulate params
 (
 { LinCongL.ar(
- LFNoise2.kr(1, 1e4, 1e4), 
- LFNoise2.kr(0.1, 0.5, 1.4), 
- LFNoise2.kr(0.1, 0.1, 0.1),
- LFNoise2.kr(0.1)
+	LFNoise2.kr(1, 1e4, 1e4),
+	LFNoise2.kr(0.1, 0.5, 1.4),
+	LFNoise2.kr(0.1, 0.1, 0.1),
+	LFNoise2.kr(0.1)
 ) * 0.2 }.play(s);
 )
 
 // as frequency control...
 (
-{ 
+{
 SinOsc.ar(
- LinCongL.ar(
- 40, 
- LFNoise2.kr(0.1, 0.1, 1), 
- LFNoise2.kr(0.1, 0.1, 0.1),
- LFNoise2.kr(0.1),
- 0, 500, 600
- ) 
+	LinCongL.ar(
+		40,
+		LFNoise2.kr(0.1, 0.1, 1),
+		LFNoise2.kr(0.1, 0.1, 0.1),
+		LFNoise2.kr(0.1),
+		0, 500, 600
+	)	
 ) * 0.4 }.play(s);
 )
+
+

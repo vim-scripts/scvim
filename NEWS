@@ -1,0 +1,4 @@
+11/7/07
+	we can now parse html help files
+1/30/07
+	removed dependence on ruby inside of vim.

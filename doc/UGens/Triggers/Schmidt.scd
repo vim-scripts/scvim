@@ -1,4 +1,5 @@
-Schmidt Schmidt trigger
+
+Schmidt			Schmidt trigger
 
 Schmidt.ar(in, lo, hi)
 Schmidt.kr(in, lo, hi)
@@ -17,9 +18,11 @@ Server.internal.boot;
 
 // threshold octave jumps
 (
-{ 
- var in = LFNoise1.kr(3);
- var octave = Schmidt.kr(in, -0.15, 0.15) + 1;
- SinOsc.ar(in * 200 + 500 * octave, 0, 0.1)
+{
+	var in = LFNoise1.kr(3);
+	var octave = Schmidt.kr(in, -0.15, 0.15) + 1;
+	SinOsc.ar(in * 200 + 500 * octave, 0, 0.1)
 }.scope;
 )
+
+

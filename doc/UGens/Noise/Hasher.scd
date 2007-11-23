@@ -1,5 +1,6 @@
 
-Hasher randomized value
+
+Hasher				randomized value
 
 Hasher.ar(in, mul, add)
 
@@ -12,25 +13,27 @@ in - input signal
 
 (
 {
- SinOsc.ar(
- Hasher.kr(MouseX.kr(0,10).round(1), 300, 500)
- ) * 0.1 
+	SinOsc.ar(
+		Hasher.kr(MouseX.kr(0,10).round(1), 300, 500)
+	) * 0.1
 }.play;
 )
 
 (
 {
- SinOsc.ar(
- Hasher.kr(MouseX.kr(0,10).round(1) + 0.0001, 300, 500)
- ) * 0.1 
+	SinOsc.ar(
+		Hasher.kr(MouseX.kr(0,10).round(1) + 0.0001, 300, 500)
+	) * 0.1
 }.play;
 )
 
 (
 {
- SinOsc.ar(
- Hasher.kr(MouseX.kr(0,10), 300, 500)
- ) * 0.1 
+	SinOsc.ar(
+		Hasher.kr(MouseX.kr(0,10), 300, 500)
+	) * 0.1
 }.play;
 )
+
+
 

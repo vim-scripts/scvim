@@ -1,8 +1,9 @@
-Osc interpolating wavetable oscillator
+
+Osc			interpolating wavetable oscillator
 
 Osc.ar(table, freq, phase, mul, add)
 
-Linear interpolating wavetable lookup oscillator with frequency and phase modulation inputs. 
+Linear interpolating wavetable lookup oscillator with frequency and phase modulation inputs.
 
 This oscillator requires a buffer to be filled with a wavetable format signal. This preprocesses the Signal into a form which can be used efficiently by the Oscillator. The buffer size must be a power of 2.
 
@@ -24,9 +25,9 @@ b = Buffer.alloc(s, 512, 1);
 b.sine1(1.0/[1,2,3,4,5,6], true, true, true);
 
 SynthDef("help-Osc",{ arg out=0,bufnum=0;
- Out.ar(out,
- Osc.ar(bufnum, 200, 0, 0.5)
- )
+	Out.ar(out,
+		Osc.ar(bufnum, 200, 0, 0.5)
+	)
 }).play(s,[\out, 0, \bufnum, b.bufnum]);
 )
 
@@ -36,9 +37,9 @@ b = Buffer.alloc(s, 512, 1);
 b.sine1(1.0/[1,2,3,4,5,6], true, true, true);
 
 SynthDef("help-Osc",{ arg out=0,bufnum=0;
- Out.ar(out,
- Osc.ar(bufnum, XLine.kr(2000,200), 0, 0.5)// modulate freq
- )
+	Out.ar(out,
+		Osc.ar(bufnum, XLine.kr(2000,200), 0, 0.5)// modulate freq
+	)
 }).play(s,[\out, 0, \bufnum, b.bufnum]);
 )
 
@@ -49,16 +50,16 @@ b = Buffer.alloc(s, 512, 1);
 b.sine1([1.0], true, true, true);
 
 SynthDef("help-Osc",{ arg out=0,bufnum=0;
- Out.ar(out,
- Osc.ar(bufnum, 
- Osc.ar(bufnum,
- XLine.kr(1,1000,9),
- 0,
- 200,
- 800), 
- 0, 
- 0.25)
- )
+	Out.ar(out,
+		Osc.ar(bufnum,
+			Osc.ar(bufnum,
+				XLine.kr(1,1000,9),
+				0,
+				200,
+				800),
+			0,
+			0.25)
+	)
 }).play(s,[\out, 0, \bufnum, b.bufnum]);
 )
 
@@ -70,15 +71,15 @@ b = Buffer.alloc(s, 512, 1);
 b.sine1([1.0], true, true, true);
 
 SynthDef("help-Osc",{ arg out=0,bufnum=0;
- Out.ar(out,
- Osc.ar(bufnum, 
- 800, 
- Osc.ar(bufnum,
- XLine.kr(20,8000,10),
- 0,
- 2pi), 
- 0.25)
- )
+	Out.ar(out,
+		Osc.ar(bufnum,
+				800,
+				Osc.ar(bufnum,
+						XLine.kr(20,8000,10),
+						0,
+						2pi),
+				0.25)
+	)
 }).play(s,[\out, 0, \bufnum, b.bufnum]);
 )
 
@@ -91,18 +92,20 @@ b = Buffer.alloc(s, 4096, 1);
 b.sine1(1.0/[1,2,3,4,5,6], true, true, true);
 
 SynthDef("help-Osc",{ arg out=0,bufnum=0;
- Out.ar(out,
- Osc.ar(bufnum, [80,80.2], 0, 0.2)
- )
+	Out.ar(out,
+		Osc.ar(bufnum, [80,80.2], 0, 0.2)
+	)
 }).play(s,[\out, 0, \bufnum, b.bufnum]);
 )
 
 (
 fork {
- var n = 32;
- 50.do {
- b.sine1(Array.rand(n,0,1).cubed, true, true, true);
- 0.25.wait;
- };
+	var n = 32;
+	50.do {
+		b.sine1(Array.rand(n,0,1).cubed, true, true, true);
+		0.25.wait;
+	};
 };
 )
+
+

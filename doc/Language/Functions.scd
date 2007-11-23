@@ -1,8 +1,9 @@
+
 Functions
 
-A [Function] is an expression which defines operations to be performed when it is sent the 'value' message. In functional languages, a function would be known as a lambda expression. Function definitions are enclosed in curly brackets {}. Argument declarations, if any, follow the open bracket. Variable declarations follow argument declarations. An expression follows the declarations. 
+A Function is an expression which defines operations to be performed when it is sent the 'value' message. In functional languages, a function would be known as a lambda expression. Function definitions are enclosed in curly brackets {}. Argument declarations, if any, follow the open bracket. Variable declarations follow argument declarations. An expression follows the declarations.
 
-{ arg a, b, c; var d; d = a * b; c + d }
+{ arg a, b, c; var d;  d = a * b; c + d }
 
 Functions are not evaluated immediately when they occur in code, but are passed as values just like integers or strings.
 
@@ -20,7 +21,7 @@ An empty function returns the value nil when evaluated.
 
 Arguments
 
-An argument list immediately follows the open curly bracket of a function definition. An argument list either begins with the reserved word arg, or is contained between two vertical bars. If a function takes no arguments, then the argument list may be omitted. 
+An argument list immediately follows the open curly bracket of a function definition. An argument list either begins with the reserved word arg, or is contained between two vertical bars. If a function takes no arguments, then the argument list may be omitted.
 
 Names of arguments in the list may be initialized to a default value by using an equals sign. Arguments which are not explicitly initialized will be set to nil if no value is passed for them.
 
@@ -53,12 +54,12 @@ In general arguments may be initialized to literals or expressions, but in the c
 
 // but this is:
 (
-SynthDef(\freqs, { arg freq = #[ 100, 300, 900, 2700 ]; 
- Out.ar(0, Mix(SinOsc.ar(freq, 0, 0.1)));
+SynthDef(\freqs, { arg freq = #[ 100, 300, 900, 2700 ];
+	Out.ar(0, Mix(SinOsc.ar(freq, 0, 0.1)));
 }).play;
 )
 
-See [Literals] for more information.
+See Literals for more information.
 
 Variables
 
@@ -69,4 +70,6 @@ examples:
 var level=0, slope=1, curve=1;
 ___________
 
-See also [Function], [AbstractFunction], and [FunctionDef].
+See also Function, AbstractFunction, and FunctionDef.
+
+

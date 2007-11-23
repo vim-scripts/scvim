@@ -1,34 +1,35 @@
-BufRd buffer reading oscillator
+
+BufRd		buffer reading oscillator
 
 
 
-read the content of a buffer at an index. 
+read the content of a buffer at an index.
 see also BufWr
 
 
 
-BufRd.ar(numChannels, bufnum, phase, loop)
+BufRd.ar(numChannels, bufnum, phase, loop, interpolation)
 
-numChannels number of channels that the buffer will be.
- this must be a fixed integer. The architechture of the SynthDef
- cannot change after it is compiled.
- warning: if you supply a bufnum of a buffer that has a different
- numChannels then you have specified to the BufRd, it will
- fail silently.
- 
-bufnum the index of the buffer to use
-phaseaudio rate modulateable index into the buffer.
-loop 1 means true, 0 means false. this is modulateable.
-interpolation 1 means no interpolation, 2 is linear, 4 is cubic interpolation
+	numChannels 	number of channels that the buffer will be.
+				this must be a fixed integer. The architecture of the SynthDef
+				cannot change after it is compiled.
+				warning: if you supply a bufnum of a buffer that has a different
+				numChannels then you have specified to the BufRd, it will
+				fail silently.
+	
+	bufnum		the index of the buffer to use
+	phase  		audio rate modulatable index into the buffer.
+	loop   		1 means true, 0 means false. this is modulatable.
+	interpolation  1 means no interpolation, 2 is linear, 4 is cubic interpolation
 
 
 
 in comparison to PlayBuf:
- PlayBuf plays through the buffer by itself,
- BufRd only moves its read point by the phase input
- and therefore has no pitch input
- 
- BufRd has variable interpolation
+	PlayBuf plays through the buffer by itself,
+	BufRd only moves its read point by the phase input
+		and therefore has no pitch input
+			
+	BufRd has variable interpolation
 
 
 
@@ -36,7 +37,9 @@ in comparison to PlayBuf:
 // read a whole sound into memory
 s = Server.local;
 // note: not *that* columbia, the first one
-s.sendMsg("/b_allocRead", 0, "sounds/a11wlk01.wav");
+s.waitForBoot{
+	s.sendMsg("/b_allocRead", 0, "sounds/a11wlk01.wav");
+}
 )
 
 //use any AUDIO rate ugen as an index generator
@@ -56,8 +59,8 @@ s.sendMsg("/b_allocRead", 0, "sounds/a11wlk01.wav");
 
 //change rate and interpolation
 (
-x = { arg rate=1, inter=2; 
- BufRd.ar(1, 0, Phasor.ar(0, BufRateScale.kr(0) * rate, 0, BufFrames.kr(0)), 1, inter) 
+x = { arg rate=1, inter=2;
+	BufRd.ar(1, 0, Phasor.ar(0, BufRateScale.kr(0) * rate, 0, BufFrames.kr(0)), 1, inter)
 }.play;
 )
 
@@ -69,18 +72,18 @@ x.set(\inter, 0);
 
 //write into the buffer with a BufWr
 (
-y = { arg rate=1; 
- var in;
- in = SinOsc.ar(LFNoise1.kr(2, 300, 400), 0, 0.1);
- BufWr.ar(in, 0, Phasor.ar(0, BufRateScale.kr(0) * rate, 0, BufFrames.kr(0)));
- 0.0 //quiet
+y = { arg rate=1;
+	var in;
+	in = SinOsc.ar(LFNoise1.kr(2, 300, 400), 0, 0.1);
+	BufWr.ar(in, 0, Phasor.ar(0, BufRateScale.kr(0) * rate, 0, BufFrames.kr(0)));
+	0.0 //quiet
 }.play;
 )
 
 //read it with a BufRd
 (
-x = { arg rate=1; 
- BufRd.ar(1, 0, Phasor.ar(0, BufRateScale.kr(0) * rate, 0, BufFrames.kr(0))) 
+x = { arg rate=1;
+	BufRd.ar(1, 0, Phasor.ar(0, BufRateScale.kr(0) * rate, 0, BufFrames.kr(0)))
 }.play;
 )
 
@@ -89,6 +92,8 @@ x = { arg rate=1;
 x.set(\rate, 5);
 y.set(\rate, 2.0.rand);
 x.set(\rate, 2);
+
+
 
 
 

@@ -1,5 +1,5 @@
 
-sign sign function
+sign			sign function
 
 a.sign
 sign(a)
@@ -8,8 +8,10 @@ sign(a)
 
 (
 {
- var a;
- a = Line.ar(-1, 1, 0.01);
- [ a, a.sign ]
+	var a;
+	a = Line.ar(-1, 1, 0.01);
+	[ a, a.sign ]
 }.plot)
+
+
 

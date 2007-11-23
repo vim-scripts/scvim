@@ -1,3 +1,4 @@
+
 Nil
 
 Superclass: Object
@@ -27,6 +28,8 @@ If the receiver is nil, value the function and return the result. Since this IS 
 
 Dependancy
 
-All the messages for the Dependancy protocol (See class Object) are defined in class Nil 
+All the messages for the Dependancy protocol (See class Object) are defined in class Nil
 to do nothing. This eliminates the need to check for nil when sending dependancy messages.
+
+
 

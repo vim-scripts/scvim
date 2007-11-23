@@ -1,19 +1,20 @@
 
-LFDClipNoise dynamic clipped noise
+
+LFDClipNoise				dynamic clipped noise
 
 LFClipNoise.ar(freq, mul, add)
 
-Like LFClipNoise, it generates the values -1 or +1 at a rate given 
-by the freq argument, with two differences: 
+Like LFClipNoise, it generates the values -1 or +1 at a rate given
+by the freq argument, with two differences:
 
--no time quantization 
+-no time quantization
 -fast recovery from low freq values.
 
-(LFClipNoise, as well as LFNoise0,1,2 quantize to the nearest integer division 
+(LFClipNoise, as well as LFNoise0,1,2 quantize to the nearest integer division
 of the samplerate, and they poll the freq argument only when scheduled;
 thus they often seem to hang when freqs get very low).
 
-If you don't need very high or very low freqs, or use fixed freqs, 
+If you don't need very high or very low freqs, or use fixed freqs,
 LFNoise0 is more efficient.
 
 freq - rate at which to generate random values.
@@ -38,4 +39,6 @@ freq - rate at which to generate random values.
 { LFClipNoise.ar(XLine.kr(1000, 20000, 10), 0.1) }.scope;
 
 { LFDClipNoise.ar(XLine.kr(1000, 20000, 10), 0.1) }.scope;
+
+
 

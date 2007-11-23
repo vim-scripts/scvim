@@ -1,3 +1,4 @@
+
 Wavetable
 
 Superclass: FloatArray
@@ -36,25 +37,19 @@ Wavetable.chebyFill(512, [0.3, -0.8, 1.1]).plot;
 
 Instance Methods
 
-plot(name, bounds)
+plot(name, bounds, minval, maxval, parent)
 
 Plot the Wavetable in a window. The arguments are not required and if not given defaults will be used.
 name - a String, the name of the window.
 bounds - a Rect giving the bounds of the window.
+minval - the minimum value in the plot. Defaults to the highest value in the data.
+maxval - the maximum value in the plot. Defaults to the lowest value in the data.
+parent - a window to place the plot in. If nil, one will be created for you
 
-Wavetable.sineFill(512, [1]).plot;
+Wavetable.sineFill(512, [0.5]).plot;
 
-Wavetable.sineFill(512, [1]).plot("Table 1", Rect.newBy(50, 50, 150, 450));
+Wavetable.sineFill(512, [1]).plot("Table 1", Rect(50, 50, 150, 450));
 
-
-play(name)
-
-Plays the Wavetable in a Mixer channel.
-name - a Symbol or String giving the name of the mixer channel.
-
-Wavetable.sineFill(512, [1]).play;
-
-Wavetable.sineFill(512, [1]).play("Table 1");
 
 
 asSignal
@@ -62,4 +57,6 @@ asSignal
 Convert the Wavetable into a Signal.
 
 Wavetable.sineFill(512, [1]).asSignal.plot;
+
+
 

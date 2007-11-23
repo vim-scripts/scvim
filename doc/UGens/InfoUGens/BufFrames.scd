@@ -1,15 +1,16 @@
-BufFramescurrent number of frames allocated in the buffer
+
+BufFrames			current number of frames allocated in the buffer
 
 superclass: BufInfoUGenBase
 
 returns the current number of allocated frames
 
- *kr(bufnum)
- *ir(bufnum)
-the .ir method is not the safest choice. Since a buffer can be reallocated at any time,
- using .ir will not track the changes.
+	*kr(bufnum)
+	*ir(bufnum)
+		the .ir method is not the safest choice. Since a buffer can be reallocated at any time,
+		using .ir will not track the changes.
 
- 
+	
 // example
 
 s.sendMsg("/b_allocRead", 0, "sounds/a11wlk01.wav");
@@ -20,3 +21,5 @@ s.sendMsg("/b_allocRead", 0, "sounds/a11wlk01.wav");
 
 // indexing by hand
 { BufRd.ar(1, 0, K2A.ar(MouseX.kr(0, BufFrames.kr(0)))) }.play;
+
+

@@ -1,4 +1,5 @@
-SyncSaw hard sync sawtooth wave
+
+SyncSaw				hard sync sawtooth wave
 
 SyncSaw.ar(ksyncFreq, ksawFreq, mul, add)
 
@@ -14,27 +15,29 @@ ksawFreq - frequency of the slave synched sawtooth wave. sawFreq should always b
 
 (
 plot { [
- SyncSaw.ar(800, 1200),
- Impulse.ar(800) // to show sync rate
+	SyncSaw.ar(800, 1200),
+	Impulse.ar(800) // to show sync rate
 ] }
 )
 
 (
 plot { [
- SyncSaw.ar(800, Line.kr(800, 1600, 0.01)), // modulate saw freq
- Impulse.ar(800) // to show sync rate
+	SyncSaw.ar(800, Line.kr(800, 1600, 0.01)), // modulate saw freq
+	Impulse.ar(800) // to show sync rate
 ] }
 )
 
 // scoping the saw: hit 's' when focused on the scope window to compare the channels
 (
-scope { 
- var freq = 400;
- [
- SyncSaw.ar(freq, freq * MouseX.kr(1, 3)), // modulate saw freq
- Impulse.ar(freq) // to show sync rate
+scope {
+	var freq = 400;
+	[
+	SyncSaw.ar(freq, freq * MouseX.kr(1, 3)), // modulate saw freq
+	Impulse.ar(freq) // to show sync rate
 ] * 0.3 }
 )
+
+
 
 
 

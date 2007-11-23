@@ -1,5 +1,5 @@
 
-COsc chorusing wavetable oscillator
+COsc			chorusing wavetable oscillator
 
 COsc.ar(bufnum, freq, beats, mul, add)
 
@@ -10,6 +10,8 @@ beats - beat frequency in Hertz
 
 
 (
-b = Buffer.alloc(s, 512, 1, {arg buf; buf.sine1Msg(1.0/[1,2,3,4,5,6,7,8,9,10])}); 
+b = Buffer.alloc(s, 512, 1, {arg buf; buf.sine1Msg(1.0/[1,2,3,4,5,6,7,8,9,10])});
 { COsc.ar(b.bufnum, 200, 0.7, 0.25) }.play;
 )
+
+

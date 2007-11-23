@@ -1,9 +1,11 @@
+
 Boolean
 
 superclass: Object
 
-Boolean is an abstract class whose instances represent a logical value. 
+Boolean is an abstract class whose instances represent a logical value.
 Boolean is the superclass of True and False which are the concrete realizations.
+In code True and False are represented by the literal values true and false.
 
 xor(aBoolean)
 
@@ -40,5 +42,7 @@ If the receiver is true, answer the evaluation of the trueFunc. If the receiver 
 binaryValue
 
 Answer 1 if the receiver is true, and 0 if the receiver is false.
+
+
 
 

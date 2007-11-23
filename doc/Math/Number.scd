@@ -1,3 +1,4 @@
+
 Number
 
 Superclass: Magnitude
@@ -96,5 +97,7 @@ endval - a Number.
 step - a Number.
 function - a Function which is passed two arguments, the first which is an number from this to
 endval, and the second which is a number from zero to the number of iterations minus one.
+
+
 
 

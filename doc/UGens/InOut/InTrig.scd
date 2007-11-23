@@ -1,4 +1,5 @@
-InTrig generate a trigger anytime a bus is set
+
+InTrig				generate a trigger anytime a bus is set
 
 superclass: MultiOutUGen
 
@@ -14,11 +15,11 @@ s = Server.local;
 b = Bus.control(s,1);
 
 SynthDef("help-InTrig",{arg out=0,busnum=0;
- var inTrig;
- inTrig = InTrig.kr( busnum );
- Out.ar(out,
- EnvGen.kr(Env.perc,gate: inTrig,levelScale: inTrig ) * SinOsc.ar
- )
+	var inTrig;
+	inTrig = InTrig.kr( busnum );
+	Out.ar(out,
+		EnvGen.kr(Env.perc,gate: inTrig,levelScale: inTrig ) * SinOsc.ar
+	)
 }).play(s,[\out, 0, \busnum, b.index]);
 
 
@@ -32,5 +33,7 @@ b.value = 0.2;
 b.value = 0.1;
 
 compare with [In] example.
+
+
 
 

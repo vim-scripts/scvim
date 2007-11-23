@@ -1,5 +1,6 @@
 
-Char ascii characters
+
+Char		ascii characters
 
 Chars may be written as literals using the $ sign. For example $a, $b, $c.
 See section [01 Literals]
@@ -48,19 +49,21 @@ isSpace
 answers whether the char is white space.
 
 isDecDigit
- 
- answers whether the char is a decimal digit $0 to $9.
- 
+
+answers whether the char is a decimal digit $0 to $9.
+
 isFileSafe
- 
- answers whether the char is safe for use as in a filename.
- excludes the path separators / and : 
- 
- 
+
+answers whether the char is safe for use as in a filename.
+excludes the path separators / and :
+
+
 for(0,255,{ arg i;
- var a;
- [i,a = i.asAscii,a.isAlphaNum,a.isPrint,a.isPunct,a.isControl].postln;
+	var a;
+	[i,a = i.asAscii,a.isAlphaNum,a.isPrint,a.isPunct,a.isControl].postln;
 });
 
 
- 
+
+
+

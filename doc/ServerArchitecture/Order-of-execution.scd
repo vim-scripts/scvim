@@ -1,26 +1,27 @@
-Order of execution 
 
-Order of execution is one of the most critical and seemingly difficult aspects of using SuperCollider, but in reality it only takes a little thought in the early planning stages to make it work for you. 
+Order of execution
+
+Order of execution is one of the most critical and seemingly difficult aspects of using SuperCollider, but in reality it only takes a little thought in the early planning stages to make it work for you.
 
 Order of execution in this context doesn't mean the order in which statements are executed in the language (the client). It refers to the ordering of synth nodes on the server, which corresponds to the order in which their output is calculated each control cycle (blockSize). Whether or not you specify the order of execution, each synth and each group goes into a specific place in the chain of execution.
 
 If you have on the server:
 
- synth 1 ---> synth 2 
+	synth 1 ---> synth 2
 
-... all the unit generators associated with synth 1 will execute before those in synth 2 during each control cycle. 
+... all the unit generators associated with synth 1 will execute before those in synth 2 during each control cycle.
 
 If you don't have any synths that use In.ar, you don't have to worry about order of execution. It only matters when one synth is reading the output of another.
 
 The rule is simple: if you have a synth on the server (i.e. an "effect") that depends on the output from another synth (the "source"), the effect must appear later in the chain of nodes on the server than the source.
 
- source ---> effect 
+	source ---> effect
 
 If you have:
 
- effect ---> source 
+	effect ---> source
 
-The effect synth will not hear the source synth, and you won't get the results you want. 
+The effect synth will not hear the source synth, and you won't get the results you want.
 
 Some Notes about Servers and Targets
 
@@ -36,89 +37,89 @@ When a Server is booted there is a top level group with an ID of 0 that defines 
 
 The default group serves an important purpose: It provides a predictable basic Node tree so that methods such as Server-scope and Server-record can function without running into order of execution problems. Thus in general one should create new Nodes within the default group rather than in the RootNode. See default_group and RootNode for more detail.
 
-Controlling order of execution 
+Controlling order of execution
 
 There are three ways to control the order of execution: using addAction in your synth creation messages, moving nodes, and placing your synths in groups. Using groups is optional, but they are the most effective in helping you organize the order of execution.
 
 Add actions:
 
-By specifying an addAction argument for Synth.new (or SynthDef.play, Function.play, etc.) one can specify the node's placement relative to a target. The target might be a group node, another synth node, or a server. 
+By specifying an addAction argument for Synth.new (or SynthDef.play, Function.play, etc.) one can specify the node's placement relative to a target. The target might be a group node, another synth node, or a server.
 
-As noted above, the default target is the default_group (the group with nodeID 1) of the default Server. 
+As noted above, the default target is the default_group (the group with nodeID 1) of the default Server.
 
- The following Symbols are valid addActions for Synth.new: \addToHead, \addToTail, \addBefore, \addAfter, \addReplace.
+The following Symbols are valid addActions for Synth.new: \addToHead, \addToTail, \addBefore, \addAfter, \addReplace.
 
- Synth.new(defName, args, target, addAction)
- if target is a Synth the \addToHead, and \addToTail methods will apply to that Synths group
- if target is a Server it will resolve to that Server's default group
- if target is nil it will resolve to the default group of the default Server
-
+	Synth.new(defName, args, target, addAction)
+		if target is a Synth the \addToHead, and \addToTail methods will apply to that Synths group
+		if target is a Server it will resolve to that Server's default group
+		if target is nil it will resolve to the default group of the default Server
+	 	
 For each addAction there is also a corresponding convenience method of class Synth:
- 
- Synth.head(aGroup, defName, args)
-add the new synth to the the head of the group specified by aGroup
- if aGroup is a synth node, the new synth will be added to the head of that node's group
- if target is a Server it will resolve to that Server's default group
- if target is nil it will resolve to the default group of the default Server
+	
+	Synth.head(aGroup, defName, args)
+		add the new synth to the the head of the group specified by aGroup
+	 	if aGroup is a synth node, the new synth will be added to the head of that node's group
+	 	if target is a Server it will resolve to that Server's default group
+		if target is nil it will resolve to the default group of the default Server
 
- Synth.tail(aGroup, defName, args)
-add the new synth to the the tail of the group specified by aGroup
- if aGroup is a synth node, the new synth will be added to the tail of that node's group
- if target is a Server it will resolve to that Server's default group
- if target is nil it will resolve to the default group of the default Server
- 
- Synth.before(aNode, defName, args)
-add the new node just before the node specified by aNode.
+	Synth.tail(aGroup, defName, args)
+		add the new synth to the the tail of the group specified by aGroup
+	 	if aGroup is a synth node, the new synth will be added to the tail of that node's group
+	 	if target is a Server it will resolve to that Server's default group
+		if target is nil it will resolve to the default group of the default Server
+	
+	Synth.before(aNode, defName, args)
+		add the new node just before the node specified by aNode.
 
- Synth.after(aNode, defName, args)
-add the new node just after the node specified by aNode.
+	Synth.after(aNode, defName, args)
+		add the new node just after the node specified by aNode.
 
- Synth.replace(synthToReplace, defName, args)
-the new node replaces the node specified by synthToReplace. The target node is freed.
+	Synth.replace(synthToReplace, defName, args)
+		the new node replaces the node specified by synthToReplace. The target node is freed.
 
 Using Synth.new without an addAction will result in the default addAction. (You can check the default values for the arguments of any method by looking at a class' source code. See Internal-Snooping for more details.) Where order of execution matters, it is important that you specify an addAction, or use one of the convenience methods shown above.
 
 
 Moving nodes:
 
- .moveBefore
- .moveAfter
- .moveToHead
- .moveToTail
+	.moveBefore
+	.moveAfter
+	.moveToHead
+	.moveToTail
 
 If you need to change the order of execution after synths and groups have been created, you can do this using move messages.
 
- ~fx = Synth.tail(s, "fx");
- ~src = Synth.tail(s, "src"); // effect will not be heard b/c it's earlier
- ~src.moveBefore(~fx); // place the source before the effect
+	~fx = Synth.tail(s, "fx");
+	~src = Synth.tail(s, "src"); // effect will not be heard b/c it's earlier
+	~src.moveBefore(~fx);  // place the source before the effect
+	
 
-
-Groups 
+Groups
 
 Groups can be moved in the same way as synths. When you move a group, all the synths in that group move with it. This is why groups are such an important tool for managing order of execution. (See the Group helpfile for details on this and other convenient aspects of Groups.)
 
- Group 1 ---> Group 2
+		Group 1 ---> Group 2
 
-In the above configuration, all of the synths in group 1 will execute before all of the synths in group 2. This is an easy, easy way to make the order of execution happen the way you want it to. 
+In the above configuration, all of the synths in group 1 will execute before all of the synths in group 2. This is an easy, easy way to make the order of execution happen the way you want it to.
 
 Determine your architecture, then make groups to support the architecture.
 
 
-Using order of execution to your advantage 
+Using order of execution to your advantage
 
-Before you start coding, plan out what you want and decide where the synths need to go. 
+Before you start coding, plan out what you want and decide where the synths need to go.
 
 A common configuration is to have a routine playing nodes, all of which need to be processed by a single effect. Plus, you want this effect to be separate from other things running at the same time. To be sure, you should place the synth -> effect chain on a private audio bus, then transfer it to the main output.
 
- [Lots of synths] ----> effect ----> transfer
+	[Lots of synths] ----> effect ----> transfer
 
 This is a perfect place to use a group:
 
- Group ( [lots of synths] ) ----> effect ----> transfer
+	Group ( [lots of synths] ) ----> effect ----> transfer
 
 To make the structure clearer in the code, one can also make a group for the effect (even if there's only one synth in it):
 
- Group ( [lots of synths] ) ----> Group ( [effect] ) ----> transfer 
+	Group ( [lots of synths] ) ----> Group ( [effect] ) ----> transfer
 
 I'm going to throw a further wrench into the example by modulating a parameter (note length) using a control rate synth.
 
@@ -128,8 +129,8 @@ s.boot;
 
 (
 l = Bus.control(s, 1); // get a bus for the LFO--not relevant to order-of-exec
-b = Bus.audio(s, 2); // assuming stereo--this is to keep the src->fx chain separate from
- // other similar chains
+b = Bus.audio(s, 2);	// assuming stereo--this is to keep the src->fx chain separate from
+				// other similar chains
 ~synthgroup = Group.tail(s);
 ~fxgroup = Group.tail(s);
 
@@ -137,22 +138,22 @@ b = Bus.audio(s, 2); // assuming stereo--this is to keep the src->fx chain separ
 
 // make some synthdefs to play with
 SynthDef("order-of-ex-dist", { arg bus, preGain, postGain;
- var sig;
- sig = In.ar(bus, 2);
- sig = (sig * preGain).distort;
- ReplaceOut.ar(bus, sig * postGain);
+	var sig;
+	sig = In.ar(bus, 2);
+	sig = (sig * preGain).distort;
+	ReplaceOut.ar(bus, sig * postGain);
 }).send(s);
 
 SynthDef("order-of-ex-pulse", { arg freq, bus, ffreq, pan, lfobus;
- var sig, noteLen;
- noteLen = In.kr(lfobus, 1);
- sig = RLPF.ar(Pulse.ar(freq, 0.2, 0.5), ffreq, 0.3);
- Out.ar(bus, Pan2.ar(sig, pan)
- * EnvGen.kr(Env.perc(0.1, 1), timeScale: noteLen, doneAction: 2));
+	var sig, noteLen;
+	noteLen = In.kr(lfobus, 1);
+	sig = RLPF.ar(Pulse.ar(freq, 0.2, 0.5), ffreq, 0.3);
+	Out.ar(bus, Pan2.ar(sig, pan)
+		* EnvGen.kr(Env.perc(0.1, 1), timeScale: noteLen, doneAction: 2));
 }).send(s);
 
 SynthDef("LFNoise1", { arg freq, mul, add, bus;
- Out.kr(bus, LFNoise1.kr(freq, mul:mul, add:add));
+	Out.kr(bus, LFNoise1.kr(freq, mul:mul, add:add));
 }).send(s);
 )
 
@@ -160,7 +161,7 @@ SynthDef("LFNoise1", { arg freq, mul, add, bus;
 
 ~lfo = Synth.head(s, "LFNoise1", [\freq, 0.3, \mul, 0.68, \add, 0.7, \bus, l.index]);
 
-// Then place your effect: 
+// Then place your effect:
 
 ~dist = Synth.tail(~fxgroup, "order-of-ex-dist", [\bus, b.index, \preGain, 8, \postGain, 0.6]);
 
@@ -173,16 +174,16 @@ SynthDef("LFNoise1", { arg freq, mul, add, bus;
 
 (
 r = Routine({
- {
- Synth.tail(~synthgroup, "order-of-ex-pulse",
- [\freq, rrand(200, 800), \ffreq, rrand(1000, 15000), \pan, 1.0.rand2,
- \bus, b.index, \lfobus, l.index]);
- 0.07.wait;
- }.loop;
+	{
+		Synth.tail(~synthgroup, "order-of-ex-pulse",
+			[\freq, rrand(200, 800), \ffreq, rrand(1000, 15000), \pan, 1.0.rand2,
+			 \bus, b.index, \lfobus, l.index]);
+		0.07.wait;
+	}.loop;
 }).play(SystemClock);
 )
 
-~dist.run(false); // proves that the distortion effect is doing something
+~dist.run(false);	// proves that the distortion effect is doing something
 ~dist.run(true);
 
 // to clean up:
@@ -212,8 +213,8 @@ In some cases we might also want to read audio from a node later in the current 
 
 The variably mixing and overwriting behaviour of the output ugens can make order of execution crucial when using In.kr or InFeedback.ar. (No pun intended.) For example with a node order like the following the InFeedback ugen in Synth 2 will only receive data from Synth 1 (-> = write out; <- = read in):
 
-Synth 1 -> busA this synth overwrites the output of Synth3 before it reaches Synth 2
-Synth 2 (with InFeedback) <- busA 
+Synth 1 -> busA					this synth overwrites the output of Synth3 before it reaches Synth 2
+Synth 2 (with InFeedback) <- busA
 Synth 3 -> busA
 
 If Synth 1 were moved after Synth 2 then Synth 2's InFeedback would receive a mix of the output from Synth 1 and Synth 3. This would also be true if Synth 2 came after Synth1 and Synth 3. In both cases data from Synth 1 and Synth 3 would have the same time stamp (either current or from the previous cycle), so nothing would be overwritten.
@@ -223,18 +224,18 @@ If Synth 1 were moved after Synth 2 then Synth 2's InFeedback would receive a mi
 Because of this it is often useful to allocate a separate bus for feedback. With the following arrangement Synth 2 will receive data from Synth3 regardless of Synth 1's position in the node order.
 
 Synth 1 -> busA
-Synth 2 (with InFeedback) <- busB 
-Synth 3 -> busB + busA 
+Synth 2 (with InFeedback) <- busB
+Synth 3 -> busB + busA
 
 The following example demonstrates this issue with In.kr:
 
 (
 SynthDef("help-Infreq", { arg bus;
- Out.ar(0, FSinOsc.ar(In.kr(bus), 0, 0.5));
+	Out.ar(0, FSinOsc.ar(In.kr(bus), 0, 0.5));
 }).send(s);
 
 SynthDef("help-Outfreq", { arg freq = 400, bus;
- Out.kr(bus, SinOsc.kr(1, 0, freq/40, freq));
+	Out.kr(bus, SinOsc.kr(1, 0, freq/40, freq));
 }).send(s);
 
 b = Bus.control(s,1);
@@ -257,12 +258,14 @@ c = Bus.control(s, 1);
 y.set(\bus, c.index); x.set(\bus, c.index);
 
 x.free; y.free; z.free;
-
+	
 
 Helpful 'Third Party' Classes
 
 James Harkins' MixerChannel class can help you with order of execution. Each channel includes a synth group and an effect group, as well as level and panning controls and pre- and post-fader sends. Using this class, it helps if you understand audio buses, but it does include methods .play and .playfx to place synths in the correct group and assign the bus automatically. You can download this class from http://www.duke.edu/~jharkins/sc3
 
 If you run into trouble, the crucial library includes a utility to query all nodes on the server so that you can see the order in which they're executing. Type Crucial.menu to access this command.
+
+
 
 

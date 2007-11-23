@@ -1,4 +1,5 @@
-Assignment Statements 
+
+Assignment Statements
 
 
 Single Assignment
@@ -20,7 +21,7 @@ A multiple assignment statement assigns the elements of a Collection which is th
 The form of a multiple assignment is:
 
 # <list of variables> = <expression>
- -- or --
+-- or --
 # <list of variables> ... <variable> = <expression>
 
 examples:
@@ -29,7 +30,7 @@ examples:
 
 # a, b ... c = [1, 2, 3, 4, 5, 6]; // afterwards a=1, b=2, c = [3, 4, 5, 6]
 
-# ... a = [1, 2, 3, 4, 5, 6]; // ILLEGAL, just use: a = [1, 2, 3, 4, 5, 6];
+# ... a = [1, 2, 3, 4, 5, 6]; // ILLEGAL, just use:  a = [1, 2, 3, 4, 5, 6];
 
 Multiple assignment is implemented using the 'at' method and the 'copyToEnd' method.
 Your right hand side expression can return any object that responds to these messages.
@@ -51,7 +52,7 @@ This type of assignment is translated to the first form by the compiler. The two
 Series Assignment to an ArrayedCollection or List
 
 There is a special syntax for doing assignments to a range of values in an ArrayedCollection or List.
- 
+
 a = (0,10..200);
 a[5..10] = 1; // series stepping by 1
 
@@ -68,5 +69,7 @@ a = (0,10..200);
 a[1,3..] = 1; // a series to the end of the array
 
 
- 
- 
+
+
+
+

@@ -1,5 +1,6 @@
 
-HPZ1 two point difference filter
+
+HPZ1					two point difference filter
 
 HPZ1.ar(in, mul, add)
 
@@ -13,4 +14,6 @@ Compare:
 { WhiteNoise.ar(0.25) }.play;
 
 { HPZ1.ar(WhiteNoise.ar(0.25)) }.play;
+
+
 

@@ -1,9 +1,10 @@
 
-Resonz resonant filter
+
+Resonz			resonant filter
 
 Resonz.ar(in, freq, rq, mul, add)
 
-A two pole resonant filter with zeroes at z = +/- 1. Based on K. Steiglitz, "A Note on Constant-Gain 
+A two pole resonant filter with zeroes at z = +/- 1. Based on K. Steiglitz, "A Note on Constant-Gain
 Digital Resonators," Computer Music Journal, vol 18, no. 4, pp. 8-10, Winter 1994.
 in - input signal to be processed
 freq - resonant frequency in Hertz
@@ -20,4 +21,6 @@ The reciprocal of Q is used rather than Q because it saves a divide operation in
 
 // modulate bandwidth opposite direction
 { Resonz.ar(WhiteNoise.ar(0.5), 2000, XLine.kr(0.001, 1, 8)) }.play
+
+
 

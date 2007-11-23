@@ -1,3 +1,4 @@
+
 SCNSObject
 
 note: this is experimental (03/2006) things might change and be careful wrong or unsupported Cocoa-calls can crash this Application!
@@ -9,25 +10,25 @@ On creation only the init message is passed, alloc is called internally. So all 
 
 Example:
 The Cocoa synthax:
- NSNumber *n = [[NSNumber alloc] initWithFloat: 1.1];
- [n floatValue];
+	NSNumber *n = [[NSNumber alloc] initWithFloat: 1.1];
+	[n floatValue];
 turns into:
- n = SCNSObject("NSNumber", "initWithFloat:", [1.1]);
- n.invoke("floatValue");
- 
+	n = SCNSObject("NSNumber", "initWithFloat:", [1.1]);
+	n.invoke("floatValue");
+	
 Multiple messages are put together in one STring and their arguments in one Array.
 Example:
 Cocoa:
- NSWindow *c = [[NSWindow alloc] initWithContentRect: rect styleMask: 10 backing: 2 defer:YES];
+	NSWindow *c = [[NSWindow alloc] initWithContentRect: rect styleMask: 10 backing: 2 defer:YES];
 SC:
- c = SCNSObject("NSWindow", "initWithContentRect:styleMask:backing:defer:",[Rect(0,0,400,100), 10, 2, 1]);
+	c = SCNSObject("NSWindow", "initWithContentRect:styleMask:backing:defer:",[Rect(0,0,400,100), 10, 2, 1]);
 
 Defer:
 
 Some methods need to be defered. If you want to defer ust call invoke with defer:true. Watch out there is no smart protection for methods that need defer until now! In general you should defer graphic operations.
 So calling this might crash sc-lang: c.invoke("makeKeyAndOrderFront:", [nil]);
 but this line is fine:
- c.invoke("makeKeyAndOrderFront:", [nil], true); 
+	c.invoke("makeKeyAndOrderFront:", [nil], true);	
 
 Types:
 
@@ -46,27 +47,27 @@ z = SCNSObject("NSString","initWithCString:", ["x 3456512"]);
 Actions:
 
 .initAction is a convenience method to add an action to a gui element.
-Depending on the type there are different actions to be set: "doFloatAction:"
- "doIntAction:"
- "doStateAction:"
- "doAction:"
- 
+Depending on the type there are different actions to be set: 	"doFloatAction:"
+	"doIntAction:"
+	"doStateAction:"
+	"doAction:"
+	
 Examples:
 
-//create a window and add a Slider that posts its value. 
+//create a window and add a Slider that posts its value.	
 
 (
 var winname = "cocoa test", win, nsname, slider;
 nsname = SCNSObject("NSString","initWithCString:length:", [winname, winname.size], false);
 
 win = SCNSObject("NSWindow", "initWithContentRect:styleMask:backing:defer:",
- [Rect(100,140,400,30), 10, 2, 1]);
+	[Rect(100,140,400,30), 10, 2, 1]);
 win.setDelegate.action_({
- "closing window, releasing objects".postln;
- [winname,nsname,slider,e].do{|it| it.release};
+	"closing window, releasing objects".postln;
+	[winname,nsname,slider,e].do{|it| it.release};
 });
-slider = SCNSObject("NSSlider", "initWithFrame:", [Rect(0,0,390,20)]); 
-e = SCNSObject("SCGraphView", "initWithFrame:", [Rect(0,0,400,30)]); 
+slider = SCNSObject("NSSlider", "initWithFrame:", [Rect(0,0,390,20)]);
+e = SCNSObject("SCGraphView", "initWithFrame:", [Rect(0,0,400,30)]);
 win.invoke("setContentView:", [e], true);
 e.invoke("addSubview:", [slider], true);
 slider.invoke("setFloatValue:", [0.5]);
@@ -87,11 +88,11 @@ z = SCNSObject("NSString","initWithCString:", ["x 3456512"]);
 
 c = SCNSObject("NSWindow", "initWithContentRect:styleMask:backing:defer:",[Rect(0,0,400,100), 10, 2, 1]);
 c.setDelegate.action_({
- "closing window, releasing objects".postln;
- [z,c,d,e].do{|it| it.release};
+	"closing window, releasing objects".postln;
+	[z,c,d,e].do{|it| it.release};
 });
-d = SCNSObject("NSTextField", "initWithFrame:", [Rect(0,0,100,20)]); 
-e = SCNSObject("NSView", "initWithFrame:", [Rect(0,0,400,100)]); 
+d = SCNSObject("NSTextField", "initWithFrame:", [Rect(0,0,100,20)]);
+e = SCNSObject("NSView", "initWithFrame:", [Rect(0,0,400,100)]);
 c.invoke("setContentView:", [e], true);
 e.invoke("addSubview:", [d], true);
 c.invoke("makeKeyAndOrderFront:", [nil], true);
@@ -102,11 +103,11 @@ z = SCNSObject("NSString","initWithCString:", ["x 3456512"]);
 
 c = SCNSObject("NSWindow", "initWithContentRect:styleMask:backing:defer:",[Rect(100,100,100,20), 10, 2, 1]);
 c.setDelegate.action_({
- "closing window, releasing objects".postln;
- [z,c,d,e].do{|it| it.release};
+	"closing window, releasing objects".postln;
+	[z,c,d,e].do{|it| it.release};
 });
-d = SCNSObject("NSButton", "initWithFrame:", [Rect(0,0,100,20)]); 
-e = SCNSObject("NSView", "initWithFrame:", [Rect(0,0,400,100)]); 
+d = SCNSObject("NSButton", "initWithFrame:", [Rect(0,0,100,20)]);
+e = SCNSObject("NSView", "initWithFrame:", [Rect(0,0,400,100)]);
 c.invoke("setContentView:", [e], true);
 e.invoke("addSubview:", [d], true);
 c.invoke("makeKeyAndOrderFront:", [nil], true);
@@ -116,4 +117,6 @@ d.initAction("doStateAction:");
 d.nsAction.action_({|it,val| val.postln;});
 }.defer(0.1);
 )
+
+
 

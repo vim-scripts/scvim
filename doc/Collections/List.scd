@@ -1,15 +1,16 @@
+
 List
 
 Superclass: SequenceableCollection
 
-List is a subclass of SequenceableCollection with unlimited growth in size. Although not a subclass of Array or its superclass ArrayedCollection it uses an Array in its implementation and is in many cases interchangeable with one. (List implements many of the same methods.) 
+List is a subclass of SequenceableCollection with unlimited growth in size. Although not a subclass of Array or its superclass ArrayedCollection it uses an Array in its implementation and is in many cases interchangeable with one. (List implements many of the same methods.)
 
 Arrays have a fixed maximum size. If you add beyond that size a new Array is created and returned, but you must use an assignment statement or the new array will be lost. (See the Array helpfile.) List has no size limitation and is thus more flexible, but has slightly more overhead.
 
 (
-x = Array.new(3); 
-y = List.new(3); 
-5.do({arg i; z = x.add(i); y.add(i);}); 
+x = Array.new(3);
+y = List.new(3);
+5.do({arg i; z = x.add(i); y.add(i);});
 x.postln; z.postln; y.postln;
 )
 
@@ -58,7 +59,7 @@ at(index)
 Return the item at index.
 
 List[ 1, 2, 3 ].at(0).postln;
- 
+		
 clipAt(index)
 
 Same as at, but values for index greater than the size of the List will be clipped to the last index.
@@ -123,8 +124,8 @@ removeAt(index)
 
 Remove and return the element at index, shrinking the size of the List.
 
-y = List[ 1, 2, 3 ]; 
-y.removeAt(1); 
+y = List[ 1, 2, 3 ];
+y.removeAt(1);
 y.postln;
 
 fill(value)
@@ -204,14 +205,14 @@ List[1, 2, 3, 4, 5, 6].scramble.postln;
 
 mirror
 
-Return a new List which is the receiver made into a palindrome. 
+Return a new List which is the receiver made into a palindrome.
 The receiver is unchanged.
 
 List[1, 2, 3, 4].mirror.postln;
 
 mirror1
 
-Return a new List which is the receiver made into a palindrome with the last element removed. 
+Return a new List which is the receiver made into a palindrome with the last element removed.
 This is useful if the list will be repeated cyclically, the first element will not get played twice.
 The receiver is unchanged.
 
@@ -248,7 +249,7 @@ List[1, 2, 3, 4].pyramid(1).postln;
 
 (
 10.do({ arg i;
- List[1, 2, 3, 4].pyramid(i + 1).asCompileString.postln;
+	List[1, 2, 3, 4].pyramid(i + 1).asCompileString.postln;
 });
 )
 
@@ -297,7 +298,7 @@ y.postln;
 
 slide(windowLength, stepSize)
 
-Return a new List whose elements are repeated subsequences from the receiver. 
+Return a new List whose elements are repeated subsequences from the receiver.
 Easier to demonstrate than explain.
 
 List[1, 2, 3, 4, 5, 6].slide(3, 1).asCompileString.postln;
@@ -313,3 +314,5 @@ Dump the List's Array.
 clear
 
 Replace the List's Array with a new empty one.
+
+

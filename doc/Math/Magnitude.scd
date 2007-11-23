@@ -1,3 +1,4 @@
+
 Magnitude
 
 superclass: Object
@@ -42,4 +43,6 @@ exclusivelyBetween(minVal, maxVal)
 
 Answer whether the receiver is greater than minVal and less than maxVal.
 
- 
+
+
+

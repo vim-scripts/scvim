@@ -1,5 +1,5 @@
 
-PulseDivider pulse divider
+PulseDivider		pulse divider
 
 PulseDivider.ar(trig, div, startCount)
 
@@ -12,10 +12,12 @@ or if startCount is negative it adds that many counts to the first time the outp
 
 
 SynthDef("help-PulseDivider",{ arg out=0;
- var p, a, b;
- p = Impulse.ar(8);
- a = SinOsc.ar(1200, 0, Decay2.ar(p, 0.005, 0.1));
- b = SinOsc.ar(600, 0, Decay2.ar(PulseDivider.ar(p, 4), 0.005, 0.5));
- 
- Out.ar(out,(a + b) * 0.4)
+	var p, a, b;
+	p = Impulse.ar(8);
+	a = SinOsc.ar(1200, 0, Decay2.ar(p, 0.005, 0.1));
+	b = SinOsc.ar(600, 0, Decay2.ar(PulseDivider.ar(p, 4), 0.005, 0.5));
+	
+	Out.ar(out,(a + b) * 0.4)
 }).play;
+
+

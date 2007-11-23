@@ -1,21 +1,22 @@
-FBSineL feedback sine with chaotic phase indexing
+
+FBSineL		feedback sine with chaotic phase indexing
 
 FBSineL.ar(freq, im, fb, a, c, xi, yi, mul, add)
 
-freq - iteration frequency in Hertz
-im - index multiplier amount
- fb - feedback amount
- a  - phase multiplier amount
- c - phase increment amount
-xi - initial value of x
-yi - initial value of y
+	freq - iteration frequency in Hertz
+	im - index multiplier amount
+	fb - feedback amount
+	a - phase multiplier amount
+	c - phase increment amount
+	xi - initial value of x
+	yi - initial value of y
 
 A linear-interpolating sound generator based on the difference equations:
- 
- xn+1 = sin(im*yn + fb*xn)
- yn+1 = (ayn + c) % 2pi
+	
+	xn+1 = sin(im*yn + fb*xn)
+	yn+1 = (ayn + c) % 2pi
 
-This uses a linear congruential function to drive the phase indexing of a sine wave. For 
+This uses a linear congruential function to drive the phase indexing of a sine wave. For
 im = 1, fb = 0, and a = 1 a normal sinewave results.
 
 // default initial params
@@ -33,10 +34,12 @@ im = 1, fb = 0, and a = 1 a normal sinewave results.
 // randomly modulate params
 (
 { FBSineL.ar(
- LFNoise2.kr(1, 1e4, 1e4), 
- LFNoise2.kr(1, 32, 33), 
- LFNoise2.kr(1, 0.5),
- LFNoise2.kr(1, 0.05, 1.05),
- LFNoise2.kr(1, 0.3, 0.3)
+	LFNoise2.kr(1, 1e4, 1e4),
+	LFNoise2.kr(1, 32, 33),
+	LFNoise2.kr(1, 0.5),
+	LFNoise2.kr(1, 0.05, 1.05),
+	LFNoise2.kr(1, 0.3, 0.3)
 ) * 0.2 }.play(s);
 )
+
+

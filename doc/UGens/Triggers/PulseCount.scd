@@ -1,5 +1,5 @@
 
-PulseCount pulse counter
+PulseCount		pulse counter
 
 PulseCount.ar(trig, reset)
 
@@ -10,10 +10,12 @@ reset - resets the counter to zero when triggered.
 
 
 SynthDef("help-PulseCount",{ arg out=0;
- Out.ar(out,
- SinOsc.ar(
- PulseCount.ar(Impulse.ar(10), Impulse.ar(0.4)) * 200, 
- 0, 0.05
- )
- )
+	Out.ar(out,
+		SinOsc.ar(
+			PulseCount.ar(Impulse.ar(10), Impulse.ar(0.4)) * 200,
+			0, 0.05
+		)
+	)
 }).play;
+
+

@@ -1,3 +1,4 @@
+
 Notes on MIDI support in SuperCollider
 
 Contents
@@ -5,14 +6,14 @@ Contents
 Introduction
 Receiving MIDI input: MIDIIn
 dewdrop_lib MIDI framework
-Playing notes on your MIDI keyboard 
+Playing notes on your MIDI keyboard
 Sending MIDI out
 MIDI synchronization
 Third party libraries
 
 Introduction
 
-SuperCollider's out of the box MIDI support is fairly thorough (although not as complete as you'll find in commercial sequencers). All MIDI devices accessible to CoreMIDI are accessible to SuperCollider. 
+SuperCollider's out of the box MIDI support is fairly thorough (although not as complete as you'll find in commercial sequencers). All MIDI devices accessible to CoreMIDI are accessible to SuperCollider.
 
 Note: This document is written from an OSX perspective. The essential behavior of the MIDI interface classes should be the same on other platforms, despite my continual reference to CoreMIDI here.
 
@@ -21,15 +22,15 @@ SuperCollider does not impose much higher-level structure on MIDI functionality.
 MIDIClient: represents SuperCollider's communications with CoreMIDI
 MIDIIn: receives MIDI messages and executes functions in response to those messages
 MIDIOut: sends MIDI messages out to a specific port and channel
-MIDIEndPoint: a client-side representation of a CoreMIDI device, containing three variables (name, device and uid, which is a unique identifier assigned by the system) 
+MIDIEndPoint: a client-side representation of a CoreMIDI device, containing three variables (name, device and uid, which is a unique identifier assigned by the system)
 
-In most cases, each physical MIDI connection (pair of in/out jacks on the MIDI interface) has one MIDIEndPoint object to represent it in the client. 
+In most cases, each physical MIDI connection (pair of in/out jacks on the MIDI interface) has one MIDIEndPoint object to represent it in the client.
 
 Receiving MIDI input: MIDIIn
 
-The MIDIIn class provides two ways to receive MIDI input: MIDI response functions, and routines that wait for MIDI events. 
+The MIDIIn class provides two ways to receive MIDI input: MIDI response functions, and routines that wait for MIDI events.
 
-1. MIDI response functions 
+1. MIDI response functions
 
 MIDIIn has a number of class variables that are evaluated when a MIDI event comes in. Technical details on each function can be found in the MIDIIn help file.
 
@@ -42,12 +43,12 @@ polyTouch
 program
 sysex
 sysrt
-smpte 
+smpte
 
-To assign a response to a particular kind of MIDI message, assign a function to the class variable: 
+To assign a response to a particular kind of MIDI message, assign a function to the class variable:
 
 MIDIIn.connect;
-MIDIIn.noteOn = { |port, chan, note, vel| [port, chan, note, vel].postln }; 
+MIDIIn.noteOn = { |port, chan, note, vel| [port, chan, note, vel].postln };
 MIDIIn.noteOn = nil; // stop responding
 
 MIDIIn provides the responding functions with all the information coming in from CoreMIDI:
@@ -55,7 +56,7 @@ MIDIIn provides the responding functions with all the information coming in from
 source (src): corresponds to the uid of the MIDIEndPont from which the message is coming.
 channel (chan): integer 0-15 representing the channel bits of the MIDI status byte
 
-... with subsequent arguments representing the data bytes. The MIDIIn help file details all the supported messages along with the arguments of the responding function for the message. 
+... with subsequent arguments representing the data bytes. The MIDIIn help file details all the supported messages along with the arguments of the responding function for the message.
 
 Because these are class variables, you can have only one function assigned at one time. A common usage is to assign a function that looks up responses in a collection. For example, you could have a separate set of response functions for each channel.
 
@@ -70,19 +71,19 @@ The advantage of this approach over using "if" or "case" statements in the respo
 
 Third-party frameworks exist to handle this bookkeeping automatically. See the "Third party libraries" section at the bottom of this file.
 
-2. Routines that wait for MIDI events 
+2. Routines that wait for MIDI events
 
 As of December 2004, there is an alternate technique to supply multiple responses for the same MIDI event type. This routine waits for a MIDI event, then posts information about the event. After your routine receives the MIDI event, it can take any other action you desire.
 
 r = Routine({
- var event;
- loop {
- event = MIDIIn.waitNoteOn;
- [event.status, event.b, event.c].postln;
- }
+	var	event;
+	loop {
+		event = MIDIIn.waitNoteOn;
+		[event.status, event.b, event.c].postln;
+	}
 }).play;
 
-r.stop; // stop responding 
+r.stop;		// stop responding
 
 Supported MIDI event waiting methods are:
 
@@ -97,15 +98,15 @@ You can have multiple routines assigned to the same MIDI event type. The MIDI wa
 
 event = MIDIIn.waitNoteOn(nil, [2, 7], (0, 2..126), { |vel| vel > 50 });
 
-This would respond to note on messages from any port, channels 2 and 7 only, even numbered note numbers only, and only velocity values greater than 50. 
+This would respond to note on messages from any port, channels 2 and 7 only, even numbered note numbers only, and only velocity values greater than 50.
 
-Use caution when creating a large number of MIDI response routines with very specific conditions. For each incoming MIDI event, SuperCollider will iterate over the entire list for that event type, which incurs a CPU cost. If you have 500 MIDI controller routines, and an incoming event should trigger only 2, all 500 sets of conditions have to be evaluated. 
+Use caution when creating a large number of MIDI response routines with very specific conditions. For each incoming MIDI event, SuperCollider will iterate over the entire list for that event type, which incurs a CPU cost. If you have 500 MIDI controller routines, and an incoming event should trigger only 2, all 500 sets of conditions have to be evaluated.
 
 In that case it may be more efficient to create a smaller number of routines and evaluate some of the conditions inside routines, either using branching statements or by looking up functions inside collections.
 
-Playing notes on your MIDI keyboard 
+Playing notes on your MIDI keyboard
 
-The technical problem is that every note on needs to save its synth object so that the note off message can end the right server-side node. 
+The technical problem is that every note on needs to save its synth object so that the note off message can end the right server-side node.
 
 s.boot;
 
@@ -117,23 +118,23 @@ MIDIIn.connect;
 notes = Array.newClear(128); // array has one slot per possible MIDI note
 
 on = Routine({
- var event, newNode;
- loop {
- event = MIDIIn.waitNoteOn; // all note-on events
- // play the note
- newNode = Synth(\default, [\freq, event.b.midicps,
- \amp, event.c * 0.00315]); // 0.00315 approx. == 1 / 127 * 0.4
- notes.put(event.b, newNode); // save it to free later
- }
+	var event, newNode;
+	loop {
+		event = MIDIIn.waitNoteOn;	// all note-on events
+			// play the note
+		newNode = Synth(\default, [\freq, event.b.midicps,
+			\amp, event.c * 0.00315]); // 0.00315 approx. == 1 / 127 * 0.4
+		notes.put(event.b, newNode);	// save it to free later
+	}
 }).play;
 
 off = Routine({
- var event;
- loop {
- event = MIDIIn.waitNoteOff;
- // look up the node currently playing on this slot, and release it
- notes[event.b].set(\gate, 0);
- }
+	var event;
+	loop {
+		event = MIDIIn.waitNoteOff;
+			// look up the node currently playing on this slot, and release it
+		notes[event.b].set(\gate, 0);
+	}
 }).play;
 
 q = { on.stop; off.stop; };
@@ -158,9 +159,9 @@ MIDI synchronization may be performed using MIDIIn's sysrt or smpte response fun
 
 For sysrt, external MIDI clocks output 24 pulses per quarter note. The responder should count the incoming pulses and multiply the rhythmic value into 24 to determine how many pulses to wait:
 
-0.25 wait 6 pulses (16th note)
-0.5 wait 12 pulses (8th note)
-2 wait 48 pulses (half note)
+0.25		wait 6 pulses (16th note)
+0.5		wait 12 pulses (8th note)
+2		wait 48 pulses (half note)
 
 dewdrop_lib (third party library) includes a class, MIDISyncClock, that receives MIDI clock messages and allows events to be scheduled to keep time with an external MIDI device. See the [MIDISyncClock] helpfile for details.
 
@@ -170,7 +171,7 @@ Third party libraries
 
 The crucial library (included in the main distribution) includes a couple of classes (NoteOnResponder, NoteOffResponder, CCResponder) that simplify the use of multiple responders when all ports and channels should respond identically. Multichannel MIDI applications are not possible using these classes.
 
-dewdrop_lib is a third party library providing a number of useful performance features, available from <http://www.dewdrop-world.net>. The library provides a user-extensible framework of MIDI responder classes designed for multiport, multichannel applications. 
+dewdrop_lib is a third party library providing a number of useful performance features, available from <http://www.dewdrop-world.net>. The library provides a user-extensible framework of MIDI responder classes designed for multiport, multichannel applications.
 
 Among its features:
 
@@ -181,3 +182,5 @@ Among its features:
 - a user-configurable array of MIDI controller numbers, to simplify assignment of events to hardware controllers
 
 The framework is not part of the main distribution. Interested users need to download the tarball from the website above and follow the installation instructions.
+
+

@@ -1,3 +1,4 @@
+
 Function
 
 superclass: AbstractFunction
@@ -9,10 +10,10 @@ Because it inherits from [AbstractFunction], Functions can respond to math opera
 
 (
 var a, b, c;
-a = { [100, 200, 300].choose }; // a Function
-b = { 10.rand + 1 }; // another Function
-c = a + b; // c is a Function.
-c.value.postln; // evaluate c and print the result
+a = { [100, 200, 300].choose };	// a Function
+b = { 10.rand + 1 };	// another Function
+c = a + b; 	// c is a Function.
+c.value.postln;	// evaluate c and print the result
 )
 
 See [AbstractFunction] for function composition examples.
@@ -124,15 +125,15 @@ block
 Break from a loop. Calls the receiver with an argument which is a function that returns from the method block. To exit the loop, call .value on the function passed in. You can pass a value to this function and that value will be returned from the block method.
 
 block {|break|
- 100.do {|i|
- i.postln;
- if (i == 7) { break.value(999) }
- };
+	100.do {|i|
+		i.postln;
+		if (i == 7) { break.value(999) }
+	};
 }
 
 thunk
 
-Return a Thunk, which is an unevaluated value that can be used in calculations 
+Return a Thunk, which is an unevaluated value that can be used in calculations
 
 x = thunk { 4.rand };
 x.value;
@@ -151,7 +152,7 @@ f.value(2, 3);
 
 flopEnvir
 
-like flop, but implements an environment argument passing (valueEnvir). 
+like flop, but implements an environment argument passing (valueEnvir).
 Less efficient in generation than flop, but not a big difference in evaluation.
 
 f = { |a| if(a > 0) { a + 1 } { -inf } }.envirFlop;
@@ -168,12 +169,12 @@ var i, x, z;
 z = [0, 1, 1.1, 1.3, 1.5, 2];
 i = z.choose;
 x = case
- { i == 1 } { \no }
- { i == 1.1 } { \wrong }
- { i == 1.3 } { \wrong }
- { i == 1.5 } { \wrong }
- { i == 2 } { \wrong }
- { i == 0 } { \true };
+	{ i == 1 }  { \no }
+	{ i == 1.1 } { \wrong }
+	{ i == 1.3 } { \wrong }
+	{ i == 1.5 } { \wrong }
+	{ i == 2 }  { \wrong }
+	{ i == 0 }  { \true };
 x.postln;
 )
 
@@ -190,7 +191,7 @@ Executes the receiver. If an exception is thrown the catch function handler is e
 
 protect(handler)
 
-Executes the receiver. The cleanup function handler is executed with an error as an argument, or nil if there was no error. The error continues to be in effect. 
+Executes the receiver. The cleanup function handler is executed with an error as an argument, or nil if there was no error. The error continues to be in effect.
 
 Examples:
 
@@ -214,7 +215,7 @@ protect { 123.postln; 789.postln } {|error| [\onExit, error].postln };
 
 (
 try {
- protect { 123.postln; 456.throw; 789.postln } {|error| [\onExit, error].postln };
+	protect { 123.postln; 456.throw; 789.postln } {|error| [\onExit, error].postln };
 } {|error| [\catch, error].postln };
 )
 
@@ -231,28 +232,28 @@ a[2].postln;
 
 (
 try {
- a = [\aaa, \bbb, \ccc, \ddd];
- a[1].postln;
- a[\x].postln;
- a[2].postln;
+	a = [\aaa, \bbb, \ccc, \ddd];
+	a[1].postln;
+	a[\x].postln;
+	a[2].postln;
 } {|error| \caught.postln; error.dump }
 )
 
 (
 try {
- a = [\aaa, \bbb, \ccc, \ddd];
- a[1].postln;
- a[\x].postln;
- a[2].postln;
+	a = [\aaa, \bbb, \ccc, \ddd];
+	a[1].postln;
+	a[\x].postln;
+	a[2].postln;
 } {|error| \caught.postln; error.dump; error.throw }
 )
 
 (
 protect {
- a = [\aaa, \bbb, \ccc, \ddd];
- a[1].postln;
- a[\x].postln;
- a[2].postln;
+	a = [\aaa, \bbb, \ccc, \ddd];
+	a[1].postln;
+	a[\x].postln;
+	a[2].postln;
 } {|error| \caught.postln; error.dump }
 )
 
@@ -261,52 +262,55 @@ Audio
 
 play(target, outbus, fadetime, addAction)
 
- This is probably the simplest way to get audio in SC3. It wraps the Function in a SynthDef (adding an Out ugen if needed), creates and starts a new Synth with it, and returns the Synth object. A Linen is also added to avoid clicks, which is configured to allow the resulting Synth to have its \gate argument set, or to respond to a release message. Args in the function become args in the resulting def.
+	This is probably the simplest way to get audio in SC3. It wraps the Function in a SynthDef (adding an Out ugen if needed), creates and starts a new Synth with it, and returns the Synth object. A Linen is also added to avoid clicks, which is configured to allow the resulting Synth to have its \gate argument set, or to respond to a release message. Args in the function become args in the resulting def.
 
- target - a Node, Server, or Nil. A Server will be converted to the default group of that server. Nil will be converted to the default group of the default Server.
- outbus - the output bus to play the audio out on. This is equivalent to Out.ar(outbus, theoutput). The default is 0.
- fadeTime - a fadein time. The default is 0.02 seconds, which is just enough to avoid a click. This will also be the fadeout time for a release if you do not specify.
- addAction - see Synth for a list of valid addActions. The default is \addToHead.
+	target - a Node, Server, or Nil. A Server will be converted to the default group of that server. Nil will be converted to the default group of the default Server.
+	outbus - the output bus to play the audio out on. This is equivalent to Out.ar(outbus, theoutput). The default is 0.
+	fadeTime - a fadein time. The default is 0.02 seconds, which is just enough to avoid a click. This will also be the fadeout time for a release if you do not specify.
+	addAction - see Synth for a list of valid addActions. The default is \addToHead.
 
- x = { arg freq = 440; SinOsc.ar(freq, 0, 0.3) }.play; // this returns a Synth object;
- x.set(\freq, 880); // note you can set the freq argument
- x.defName; // the name of the resulting SynthDef (derived from the Functions hash value)
- x.release(4); // fadeout over 4 seconds
+	x = { arg freq = 440; SinOsc.ar(freq, 0, 0.3) }.play; // this returns a Synth object;
+	x.set(\freq, 880); // note you can set the freq argument
+	x.defName; // the name of the resulting SynthDef (derived from the Functions hash value)
+	x.release(4); // fadeout over 4 seconds
 
- Many of the examples in SC3 make use of the Function.play syntax. Note that reusing such code in a SynthDef requires the addition of an Out ugen.
+	Many of the examples in SC3 make use of the Function.play syntax. Note that reusing such code in a SynthDef requires the addition of an Out ugen.
 
- // the following two lines produce equivalent results
- { SinOsc.ar(440, 0, 0.3) }.play(fadeTime: 0.0); 
- SynthDef("help-FuncPlay", { Out.ar(0, SinOsc.ar(440, 0, 0.3))}).play;
+	// the following two lines produce equivalent results
+	{ SinOsc.ar(440, 0, 0.3) }.play(fadeTime: 0.0);
+	SynthDef("help-FuncPlay", { Out.ar(0, SinOsc.ar(440, 0, 0.3))}).play;
 
- Function.play is often more convienent than SynthDef.play, particularly for short examples and quick testing. The latter does have some additional options, such as lagtimes for controls, etc. Where reuse and maximum flexibility are of greater importance, SynthDef and its various methods are usually the better choice. 
- 
+	Function.play is often more convienent than SynthDef.play, particularly for short examples and quick testing. The latter does have some additional options, such as lagtimes for controls, etc. Where reuse and maximum flexibility are of greater importance, SynthDef and its various methods are usually the better choice.
+	
 
 scope(numChannels, outbus, fadeTime, bufsize, zoom)
 
- As play above, but plays it on the internal Server, and calls Server-scope to open a scope window in which to view the output. Currently only works on OSX.
- 
-numChannels - The number of channels to display in the scope window, starting from outbus. The default is 2.
- outbus - The output bus to play the audio out on. This is equivalent to Out.ar(outbus, theoutput). The default is 0.
-fadeTime - A fadein time. The default is 0.02 seconds, which is just enough to avoid a click.
-bufsize - The size of the buffer for the ScopeView. The default is 4096.
-zoom - A zoom value for the scope's X axis. Larger values show more. The default is 1.
+	As play above, but plays it on the internal Server, and calls Server-scope to open a scope window in which to view the output. Currently only works on OSX.
+	
+	numChannels - The number of channels to display in the scope window, starting from outbus. The default is 2.
+	outbus - The output bus to play the audio out on. This is equivalent to Out.ar(outbus, theoutput). The default is 0.
+	fadeTime - A fadein time. The default is 0.02 seconds, which is just enough to avoid a click.
+	bufsize - The size of the buffer for the ScopeView. The default is 4096.
+	zoom - A zoom value for the scope's X axis. Larger values show more. The default is 1.
 
- { FSinOsc.ar(440, 0, 0.3) }.scope(1)
+	{ FSinOsc.ar(440, 0, 0.3) }.scope(1)
 
 
 
-plot(duration, server, bounds)
+plot(duration, server, bounds, minval, maxval, parent)
 
- Calculates duration in seconds worth of the output of this function, and plots it in a GUI window. Currently only works on OSX. Unlike play and scope it will not work with explicit Out Ugens, so your function should return a UGen or an Array of them. The plot will be calculated in realtime.
+	Calculates duration in seconds worth of the output of this function, and plots it in a GUI window. Unlike play and scope it will not work with explicit Out Ugens, so your function should return a UGen or an Array of them. The plot will be calculated in realtime.
 
- duration - The duration of the function to plot in seconds. The default is 0.01.
- server - The Server on which to calculate the plot. This must be running on your local machine, but does not need to be the internal server. If nil the default server will be used.
-bounds - An instance of Rect or Point indicating the bounds of the plot window.
+	duration - The duration of the function to plot in seconds. The default is 0.01.
+	server - The Server on which to calculate the plot. This must be running on your local machine, but does not need to be the internal server. If nil the default server will be used.
+	bounds - An instance of Rect or Point indicating the bounds of the plot window.
+	minval - the minimum value in the plot. Defaults to -1.0.
+	maxval - the maximum value in the plot. Defaults to 1.0.
+	parent - a window to place the plot in. If nil, one will be created for you.
 
- { SinOsc.ar(440) }.plot(0.01, bounds: SCWindow.screenBounds);
- 
- { {|i| SinOsc.ar(1 + i)}.dup(7) }.plot(1);
+	{ SinOsc.ar(440) }.plot(0.01, bounds: GUI.window.screenBounds);
+	
+	{ {|i| SinOsc.ar(1 + i)}.dup(7) }.plot(1);
 
 
 
@@ -316,11 +320,11 @@ Conversion
 
 asSynthDef(rates, prependArgs, outClass, fadetime)
 
- Returns a SynthDef based on this Function, adding a Linen and an Out ugen if needed.
+	Returns a SynthDef based on this Function, adding a Linen and an Out ugen if needed.
 
- rates - An Array of rates and lagtimes for the function's arguments (see SynthDef for more details).
-outClass - The class of the output ugen as a symbol. The default is \Out.
-fadeTime - a fadein time. The default is 0.
+	rates - An Array of rates and lagtimes for the function's arguments (see SynthDef for more details).
+	outClass - The class of the output ugen as a symbol. The default is \Out.
+	fadeTime - a fadein time. The default is 0.
 
 
 
@@ -335,6 +339,8 @@ y = Synth.new(x);
 asRoutine
 
 Returns a Routine using this as its func argument.
+
+
 
 
 

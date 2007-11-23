@@ -1,3 +1,4 @@
+
 Library
 
 superclass: MultiLevelIdentityDictionary
@@ -16,6 +17,8 @@ Library.atList([\multi,\level,\addressing,\system]).postln;
 
 
 postTree
- post a formatted description of the entire library
- 
- Library.postTree;
+	post a formatted description of the entire library
+	
+	Library.postTree;
+
+

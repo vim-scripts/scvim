@@ -1,3 +1,4 @@
+
 Symbol
 
 superclass: Object
@@ -41,4 +42,6 @@ Symbols respond to all unary and binary math operations by returning themselves.
 The result of any math operation between a Number or other math object and a Symbol
 is to return the Symbol. This allows operations on lists of notes which contain 'rest's
 to preserve the rests.
+
+
 

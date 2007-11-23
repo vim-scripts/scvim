@@ -1,6 +1,7 @@
+
 Cocoa
 
-see also: [CocoaDialog]
+see also: CocoaDialog
 
 
 Cocoa.getPathsInDirectory(path)
@@ -19,15 +20,17 @@ Cocoa.getPathsInDirectory("plugins")
 
 /*
 
- This is a temporary implementation before I (felix) gets around to doing the proper
- Directory implementation.
- It gets all paths in that directory and subdirectories.
- maxItems is the size of the array to use, and should be larger than the number of items
- you might return, else a primitive index error.
- 
+	This is a temporary implementation before I (felix) gets around to doing the proper
+	Directory implementation.
+	It gets all paths in that directory and subdirectories.
+	maxItems is the size of the array to use, and should be larger than the number of items
+	you might return, else a primitive index error.
+	
 
- all paths are standardized
- 
+	all paths are standardized
+	
 */
- 
+	
+	
+
 

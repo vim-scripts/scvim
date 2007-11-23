@@ -1,3 +1,4 @@
+
 Float
 
 superclass: SimpleNumber
@@ -8,7 +9,7 @@ Random Numbers
 
 coin
 
-Answers a Boolean which is the result of a random test whose probability of success in a range from 
+Answers a Boolean which is the result of a random test whose probability of success in a range from
 zero to one is this.
 
 Testing
@@ -22,4 +23,6 @@ Converting
 asFloat
 
 Answer this since this is a Float.
+
+
 

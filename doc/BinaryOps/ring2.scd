@@ -1,4 +1,5 @@
-ring2 ring modulation plus both sources
+
+ring2			ring modulation plus both sources
 
 BinaryOperator
 
@@ -13,9 +14,11 @@ same as :
 
 (
 {
- var a, b;
- a = FSinOsc.ar(800);
- b = FSinOsc.ar(XLine.kr(200,500,5));
- ((a * b) + a + b) * 0.125
+	var a, b;
+	a = FSinOsc.ar(800);
+	b = FSinOsc.ar(XLine.kr(200,500,5));
+	((a * b) + a + b) * 0.125
 }.play)
+
+
 

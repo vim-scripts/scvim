@@ -1,4 +1,5 @@
-StartUp register functions to be evaluated after the startup is finished
+
+StartUp			register functions to be evaluated after the startup is finished
 
 Superclass: Object
 
@@ -10,7 +11,7 @@ Class Methods
 
 *add(function)
 
-Registers an function to be evaluated after startup is finished. 
+Registers an function to be evaluated after startup is finished.
 
 *remove(function)
 
@@ -26,11 +27,13 @@ runs the functions in order.
 Examples
 
 *initClass {
- StartUp.add {
- // something to do...
- }
+	StartUp.add {
+		// something to do...
+	}
 
 
 }
+
+
 
 

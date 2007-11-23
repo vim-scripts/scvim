@@ -1,8 +1,9 @@
+
 Bag
 
 Superclass: Collection
 
-A Bag is an unordered collection of objects. In some languages it is referred to as a counted set. A Bag keeps track of the number of times objects are inserted and requires that objects be removed the same number of times. Thus, there is only one instance of an object in a Bag even if the object has been added to the Bag multiple times. 
+A Bag is an unordered collection of objects. In some languages it is referred to as a counted set. A Bag keeps track of the number of times objects are inserted and requires that objects be removed the same number of times. There is only one instance of an object in a Bag even if the object has been added to the Bag multiple times (test is for equality)
 
 Most of Bag's methods are inherited from Collection.
 The contents of a Bag are unordered. You must not depend on the order of items in a set.
@@ -27,6 +28,12 @@ Remove anObject from the Bag.
 
 Bag[1, 2, 3].remove(3).postln;
 
+contents
+
+Returns the dictionary that stores the objects in pairs (obj -> numberOfObjects)
+
+Bag["a", "b", "c", "c"].contents;
+
 
 Iteration:
 
@@ -36,6 +43,24 @@ Evaluates function for each item in the Bag.
 The function is passed two arguments, the item and an integer index.
 
 Bag[1, 2, 3, 300].do({ arg item, i; item.postln });
+
+
+Difference between Bag and IdentityBag:
+
+// the two strings are equal, but not identical
+"something" == "something"; // true
+"something" === "something" // false
+
+a = Bag.new;
+a.add("something");
+a.add("something");
+a.contents; // only one object in the bag really
+
+a = IdentityBag.new;
+a.add("something");
+a.add("something");
+a.contents; // two objects in the bag
+
 
 
 

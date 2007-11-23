@@ -1,3 +1,4 @@
+
 ContiguousBlockAllocator
 
 A more robust replacement for the default server block allocator, PowerOfTwoAllocator. May be used in the Server class to allocate audio/control bus numbers and buffer numbers.
@@ -23,3 +24,5 @@ Free a previously allocated block starting at address.
 reserve(address, size = 1)
 
 Mark a specific range of addresses as used so that the alloc method will not return any addresses within that range.
+
+

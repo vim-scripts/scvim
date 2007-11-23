@@ -1,10 +1,11 @@
+
 Gendy2
 
-See Gendy1 help file for background. This variant of GENDYN is closer to that presented in 
+See Gendy1 help file for background. This variant of GENDYN is closer to that presented in
 
-Hoffmann, Peter. (2000) The New GENDYN Program. Computer Music Journal 24:2, pp 31-38. 
+Hoffmann, Peter. (2000) The New GENDYN Program. Computer Music Journal 24:2, pp 31-38.
 
-Technical notes- random walk is of the amplitude and time delta, not the amp and time directly. The amplitude step random walk uses a lehmer style number generator whose parameters are accessible. 
+Technical notes- random walk is of the amplitude and time delta, not the amp and time directly. The amplitude step random walk uses a lehmer style number generator whose parameters are accessible.
 
 Class Methods
 
@@ -12,7 +13,7 @@ Class Methods
 
 All parameters can be modulated at control rate except for initCPs which is used only at initialisation.
 
-ampdist - Choice of probability distribution for the next perturbation of the amplitude of a control point. 
+ampdist - Choice of probability distribution for the next perturbation of the amplitude of a control point.
 
 The distributions are (adapted from the GENDYN program in Formalized Music):
 0- LINEAR
@@ -24,21 +25,21 @@ The distributions are (adapted from the GENDYN program in Formalized Music):
 6- SINUS
 Where the sinus (Xenakis' name) is in this implementation taken as sampling from a third party oscillator. See example below.
 
-durdist- Choice of distribution for the perturbation of the current inter control point duration. 
+durdist- Choice of distribution for the perturbation of the current inter control point duration.
 
 adparam- A parameter for the shape of the amplitude probability distribution, requires values in the range 0.0001 to 1 (there are safety checks in the code so don't worry too much if you want to modulate!)
 
 ddparam- A parameter for the shape of the duration probability distribution, requires values in the range 0.0001 to 1
 
-minfreq- Minimum allowed frequency of oscillation for the Gendy1 oscillator, so gives the largest period the duration is allowed to take on. 
+minfreq- Minimum allowed frequency of oscillation for the Gendy1 oscillator, so gives the largest period the duration is allowed to take on.
 
-maxfreq- Maximum allowed frequency of oscillation for the Gendy1 oscillator, so gives the smallest period the duration is allowed to take on. 
+maxfreq- Maximum allowed frequency of oscillation for the Gendy1 oscillator, so gives the smallest period the duration is allowed to take on.
 
 ampscale- Normally 0.0 to 1.0, multiplier for the distribution's delta value for amplitude. An ampscale of 1.0 allows the full range of -1 to 1 for a change of amplitude.
 
 durscale- Normally 0.0 to 1.0, multiplier for the distribution's delta value for duration. An ampscale of 1.0 allows the full range of -1 to 1 for a change of duration.
 
-initCPs- Initialise the number of control points in the memory. Xenakis specifies 12. There would be this number of control points per cycle of the oscillator, though the oscillator's period will constantly change due to the duration distribution. 
+initCPs- Initialise the number of control points in the memory. Xenakis specifies 12. There would be this number of control points per cycle of the oscillator, though the oscillator's period will constantly change due to the duration distribution.
 
 knum- Current number of utilised control points, allows modulation. 
 
@@ -48,12 +49,12 @@ c- parameter for Lehmer random number generator perturbed by Xenakis
 
 
 Examples
- 
- 
-//warning- if you have lots of CPs and you have fast frequencies, the CPU cost goes up a lot because a new CP move happens every sample! 
+	
+	
+//warning- if you have lots of CPs and you have fast frequencies, the CPU cost goes up a lot because a new CP move happens every sample!	
 
- 
-//LOUD! defaults like a rougher Gendy1 
+	
+//LOUD! defaults like a rougher Gendy1	
 {Pan2.ar(Gendy2.ar)}.play
 
 //advantages of messing with the random number generation- causes periodicities
@@ -76,7 +77,7 @@ MouseY.kr(10,10000,'exponential'),0.05)
 {Pan2.ar(Gendy2.ar(3,5,1.0,1.0,50,1000,MouseX.kr(0.05,1),MouseY.kr(0.05,1),15, 0.05,0.51,mul:0.5))}.play
 
 
-//play me 
+//play me	
 {Pan2.ar(RLPF.ar(Gendy2.ar(1,3,minfreq:20, maxfreq:MouseX.kr(100,1000), durscale:0.0, initCPs:4), 500,0.3, 0.2), 0.0)}.play
 
 
@@ -87,11 +88,11 @@ MouseY.kr(10,10000,'exponential'),0.05)
 {Pan2.ar(Gendy2.ar(initCPs:2))}.play
 
 
-//used as an LFO 
+//used as an LFO	
 (
 {Pan2.ar(SinOsc.ar(Gendy2.kr(2,1,SinOsc.kr(0.1,0,0.49,0.51),SinOsc.kr(0.13,0,0.49,0.51), 3.4,3.5, SinOsc.kr(0.17,0,0.49,0.51), SinOsc.kr(0.19,0,0.49,0.51),10,10,mul:50, add:350), 0, 0.3), 0.0)}.play
 )
- 
+	
 //very angry wasp
 {Pan2.ar(Gendy2.ar(0, 0, SinOsc.kr(0.1, 0, 0.1, 0.9),1.0, 50,1000, 1,0.005, 12, 12, 0.2,0.2,0.2), 0.0)}.play
 
@@ -109,7 +110,7 @@ MouseY.kr(10,10000,'exponential'),0.05)
 {Pan2.ar(Gendy2.ar(maxfreq:Gendy1.kr(5,4,0.3, 0.7, 0.1, MouseY.kr(0.1,10), 1.0, 1.0, 5,5, 500, 600), knum:MouseX.kr(1,13),mul:0.2), 0.0)}.play
 
 
-//use SINUS to track any oscillator and take CP positions from it, use adparam and ddparam as the inputs to sample 
+//use SINUS to track any oscillator and take CP positions from it, use adparam and ddparam as the inputs to sample
 {Pan2.ar(Gendy2.ar(6,6,LFPulse.kr(100, 0, 0.4, 1.0), SinOsc.kr(30, 0, 0.5),mul:0.2), 0.0)}.play
 
 
@@ -181,3 +182,5 @@ Pan2.ar(Gendy2.ar(6.rand,6.rand,1.0.rand,1.0.rand,freq ,freq, 1.0.rand, 1.0.rand
 
 
 //SuperCollider implementation by Nick Collins (sicklincoln.org)
+
+

@@ -1,5 +1,6 @@
 
-Formlet FOF-like filter
+
+Formlet			FOF-like filter
 
 Formlet.ar(in, freq, attacktime, decaytime, mul, add)
 
@@ -28,34 +29,36 @@ decayTime - 60 dB decay time in seconds.
 
 (
 // modulating formant frequency
-{ 
- var in;
- in = Blip.ar(SinOsc.kr(5,0,20,300), 1000, 0.1);
- Formlet.ar(in, XLine.kr(1500,700,8), 0.005, 0.04);
+{
+	var in;
+	in = Blip.ar(SinOsc.kr(5,0,20,300), 1000, 0.1);
+	Formlet.ar(in, XLine.kr(1500,700,8), 0.005, 0.04);
 }.play;
 )
 
 (
 // mouse control of frequency and decay time.
-{ 
- var in;
- in = Blip.ar(SinOsc.kr(5,0,20,300), 1000, 0.1);
- Formlet.ar(in, 
- MouseY.kr(700,2000,1), 
- 0.005, MouseX.kr(0.01,0.2,1));
+{
+	var in;
+	in = Blip.ar(SinOsc.kr(5,0,20,300), 1000, 0.1);
+	Formlet.ar(in,
+		MouseY.kr(700,2000,1),
+		0.005, MouseX.kr(0.01,0.2,1));
 }.play;
 )
 
 (
 // mouse control of frequency and decay time.
-{ 
- var freq;
- freq = Formlet.kr(
- Dust.kr(10 ! 2), 
- MouseY.kr(7,200,1), 
- 0.005, MouseX.kr(0.1,2,1)
- );
- SinOsc.ar(freq * 200 + [500, 600] - 100) * 0.2
+{
+	var freq;
+	freq = Formlet.kr(
+		Dust.kr(10 ! 2),
+		MouseY.kr(7,200,1),
+		0.005, MouseX.kr(0.1,2,1)
+	);
+	SinOsc.ar(freq * 200 + [500, 600] - 100) * 0.2
 }.play;
 )
+
+
 

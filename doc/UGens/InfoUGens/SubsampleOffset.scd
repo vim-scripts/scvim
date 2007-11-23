@@ -1,15 +1,16 @@
-SubsampleOffsetoffset from synth start within one sample
+
+SubsampleOffset		offset from synth start within one sample
 
 superclass: InfoUGenBase
 
- 
-SubsampleOffset.ir
+	
+	SubsampleOffset.ir
 
 
-When a synth is created from a time stamped osc-bundle, it starts calculation at the next possible block (normally 64 samples). Using an OffsetOut ugen, one can delay the audio so that it matches sample accurately. 
+When a synth is created from a time stamped osc-bundle, it starts calculation at the next possible block (normally 64 samples). Using an OffsetOut ugen, one can delay the audio so that it matches sample accurately.
 For some synthesis methods, one needs subsample accuracy. SubsampleOffset provides the information where, within the current sample, the synth was scheduled. It can be used to offset envelopes or resample the audio output.
 
-see also: [OffsetOut]
+see also: OffsetOut
 
 
 
@@ -22,18 +23,18 @@ Server.default = s = Server.internal; // switch servers for scope
 // impulse train that can be moved between samples
 (
 SynthDef(\Help_SubsampleOffset, { |out, addOffset|
- var in, dt, sampDur, extraSamples, sampleOffset, resampledSignal;
- in = Impulse.ar(2000, 0, 0.3); // some input.
- sampDur = SampleDur.ir; // duration of one sample
- extraSamples = 4; // DelayC needs at least 4 samples buffer
- sampleOffset = 1 - SubsampleOffset.ir; // balance out subsample offset
- sampleOffset = sampleOffset + MouseX.kr(0, addOffset); // add a mouse dependent offset
- // cubic resampling:
- resampledSignal = DelayC.ar(in, 
- maxdelaytime: sampDur * (1 + extraSamples),
- delaytime: sampDur * (sampleOffset + extraSamples)
- );
- OffsetOut.ar(out, resampledSignal)
+	var in, dt, sampDur, extraSamples, sampleOffset, resampledSignal;
+	in = Impulse.ar(2000, 0, 0.3); // some input.
+	sampDur = SampleDur.ir; 	// duration of one sample
+	extraSamples = 4;			// DelayC needs at least 4 samples buffer
+	sampleOffset = 1 - SubsampleOffset.ir; // balance out subsample offset
+	sampleOffset = sampleOffset + MouseX.kr(0, addOffset); // add a mouse dependent offset
+	// cubic resampling:
+	resampledSignal = DelayC.ar(in,
+							maxdelaytime: sampDur * (1 + extraSamples),
+							delaytime: sampDur * (sampleOffset + extraSamples)
+					);
+	OffsetOut.ar(out, resampledSignal)
 }).send(s);
 )
 
@@ -58,28 +59,30 @@ s.scope(1, 40, zoom: 0.2);
 // someone could add an example that shows the effect)
 
 (
-SynthDef("Help_Subsample_Grain", 
- { arg out=0, freq=440, sustain=0.005, attack=0.001;
- var env, offset, sig, sd;
- 
- sd = SampleDur.ir;
- offset = (1 - SubsampleOffset.ir) * sd;
- // free synth after delay:
- Line.ar(1,0, attack + sustain + offset, doneAction:2); env = EnvGen.kr(Env.perc(attack, sustain, 0.2));
- sig = SinOsc.ar(freq, 0, env);
- 
- sig = DelayC.ar(sig, sd * 4, offset);
- OffsetOut.ar(out, sig);
- }, [\ir, \ir, \ir, \ir]).send(s);
+SynthDef("Help_Subsample_Grain",
+	{ arg out=0, freq=440, sustain=0.005, attack=0.001;
+		var env, offset, sig, sd;
+		
+		sd = SampleDur.ir;
+		offset = (1 - SubsampleOffset.ir) * sd;
+		// free synth after delay:
+		Line.ar(1,0, attack + sustain + offset, doneAction:2); 		env = EnvGen.kr(Env.perc(attack, sustain, 0.2));
+		sig = SinOsc.ar(freq, 0, env);
+		
+		sig = DelayC.ar(sig, sd * 4, offset);
+		OffsetOut.ar(out, sig);
+	}, [\ir, \ir, \ir, \ir]).send(s);
 )
 
 (
- Routine {
- loop {
- s.sendBundle(0.2, [9, \Help_Subsample_Grain, -1, 1, 1, \freq, 1000]);
- rrand(0.001, 0.002).wait;
- }
- }.play;
+	Routine {
+		loop {
+			s.sendBundle(0.2, [9, \Help_Subsample_Grain, -1, 1, 1, \freq, 1000]);
+			rrand(0.001, 0.002).wait;
+		}
+	}.play;
 )
+
+
 
 

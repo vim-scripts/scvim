@@ -1,3 +1,4 @@
+
 *initClass
 
 
@@ -8,20 +9,20 @@ In this method, any class that requires it may initalize classvars or other reso
 
 
 In some cases you will require another class to be initalized before you can initalize your own. You may depend on its resources (a classvar). This can be accomplished by:
- 
+	
 YourClass {
- *initClass {
- Class.initClass(OtherClass);
- 
- ..
- 
- //
- 
- ..
- }
- 
- ..
- 
+	*initClass {
+		Class.initClass(OtherClass);
+		
+		..
+		
+		//
+		
+		..
+	}
+	
+	..
+	
 }
 
 
@@ -30,4 +31,6 @@ Each class will be inited once, and the OtherClass will have all of its subclass
 
 
 -felix
+
+
 

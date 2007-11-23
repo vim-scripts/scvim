@@ -1,5 +1,5 @@
 
-SetResetFF set-reset flip flop
+SetResetFF			set-reset flip flop
 
 SetResetFF.ar(trig, reset)
 
@@ -12,8 +12,10 @@ reset - trigger resets output to zero
 
 (
 play({
- a = Dust.ar(5); // the set trigger
- b = Dust.ar(5); // the reset trigger
- SetResetFF.ar(a,b) * BrownNoise.ar(0.2); 
+	a = Dust.ar(5); // the set trigger
+	b = Dust.ar(5); // the reset trigger
+	SetResetFF.ar(a,b) * BrownNoise.ar(0.2);
 
 }))
+
+

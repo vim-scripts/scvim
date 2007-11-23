@@ -1,7 +1,8 @@
+
 Control Structures
 
-Control structures in SuperCollider are implemented via message sends. Here are a few of those available. 
-See [Syntax-Shortcuts] for the various ways expressions can be written.
+Control structures in SuperCollider are implemented via message sends. Here are a few of those available.
+See Syntax-Shortcuts for the various ways expressions can be written.
 
 
 
@@ -16,13 +17,13 @@ if (expr, trueFunc, falseFunc);
 expr.if (trueFunc, falseFunc);
 
 
-see also: the [if] helpfile
+see also: the if helpfile
 
 examples:
 
-if ( [false, true].choose, // Boolean expression (chooses one at random)
- { "expression was true".postln }, // true function
- { "expression was false".postln } // false function
+if ( [false, true].choose,				// Boolean expression (chooses one at random)
+	{ "expression was true".postln },	// true function
+	{ "expression was false".postln }	// false function
 )
 
 (
@@ -117,7 +118,7 @@ example:
 
 'they'.do({ arg item; item.postln }); // a Symbol is a singular item
 
-(8..20).do({ arg item; item.postln }); // iterates from eight to twenty 
+(8..20).do({ arg item; item.postln }); // iterates from eight to twenty
 
 (8,10..20).do({ arg item; item.postln }); // iterates from eight to twenty, with stepsize two
 
@@ -132,30 +133,36 @@ Object implements a switch method which allows for conditional evaluation with m
 
 
 (
+var x=0; //also try 1
+switch(x,0,{"hello"}, 1, {"goodbye"})
+)
+
+
+(
 var x, z;
 z = [0, 1, 1.1, 1.3, 1.5, 2];
 switch (z.choose.postln,
- 1, { \no },
- 1.1, { \wrong },
- 1.3, { \wrong },
- 1.5, { \wrong },
- 2, { \wrong },
- 0, { \true }
+	1,  { \no },
+	1.1, { \wrong },
+	1.3, { \wrong },
+	1.5, { \wrong },
+	2,  { \wrong },
+	0,  { \true }
 ).postln;
 )
 
 or:
- 
+		
 (
 var x, z;
 z = [0, 1, 1.1, 1.3, 1.5, 2];
 x = switch (z.choose)
- {1} { \no }
- {1.1} { \wrong }
- {1.3} { \wrong }
- {1.5} { \wrong }
- {2} { \wrong }
- {0} { \true };
+	{1}  { \no }
+	{1.1} { \wrong }
+	{1.3} { \wrong }
+	{1.5} { \wrong }
+	{2}  { \wrong }
+	{0}  { \true };
 x.postln;
 )
 
@@ -168,12 +175,12 @@ var i, x, z;
 z = [0, 1, 1.1, 1.3, 1.5, 2];
 i = z.choose;
 x = case
- { i == 1 } { \no }
- { i == 1.1 } { \wrong }
- { i == 1.3 } { \wrong }
- { i == 1.5 } { \wrong }
- { i == 2 } { \wrong }
- { i == 0 } { \true };
+	{ i == 1 }  { \no }
+	{ i == 1.1 } { \wrong }
+	{ i == 1.3 } { \wrong }
+	{ i == 1.5 } { \wrong }
+	{ i == 2 }  { \wrong }
+	{ i == 0 }  { \true };
 x.postln;
 )
 
@@ -181,4 +188,6 @@ x.postln;
 Other Control Structures
 
 Using Functions, many control structures can be defined like the ones above. In the class Collection there are many more messages defined for iterating over Collections.
+
+
 

@@ -1,3 +1,4 @@
+
 SCMultiSliderView
 
 
@@ -13,14 +14,14 @@ b = SCMultiSliderView(a, Rect(0, 0, 350, 100));
 
 c = Array.new;
 size.do({arg i;
- c = c.add(0.01);
- });
+	c = c.add(0.01);
+	});
 c = c.reverse;
 b.value_(c);
 
 b.isFilled_(true);
 
-// width in pixels of each stick 
+// width in pixels of each stick
 b.indexThumbSize_(2.0);
 // spacing on the value axis
 b.gap_(4);
@@ -59,7 +60,7 @@ b.action = {arg xb; ("index: " ++ xb.index ++" value: " ++ xb.currentvalue).post
 
 c = Array.new;
 size.do({arg i;
- c = c.add(i/size);
+	c = c.add(i/size);
 });
 b.value_(c);
 
@@ -100,17 +101,17 @@ b.selectionSize;
 b.setProperty(\showIndex, true);
 
 r = Routine({
- var j = 0;
- 20.do({ arg i;
- 0.1.wait;
- b.index_(j);
- if (j < 11 ,{j = j + 1},{j = 0});
- });
- 0.1.wait;
- 20.do({ arg i;
- [0.1,0.2].choose.wait;
- b.index_(b.size.rand);
- });
+	var j = 0;
+	20.do({ arg i;
+		0.1.wait;
+		b.index_(j);
+		if (j < 11 ,{j = j + 1},{j = 0});
+	});
+	0.1.wait;
+	20.do({ arg i;
+		[0.1,0.2].choose.wait;
+		b.index_(b.size.rand);
+	});
 });
 AppClock.play(r);
 
@@ -130,7 +131,7 @@ a.view.decorator.nextLine;
 e = SCMultiSliderView(a, Rect(0, 0, size * 17, 50));
 c = Array.new;
 size.do({arg i;
- c = c.add(i/size);
+	c = c.add(i/size);
 });
 b.value_(c);
 
@@ -182,17 +183,17 @@ maxval = 0;
 f = Array.new;
 d = Array.new;
 c.do({arg fi, i;
- if(fi < minval, {minval = fi});
- if(fi > maxval, {maxval = fi});
+	if(fi < minval, {minval = fi});
+	if(fi > maxval, {maxval = fi});
 
- //f.postln;
- if(i % 256 == 0,{
- d = d.add((1 + maxval ) * 0.5 );
- f = f.add((1 + minval ) * 0.5 );
- 
- minval = 0;
- maxval = 0;
- });
+	//f.postln;
+	if(i % 256 == 0,{
+		d = d.add((1 + maxval ) * 0.5 );
+		f = f.add((1 + minval ) * 0.5 );
+	
+		minval = 0;
+		maxval = 0;
+	});
 });
 
 b.reference_(d); //this is used to draw the upper part of the table
@@ -208,7 +209,7 @@ b.drawRects_(false);
 b.isFilled_(true);
 b.selectionSize_(10);
 b.index_(10);
-b.thumbSize_(1); 
+b.thumbSize_(1);
 b.gap_(0);
 b.colors_(Color.black, Color.blue(1.0,1.0));
 b.showIndex_(true);
@@ -233,7 +234,7 @@ b.action = { arg xb; ("index: " ++ xb.index ++" value: " ++ xb.currentvalue).pos
 
 c = Array.new;
 size.do({ arg i;
- c = c.add(i/size);
+	c = c.add(i/size);
 });
 b.value_(c);
 
@@ -253,8 +254,10 @@ a.front;
 // this means the x-dimension size in pixels
 b.indexThumbSize = 40
 
-// not the selection size 
+// not the selection size
 
 // value pixels, the y-dimension
 b.valueThumbSize = 100
+
+
 

@@ -1,3 +1,4 @@
+
 Dictionary
 
 Superclass: Set
@@ -5,7 +6,7 @@ Superclass: Set
 A Dictionary is an associative collection mapping keys to values.
 Two keys match if they are equal. i.e. == returns true.
 
-The contents of a Dictionary are unordered. 
+The contents of a Dictionary are unordered.
 You must not depend on the order of items in a Dictionary.
 
 
@@ -35,7 +36,7 @@ put(key, obj)
 
 Associate two objects and add them to the Dictionary.
 key - key to associate with object
-obj  - an object
+obj - an object
 
 d.put("abc", 10).postln;
 
@@ -58,19 +59,19 @@ d.at('monkey');
 
 matchAt(item)
 
-The dictionary's keys are used as conditions against which the arbitrary item is matched. 
+The dictionary's keys are used as conditions against which the arbitrary item is matched.
 
 Note: if an item matches multiple criteria, the value returned is arbitrary. This is because a dictionary is an unordered collection. It's the user's responsibility to make sure that criteria are mutually exclusive.
 
-If the key is an object, the item will be matched by identity (if key === item, the value will be returned). 
-If the key is a collection, the item is matched if it's contained in the collection. 
+If the key is an object, the item will be matched by identity (if key === item, the value will be returned).
+If the key is a collection, the item is matched if it's contained in the collection.
 If the key is a function, the function is evaluated with the item as an argument and the item is matched if the function returns true.
 
 d = Dictionary[
- 0 -> 'zero',
- 'abc' -> 'alpha',
- [1, 2, 3, 5, 8, 13, 21] -> 'fibonacci',
- { |x| x.even } -> 'even'
+	0 -> 'zero',
+	'abc' -> 'alpha',
+	[1, 2, 3, 5, 8, 13, 21] -> 'fibonacci',
+	{ |x| x.even } -> 'even'
 ];
 
 d.matchAt(0)
@@ -78,3 +79,5 @@ d.matchAt(1)
 d.matchAt(2) // matches both 'fibonacci' and 'even', but 'fibonacci' is returned
 d.matchAt(4)
 d.matchAt('abc')
+
+

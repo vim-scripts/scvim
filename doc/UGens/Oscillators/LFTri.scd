@@ -1,5 +1,5 @@
 
-LFTri triangle oscillator
+LFTri				triangle oscillator
 
 LFTri.ar(freq, iphase, mul, add)
 
@@ -11,4 +11,6 @@ iphase - initial phase offset. For efficiency reasons this is a value ranging fr
 
 // used as both Oscillator and LFO:
 { LFTri.ar(LFTri.kr(4, 0, 200, 400), 0, 0.1) }.play
+
+
 

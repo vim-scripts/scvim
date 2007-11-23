@@ -1,4 +1,5 @@
-InRange tests if a signal is within a given range
+
+InRange			tests if a signal is within a given range
 
 inRange.ar(in, lo, hi)
 InRange.kr(in, lo, hi)
@@ -14,3 +15,5 @@ Server.internal.boot;
 { InRange.kr(SinOsc.kr(1, 0, 0.2), -0.15, 0.15)}.scope; // see the trigger
 
 { InRange.kr(SinOsc.kr(1, 0, 0.2), -0.15, 0.15) * BrownNoise.ar(0.1)}.scope; // trigger noise Burst
+
+

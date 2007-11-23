@@ -1,5 +1,6 @@
 
-MultiTap multiple tap delay
+
+MultiTap				multiple tap delay
 
 MultiTap.ar(timesArray, levelsArray, in, mul, add, bufnum)
 
@@ -13,8 +14,10 @@ s.boot;
 b = Buffer.alloc(s, s.sampleRate);
 (
 {
- MultiTap.ar(`[0.1, 0.2, 0.3, 0.4], `[0.1, 0.2, 0.4, 0.8], 
- Decay.ar(Dust.ar(2), 0.1, PinkNoise.ar), bufnum: b.bufnum)
+	MultiTap.ar(`[0.1, 0.2, 0.3, 0.4], `[0.1, 0.2, 0.4, 0.8],
+		Decay.ar(Dust.ar(2), 0.1, PinkNoise.ar), bufnum: b.bufnum)
 }.play
 )
+
+
 

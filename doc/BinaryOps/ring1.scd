@@ -1,4 +1,5 @@
-ring1 ring modulation plus first source
+
+ring1			ring modulation plus first source
 
 BinaryOperator
 
@@ -13,18 +14,20 @@ same as :
 
 (
 {
- var a, b;
- a = FSinOsc.ar(800);
- b = FSinOsc.ar(XLine.kr(200,500,5));
- ((a * b) + a) * 0.125
+	var a, b;
+	a = FSinOsc.ar(800);
+	b = FSinOsc.ar(XLine.kr(200,500,5));
+	((a * b) + a) * 0.125
 }.play)
 
 normal ring modulation:
 
 (
 {
- var a, b;
- a = FSinOsc.ar(800);
- b = FSinOsc.ar(XLine.kr(200,500,5));
- (a * b) * 0.125
+	var a, b;
+	a = FSinOsc.ar(800);
+	b = FSinOsc.ar(XLine.kr(200,500,5));
+	(a * b) * 0.125
 }.play)
+
+

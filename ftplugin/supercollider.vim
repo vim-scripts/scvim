@@ -1,5 +1,20 @@
-" By Alex Norman
-" SuperCollider/Vim interaction scripts
+"SuperCollider/Vim interaction scripts
+"Copyright 2007 Alex Norman
+"
+"This file is part of SCVIM.
+"
+"SCVIM is free software: you can redistribute it and/or modify
+"it under the terms of the GNU General Public License as published by
+"the Free Software Foundation, either version 3 of the License, or
+"(at your option) any later version.
+"
+"SCVIM is distributed in the hope that it will be useful,
+"but WITHOUT ANY WARRANTY; without even the implied warranty of
+"MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+"GNU General Public License for more details.
+"
+"You should have received a copy of the GNU General Public License
+"along with SCVIM.  If not, see <http://www.gnu.org/licenses/>.
 
 "au VimLeave
 
@@ -15,307 +30,256 @@ let loaded_scvim = 1
 
 so $SCVIM_DIR/syntax/supercollider.vim
 
-"ruby definitions
-ruby << EOF
+if exists("g:sclangKillOnExit")
+	let s:sclangKillOnExit = g:sclangKillOnExit
+else
+	let s:sclangKillOnExit = 1
+endif
 
-#these are user editable
-$sclangpipe_loc = "/tmp/sclang-pipe"
-$sclang_terminal = "xterm -e"
-$sclangapp = `which sclang`.chomp
-$rundir = "/home/alex/music/supercollider/"
+if exists("g:sclangPipeLoc")
+	let s:sclangPipeLoc = g:sclangPipeLoc
+else
+	let s:sclangPipeLoc = "/tmp/sclang-pipe"
+endif
+let $SCVIM_PIPE_LOC = s:sclangPipeLoc
 
-#don't edit these variables
-$sclang_pid = 0
-#we need to remove the quotes for when we ask for this process's pid, but the pid lookup function
-#doesn't like to have the arguments, so we add the argument and the last quote after we save the
-#app name and remove the quotes
-$sclangpipe_app = "#{$sclang_terminal} \"while [ 1==1 ]; do cat #{$sclangpipe_loc}; done | #{$sclangapp}"
-$sclangpipe_app_no_quotes = $sclangpipe_app.gsub(/"/,"")
-$sclangpipe_app = "#{$sclangpipe_app} -d #{$rundir}\""
-#this is the file descriptor of the pipe to sclang
-$sclangpipe_ref = 0
+if exists("g:sclangPipeAppPidLoc")
+	let s:sclangPipeAppPidLoc = g:sclangPipeAppPidLoc
+else
+	let s:sclangPipeAppPidLoc = "/tmp/sclangpipe_app-pid"
+endif
+let $SCVIM_PIPE_PID_LOC = s:sclangPipeAppPidLoc
 
-class UnmachedParen < StandardError
-	def initialize
-		@message = "Error: Unmached Paren"
-	end
-end
+if exists("g:sclangTerm")
+	let s:sclangTerm = g:sclangTerm
+else
+	let s:sclangTerm = "xterm -e"
+endif
 
-class OutsideOfParens < StandardError
-	def initialize
-		@message = "Error: Not Inside of Parens"
-	end
-end
+if exists("g:sclangPipeApp")
+	let s:sclangPipeApp	= g:sclangPipeApp
+else
+	let s:sclangPipeApp	= "$SCVIM_DIR/bin/sclangpipe_app.sh"
+endif
 
-class SClangNotLaunched < StandardError
-	def initialize
-		@message = "Error: SClang Not Launched"
-	end
-end
-
-#def InitSClang()
-#	if $sclangpipe_ref != 0
-#		$sclangpipe_ref.close
-#	end
-#	curdir = Dir.pwd
-#	Dir.chdir($rundir)
-#	$sclangpipe_ref = IO.popen("#{$sclangloc}", "a+")
-#	Dir.chdir(curdir)
-#
-#	#hack for now, split the screen and load the buffer
-#	VIM::command("norm :10split sclangoutput")
-#	VIM::command("setlocal buftype=nofile")
-#	VIM::command("setlocal noswapfile")
-#	#go back to our buffer (and swap the locations)
-#	VIM::command("norm x")
-#
-#	@sclang_output_thread = Thread.new {
-#		#VIM::command("bad sclangoutput")
-#		n = VIM::evaluate('bufnr("sclangoutput")').to_i
-#		b = VIM::Buffer[n-1]
-#		while true
-#			line = $sclangpipe_ref.gets
-#			#get rid of the control char at the end
-#			line.chomp!
-#			b.append(b.count, line)
-#		end
-#	}
-#end
-
-def SClangKill
-	if $sclang_pid != 0
-		Process.kill("SIGKILL", $sclang_pid)
-		$sclang_pid = 0
-	end
-end
-
-def SClangStart
-	#if our sclang app is already running then we should kill it
-
-	if $sclang_pid != 0 || `pidof "#{$sclangpipe_app_no_quotes}"`.chomp != ""
-		SClangKill()
-	end
-
-	#make the pipe if we need it
-	if !File.exists?($sclangpipe_loc)
-		system("mkfifo #{$sclangpipe_loc}")
-	elsif !File.stat($sclangpipe_loc).pipe?
-		VIM::message("file exists at #{$sclangpipe_loc} that is not a pipe")	
-		return
-	end
-
-	#keep the pid so that we can kill it later
-	#fork a new process then exec the sclang pipe script in a terminal
-	$sclang_pid = fork do
-		exec($sclangpipe_app)
-	end
-end
+"function SClangRunning()
+"	if s:sclang_pid != 0 && `pidof "#{$sclangsclangPipeApp_no_quotes}"`.chomp != ""
+"		return true
+"	else
+"		$sclang_pid = 0
+"		return false
+"	end
+"end
 
 
-def SClangRunning?
-	if $sclang_pid != 0 && `pidof "#{$sclangpipe_app_no_quotes}"`.chomp != ""
-		return true
-	else
-		$sclang_pid = 0
-		return false
-	end
-end
+function! FindOuterMostBlock()
+	"search backwards for parens dont wrap
+	let l:search_expression_up = "call searchpair('(', '', ')', 'bW'," .
+		\"'synIDattr(synID(line(\".\"), col(\".\"), 0), \"name\") =~? \"scComment\" || " .
+		\"synIDattr(synID(line(\".\"), col(\".\"), 0), \"name\") =~? \"scString\" || " .
+		\"synIDattr(synID(line(\".\"), col(\".\"), 0), \"name\") =~? \"scSymbol\"')"
+	"search forward for parens, don't wrap
+	let l:search_expression_down = "call searchpair('(', '', ')', 'W'," .
+		\"'synIDattr(synID(line(\".\"), col(\".\"), 0), \"name\") =~? \"scComment\" || " .
+		\"synIDattr(synID(line(\".\"), col(\".\"), 0), \"name\") =~? \"scString\" || " .
+		\"synIDattr(synID(line(\".\"), col(\".\"), 0), \"name\") =~? \"scSymbol\"')"
 
-def SendToSC(textosend)
-	if !SClangRunning?
-		throw :SClangNotLaunched
-	end
-#	if $sclangpipe_ref != 0
-#		$sclangpipe_ref.puts textosend
-#		$sclangpipe_ref.flush
-#	else
-#		throw :SClangNotLaunched
-#	end
-	f = File.open($sclangpipe_loc, File::WRONLY|File::APPEND)
-	#write the text to the pipe
-	f.puts textosend
-	f.close
-end
-
-def currentline()
-	return VIM::evaluate('line(".")').to_i
-end
-
-def currentcol()
-	return VIM::evaluate('col(".")').to_i
-end
-
-def cursor(line,col)
-	VIM::evaluate('cursor(' + line.to_s + ', ' + col.to_s + ')')
-end
-
-def findOuterMostBlock()
-
-	#search backwards for parens dont wrap
-	search_expression_up = "searchpair('(', '', ')', 'bW'," +
-		"'synIDattr(synID(line(\".\"), col(\".\"), 0), \"name\") =~? \"scComment\" || " +
-		"synIDattr(synID(line(\".\"), col(\".\"), 0), \"name\") =~? \"scString\" || " +
-		"synIDattr(synID(line(\".\"), col(\".\"), 0), \"name\") =~? \"scSymbol\"')"
-	#search forward for parens, don't wrap
-	search_expression_down = "searchpair('(', '', ')', 'W'," +
-		"'synIDattr(synID(line(\".\"), col(\".\"), 0), \"name\") =~? \"scComment\" || " +
-		"synIDattr(synID(line(\".\"), col(\".\"), 0), \"name\") =~? \"scString\" || " +
-		"synIDattr(synID(line(\".\"), col(\".\"), 0), \"name\") =~? \"scSymbol\"')"
-
-	buf = VIM::Buffer.current
-
-	#save our current cursor position
-	returnline = currentline()
-	returncol = currentcol()
+	"save our current cursor position
+	let l:returnline = line(".")
+	let l:returncol = col(".")
 	
-	#if we're on an opening paren then we should actually go to the closing one to start the search
-	if(buf[returnline][returncol-1,1] == "(")
-		VIM::evaluate(search_expression_down)
-	end
+	"if we're on an opening paren then we should actually go to the closing one to start the search
+	"if buf[l:returnline][l:returncol-1,1] == "("
+	if strpart(getline(line(".")),col(".") - 1,1) == "("
+		exe l:search_expression_down
+	endif
 
-	origline = currentline()
-	origcol = currentcol()
+	let l:origline = line(".")
+	let l:origcol = col(".")
 
-	#these numbers will define our range, first init them to illegal values
-	range_e = range_s = [-1, -1]
+	"these numbers will define our range, first init them to illegal values
+	let l:range_e = [-1, -1]
+	let l:range_s = [-1, -1]
 
-	#this is the last line in our search
-	lastline = currentline()
-	lastcol = currentcol()
+	"this is the last line in our search
+	let l:lastline = line(".")
+	let l:lastcol = col(".")
 
-	VIM::evaluate(search_expression_up)
+	exe l:search_expression_up
 
-	while currentline() != lastline || (currentline() == lastline && currentcol() != lastcol)
-		#keep track of the last line/col we were on
-		lastline = currentline()
-		lastcol = currentcol()
-		#go to the matching paren
-		VIM::evaluate(search_expression_down)
+	while line(".") != l:lastline || (line(".") == l:lastline && col(".") != l:lastcol)
+		"keep track of the last line/col we were on
+		let l:lastline = line(".")
+		let l:lastcol = col(".")
+		"go to the matching paren
+		exe l:search_expression_down
 
-		#if there isn't a match print an error
-		if lastline == currentline() && lastcol == currentcol()
-			#restore the buffer variable match_skip
-			restoreMatchitSettings(old_match_skip, old_match_words)
-			cursor(returnline,returncol)
-			throw :UnmachedParen
-		end
+		"if there isn't a match print an error
+		if l:lastline == line(".") && l:lastcol == col(".")
+			call cursor(l:returnline,l:returncol)
+			throw "UnmachedParen at line:" . l:lastline . ", col: " . l:lastcol
+		endif
 
-		#if this is equal to or later than our original cursor position
-		if currentline() > origline || (currentline() == origline && currentcol() >= origcol)
-			range_e = [currentline(), currentcol()]
-			#go back to opening paren
-			VIM::evaluate(search_expression_up)
-			range_s = [currentline(), currentcol()]
+		"if this is equal to or later than our original cursor position
+		if line(".") > l:origline || (line(".") == l:origline && col(".") >= l:origcol)
+			let l:range_e = [line("."), col(".")]
+			"go back to opening paren
+			exe l:search_expression_up
+			let l:range_s = [line("."), col(".")]
 		else
-			#go back to opening paren
-			VIM::evaluate(search_expression_up)
-		end
-		#find next paren (if there is one)
-		VIM::evaluate(search_expression_up)
-	end
+			"go back to opening paren
+			exe l:search_expression_up
+		endif
+		"find next paren (if there is one)
+		exe l:search_expression_up
+	endwhile
 
-	#restore the settings
-	cursor(returnline,returncol)
+	"restore the settings
+	call cursor(l:returnline,l:returncol)
 
-	throw :OutsideOfParens if range_s[0] == -1 || range_s[1] == -1
+	if l:range_s[0] == -1 || l:range_s[1] == -1
+		throw "OutsideOfParens"
+	endif
 	
-	#return the ranges
-	return [range_s, range_e]
-end
+	"return the ranges
+	 return [l:range_s, l:range_e]
+endfunction
 
-EOF
 
 "this causes the sclang pipe / terminal app to be killed when you exit vim, if you don't
 "want that to happen then just comment this out
 if !exists("loaded_kill_sclang")
-	au VimLeave * :ruby SClangKill()
+	if s:sclangKillOnExit
+		au VimLeave * call SClangKill()
+	endif
 	let loaded_kill_sclang = 1
 endif
 
 "the vim version of SendToSC
 function SendToSC(text)
-	ruby SendToSC(VIM::evaluate('a:text'))
+	let l:text = substitute(a:text, '\', '\\\\', 'g')
+	let l:text = substitute(l:text, '"', '\\"', 'g')
+	let l:cmd = system('echo "' . l:text . '" >> ' . s:sclangPipeLoc)
+	"let l:cmd = system('echo "' . l:text . '" >> /tmp/test')
+endfunction
+
+function SendLineToSC(linenum)
+	let cmd = a:linenum . "w! >> " . s:sclangPipeLoc
+	silent exe cmd
+	"let cmd = a:linenum . "w! >> /tmp/test" 
+	"silent exe cmd
 endfunction
 
 function! SClang_send()
-ruby << EOF
-	linenum = VIM::evaluate('line(".")').to_i
-	SendToSC(VIM::Buffer.current[linenum])
-	#if this is the last line in the range send the end character
-	if VIM::evaluate("a:lastline").to_i == linenum
-		SendToSC("")
-		#if(@sclang_output_thread != nil)
-		#	@sclang_output_thread.wakeup
-		#end
-	end
-EOF
+	let cmd = ".w! >> " . s:sclangPipeLoc
+	exe cmd
+	if line(".") == a:lastline
+		call SendToSC('')
+		"redraw!
+	endif
 endfunction
 
 function SClangStart()
-	ruby SClangStart()
+	if !filewritable(s:sclangPipeAppPidLoc)
+		call system(s:sclangTerm . " " . s:sclangPipeApp . "&")
+	else
+		throw s:sclangPipeAppPidLoc . " exists, is " . s:sclangPipeApp . " running?  If not try deleting " . s:sclangPipeAppPidLoc
+	endif
 endfunction
 
 function SClangKill()
-	ruby SClangKill()
+	if filewritable(s:sclangPipeAppPidLoc)
+		call system("kill `cat " . s:sclangPipeAppPidLoc . "` && rm " . s:sclangPipeAppPidLoc . " && rm " . s:sclangPipeLoc)
+	end
+endfunction
+
+function SClangRestart()
+	call SClangKill()
+	call SClangStart()
 endfunction
 
 function SClang_free(server)
-	ruby SendToSC("s.freeAll;")
+	call SendToSC('s.freeAll;')
+	redraw!
 endfunction
 
 function SClang_thisProcess_stop()
-	ruby SendToSC("thisProcess.stop;")
+	call SendToSC('thisProcess.stop;')
+	redraw!
 endfunction
 
 function SClang_TempoClock_clear()
-	ruby SendToSC("TempoClock.default.clear;")
+	call SendToSC('TempoClock.default.clear;')
+	redraw!
 endfunction
 
-function SClang_block()
-ruby << EOF
-	blkstart,blkend = findOuterMostBlock()
-
-	buf = VIM::Buffer.current
-	#if the range is just one line
-	if blkstart[0] == blkend[0]
-		SendToSC(buf[blkstart[0]][blkstart[1]-1, (blkend[1] - blkstart[1]) + 1])
-	else
-		linen = blkstart[0]
-		#send the first line as it might not be a full line
-		line = buf[linen]
-		SendToSC(line[blkstart[1] - 1, line.length - blkstart[1] + 1])
-		linen += 1
-		endlinen = blkend[0]
-		while linen < endlinen
-			SendToSC(buf[linen])
-			linen += 1
-		end
-		#send the last line as it might not be a full line
-		line = buf[endlinen]
-		SendToSC(line[0,blkend[1]])
-	end
-	SendToSC("")
-EOF
+function! SClang_block()
+	let [blkstart,blkend] = FindOuterMostBlock()
+	"blkstart[0],blkend[0] call SClang_send()
+	"these next lines are just a hack, how can i do the above??
+	let cmd = blkstart[0] . "," . blkend[0] . " call SClang_send()"
+	let l:origline = line(".")
+	let l:origcol = col(".")
+	exe cmd
+	call cursor(l:origline,l:origcol)
+	
+	""if the range is just one line
+	"if blkstart[0] == blkend[0]
+	"	"XXX call SendToSC(strpart(getline(blkstart[0]),blkstart[1] - 1, (blkend[1] - blkstart[1] + 1)))
+	"	call SendLineToSC(blkstart[0])
+	"else
+	"	let linen = blkstart[0] - 1
+	"	"send the first line as it might not be a full line
+	"	"XXX let line = getline(linen)
+	"	"XXX call SendToSC(strpart(line, blkstart[1] - 1))
+	"	call SendLineToSC(linen)
+	"	let linen += 1
+	"	let endlinen = blkend[0]
+	"	while linen < endlinen
+	"		"XXX call SendToSC(getline(linen))
+	"		call SendLineToSC(linen)
+	"		let linen += 1
+	"	endwhile
+	"	"send the last line as it might not be a full line
+	"	"XXX let line = getline(endlinen)
+	"	"XXX call SendToSC(strpart(line,0,blkend[1]))
+	"	call SendLineToSC(endlinen)
+	"endif
+	"call SendToSC('')
 endfunction
 
 function SCdef(subject)
-	let s:dontcare = system("grep SCDEF:" . a:subject . " $SCVIM_DIR/TAGS_SCDEF > $SCVIM_DIR/doc/tags")
+	let l:dontcare = system("grep SCDEF:" . a:subject . " $SCVIM_DIR/TAGS_SCDEF > $SCVIM_DIR/doc/tags")
 	exe "help SCdef:" . a:subject
 endfun
 
+"function SCbrowse(dir)
+"	if a:dir == ""
+"		let l:dontcare = system("grep \"SCB:Top\" $SCVIM_DIR/doc/TAGS_BROWSER > $SCVIM_DIR/doc/tags")
+"		exe "help SCB:Top"
+"	else
+"		let l:dontcare = system("grep SCB:\"" . a:dir . "\" $SCVIM_DIR/doc/TAGS_BROWSER > $SCVIM_DIR/doc/tags")
+"		exe "help SCB:" . a:dir
+"	end
+"endfun
+
 function SChelp(subject)
+	"if we're in the help browser do something different
+	if a:subject =~ "|$"
+		let l:dir = substitute(a:subject, '|', '', 'g')
+		call SCbrowse(l:dir)
 	"the keybindings won't find * but will find ** for some reason
-	if a:subject == ""
-		let s:dontcare = system("grep \"SC:Help\" $SCVIM_DIR/doc//TAGS_HELP > $SCVIM_DIR/doc/tags")
+	elseif a:subject == ""
+		let l:dontcare = system("grep \"SC:Help\" $SCVIM_DIR/doc/TAGS_HELP > $SCVIM_DIR/doc/tags")
 		exe "help SC:Help"
 	elseif a:subject == "*"
-		let s:dontcare = system("grep \"SC:\\*\" $SCVIM_DIR/doc/TAGS_HELP > $SCVIM_DIR/doc/tags")
+		let l:dontcare = system("grep \"SC:\\*\" $SCVIM_DIR/doc/TAGS_HELP > $SCVIM_DIR/doc/tags")
 		exe "help SC:\*" . a:subject
 	elseif a:subject == "**"
-		let s:dontcare = system("grep \"SC:\\*\\*\" $SCVIM_DIR/doc/TAGS_HELP > $SCVIM_DIR/doc/tags")
+		let l:dontcare = system("grep \"SC:\\*\\*\" $SCVIM_DIR/doc/TAGS_HELP > $SCVIM_DIR/doc/tags")
 		exe "help SC:\*\*" . a:subject
 	else
-		let s:dontcare = system("grep SC:\"" . a:subject . "\" $SCVIM_DIR/doc/TAGS_HELP > $SCVIM_DIR/doc/tags")
+		let l:dontcare = system("grep SC:\"" . a:subject . "\" $SCVIM_DIR/doc/TAGS_HELP > $SCVIM_DIR/doc/tags")
 		exe "help SC:" . a:subject
 	endif
 endfun
@@ -328,11 +292,17 @@ function ListSCHelpItems(A,L,P)
 	return system("cat $SCVIM_DIR/doc/sc_help_completion")
 endfun
 
+"function ListSCBrowserItems(A,L,P)
+"	return system("cat $SCVIM_DIR/doc/sc_browser_completion")
+"endfun
+
 "custom commands (SChelp,SCdef,SClangfree)
 com -complete=custom,ListSCHelpItems -nargs=? SChelp call SChelp("<args>")
 com -complete=custom,ListSCObjects -nargs=1 SCdef call SCdef("<args>")
+"com -complete=custom,ListSCBrowserItems -nargs=? SCbrowse call SCbrowse("<args>")
 com -nargs=1 SClangfree call SClang_free("<args>")
 com -nargs=0 SClangStart call SClangStart()
 com -nargs=0 SClangKill call SClangKill()
+com -nargs=0 SClangRestart call SClangRestart()
 
 " end supercollider.vim

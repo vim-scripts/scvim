@@ -1,4 +1,5 @@
-SharedOut write to a shared control bus
+
+SharedOut			write to a shared control bus
 
 superclass: AbstractOut
 
@@ -16,7 +17,7 @@ s.boot;
 
 (
 SynthDef("help-SharedOut", {
- SharedOut.kr(0, SinOsc.kr(0.2));
+	SharedOut.kr(0, SinOsc.kr(0.2));
 }).send(s);
 )
 
@@ -26,13 +27,15 @@ s.sendMsg(\n_trace, x);
 
 // poll the shared control bus
 Routine({
- 30.do({
- s.getSharedControl(0).postln;
- 0.2.wait;
- });
+	30.do({
+		s.getSharedControl(0).postln;
+		0.2.wait;
+	});
 }).play;
 )
 
 
 s.quit;
+
+
 

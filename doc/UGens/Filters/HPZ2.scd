@@ -1,5 +1,6 @@
 
-HPZ2 two zero fixed highpass
+
+HPZ2					two zero fixed highpass
 
 HPZ2.ar(in, mul, add)
 
@@ -12,4 +13,6 @@ Compare:
 { WhiteNoise.ar(0.25) }.play;
 
 { HPZ2.ar(WhiteNoise.ar(0.25)) }.play;
+
+
 

@@ -1,8 +1,9 @@
+
 BinaryOpUGen
 
 superclass: UGen
 
-BinaryOpUGens are created as the result of a binary operator applied to a UGen. 
+BinaryOpUGens are created as the result of a binary operator applied to a UGen.
 
 (SinOsc.ar(200) * ClipNoise.ar).dump;
 (SinOsc.ar(200).thresh(0.5)).dump;
@@ -19,12 +20,12 @@ with
 
 ( // trigger an envelope
 {
- var trig;
- trig = SinOsc.ar(1) > 0.1;
- Out.ar(0,
- EnvGen.kr(Env.perc, trig, doneAction: 0) 
- * SinOsc.ar(440,0,0.1)
- )
+	var trig;
+	trig = SinOsc.ar(1) > 0.1;
+	Out.ar(0,
+		EnvGen.kr(Env.perc, trig, doneAction: 0)
+			* SinOsc.ar(440,0,0.1)
+	)
 }.play(s);) // > outputs 0 or 1
 
 See the individual helpfiles for more detail.
@@ -32,3 +33,5 @@ See the individual helpfiles for more detail.
 The following operators have their own helpfiles:
 
 + - * / ** absdif amclip atan2 clip2 difsqr excess fold2 hypot hypotApx max min ring1 ring2 ring3 ring4 round scaleneg sqrdif sqrsum sumsqr thresh trunc wrap2
+
+

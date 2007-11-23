@@ -1,3 +1,4 @@
+
 SortedList
 
 Superclass: List
@@ -24,4 +25,6 @@ addAll(aCollection)
 Adds all the items in the collection into the SortedList.
 
 SortedList[1, 2, 5, 6].addAll([0, 3, 4, 7]).postln;
+
+
 

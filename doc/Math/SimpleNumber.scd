@@ -1,3 +1,4 @@
+
 SimpleNumber
 
 superclass: Number
@@ -167,7 +168,7 @@ Distortion with a perfectly linear region from -0.5 to +0.5
 
 coin
 
-Answers a Boolean which is the result of a random test whose probability of success in a range from 
+Answers a Boolean which is the result of a random test whose probability of success in a range from
 zero to one is this.
 
 even
@@ -239,6 +240,14 @@ Bitwise Or
 bitXor(aNumber)
 
 Bitwise Exclusive Or
+
+bitHammingDistance(aNumber)
+
+Binary Hamming distance, or the count of bits that are not the same in the two numbers
+
+bitTest(aNumber)
+
+Returns true if bit at index aNumber is set.
 
 lcm(aNumber)
 
@@ -340,66 +349,68 @@ Return an array of denominator and divisor of the nearest and smallest fraction
 
 rrand(aNumber)
 
- Returns a random number in the interval [a, b). If both a and b are Integer then the result will be an Integer.
+	Returns a random number in the interval [a, b). If both a and b are Integer then the result will be an Integer.
 
 exprand(aNumber)
 
- Returns an exponentially distributed random number in the interval [a, b). Always returns a Float.
+	Returns an exponentially distributed random number in the interval [a, b). Always returns a Float.
 
 
 degreeToKey(scale, stepsPerOctave)
 
- the value is truncated to an integer and used as an index into an octave repeating table of note values.
- Indices wrap around the table and shift octaves as they do
- stepsPerOctave is 12 by default
- 
-(
- l = [0, 1, 5, 9, 11]; // pentatonic scale
- (1, 2..15).collect { |i| i.degreeToKey(l, 12) }
- )
+	the value is truncated to an integer and used as an index into an octave repeating table of note values.
+	Indices wrap around the table and shift octaves as they do
+	stepsPerOctave is 12 by default
+	
+	(
+		l = [0, 1, 5, 9, 11]; // pentatonic scale
+		(1, 2..15).collect { |i| i.degreeToKey(l, 12) }
+	)
 
 
 keyToDegree(scale, stepsPerOctave)
 
- inverse of degreeToKey.
- stepsPerOctave is 12 by default
- 
-(
- l = [0, 1, 5, 9, 11]; // pentatonic scale
- (60, 61..75).collect { |i| i.keyToDegree(l, 12) }
- )
- (
- l = [0, 1, 5, 9, 11]; // pentatonic scale
- (60, 61..75).postln.collect { |i| i.keyToDegree(l, 12).degreeToKey(l) }
- )
- 
+	inverse of degreeToKey.
+	stepsPerOctave is 12 by default
+	
+	(
+		l = [0, 1, 5, 9, 11]; // pentatonic scale
+		(60, 61..75).collect { |i| i.keyToDegree(l, 12) }
+	)
+	(
+		l = [0, 1, 5, 9, 11]; // pentatonic scale
+		(60, 61..75).postln.collect { |i| i.keyToDegree(l, 12).degreeToKey(l) }
+	)
+	
 nearestInList(list)
 
- returns the value in the collection closest to this
- 
-(
- l = [0, 0.5, 0.9, 1];
- (0, 0.05..1).collect { |i| i.nearestInList(l) }
- )
+	returns the value in the collection closest to this
+	
+	(
+		l = [0, 0.5, 0.9, 1];
+		(0, 0.05..1).collect { |i| i.nearestInList(l) }
+	)
 
 
 nearestInScale(scale, stepsPerOctave)
 
- returns the value in the collection closest to this, assuming an octave repeating table of note values.
- stepsPerOctave is 12 by default
- 
-(
- l = [0, 1, 5, 9, 11]; // pentatonic scale
- (60, 61..76).collect { |i| i.nearestInScale(l, 12) }
- )
- 
+	returns the value in the collection closest to this, assuming an octave repeating table of note values.
+	stepsPerOctave is 12 by default
+	
+	(
+		l = [0, 1, 5, 9, 11]; // pentatonic scale
+		(60, 61..76).collect { |i| i.nearestInScale(l, 12) }
+	)
+	
 asTimeString(precision)
 
- returns a string corresponding to the hours:minutes:seconds based on the receiver as number of seconds
- precision is 0.1 by default
- 
-(
- var start;
- start = Main.elapsedTime;
- { loop({(Main.elapsedTime - start).asTimeString.postln; 0.05.wait}) }.fork;
- )
+	returns a string corresponding to the hours:minutes:seconds based on the receiver as number of seconds
+	precision is 0.1 by default
+	
+	(
+		var start;
+		start = Main.elapsedTime;
+		{ loop({(Main.elapsedTime - start).asTimeString.postln; 0.05.wait}) }.fork;
+	)
+
+

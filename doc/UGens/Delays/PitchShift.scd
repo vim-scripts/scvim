@@ -1,3 +1,4 @@
+
 PitchShift
 
 PitchShift.ar(in, windowSize, pitchRatio, pitchDispersion, timeDispersion, mul, add)
@@ -14,20 +15,20 @@ grain placement. It can also be an effect in itself. timeDispersion can be no la
 
 (
 play({
- z = Blip.ar(800, 6, 0.1);
- PitchShift.ar(z, 0.02, Line.kr(0.1,4,20), 0, 0.0001)
+	z = Blip.ar(800, 6, 0.1);
+	PitchShift.ar(z, 0.02, Line.kr(0.1,4,20), 0, 0.0001)
 }))
 
 (
 // pitch shift input - USE HEADPHONES to prevent feedback.
 play({
- PitchShift.ar(
- AudioIn.ar([1,2]), // stereo audio input
- 0.1, // grain size
- MouseX.kr(0,2), // mouse x controls pitch shift ratio
- 0, // pitch dispersion
- 0.004 // time dispersion
- )
+	PitchShift.ar(
+		AudioIn.ar([1,2]),	// stereo audio input
+		0.1, 			// grain size
+		MouseX.kr(0,2),	// mouse x controls pitch shift ratio
+		0, 				// pitch dispersion
+		0.004			// time dispersion
+	)
 }))
 
 (
@@ -36,12 +37,14 @@ play({
 var grainSize;
 grainSize = 0.5;
 play({
- PitchShift.ar(
- AudioIn.ar([1,2]), 
- grainSize, 
- 1, // nominal pitch rate = 1
- MouseX.kr(0,1), // pitch dispersion
- MouseY.kr(0, grainSize) // time dispersion
- )
+	PitchShift.ar(
+		AudioIn.ar([1,2]),
+		grainSize,		
+		1,						// nominal pitch rate = 1
+		MouseX.kr(0,1), 			// pitch dispersion
+		MouseY.kr(0, grainSize)	// time dispersion
+	)
 }))
+
+
 

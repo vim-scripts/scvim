@@ -1,3 +1,4 @@
+
 writeAsPlist
 
 Object method
@@ -27,7 +28,7 @@ Char -> NSString
 Nil -> NSNull
 Boolean ->NSNumber (numberWithBool:) equivalent to a CFBoolean
 Dictionary ->NSDictionary (each item converted)
- 
+	
 Other objects -> NSNull
 
 Most commonly the root object is an NSDictionary or NSArray.
@@ -57,16 +58,18 @@ List[1,false,\symbol].writeAsPlist("testWritePlist.plist");
 [Ref(pi),Pbind.new].writeAsPlist("testWritePlist.plist");
 
 Dictionary[
- \a -> "a",
- "b" -> \b,
- 3 -> 3.0
- ].writeAsPlist("testWritePlist.plist");
+	\a -> "a",
+	"b" -> \b,
+	3 -> 3.0
+	].writeAsPlist("testWritePlist.plist");
 
 
 IdentityDictionary[
- \a -> "a",
- "b" -> \b,
- 3 -> 3.0
- ].writeAsPlist("testWritePlist.plist");
- 
- 
+	\a -> "a",
+	"b" -> \b,
+	3 -> 3.0
+	].writeAsPlist("testWritePlist.plist");
+	
+	
+
+

@@ -1,69 +1,82 @@
-// =====================================================================
-// LID -- Linux Input Device
-// =====================================================================
-//
-// This class provides a way to access devices in the linux input
-// layer, which supports many input devices (mouse, keyboard,
-// joystick, gamepad, tablet) and busses (serial, PS/2, USB).
 
-// =====================================================================
-// Opening a device
-// =====================================================================
-//
-// Input devices are accessed through device nodes, typically
-// /dev/input/event[0-9]. When using a userspace daemon like udev,
-// meaningful names can be assigned to devices.
 
-// raw device name
-d = LID("/dev/input/event4");
+=====================================================================
+LID -- Linux Input Device
+=====================================================================
 
-// symbolic device name
+This class provides a way to access devices in the linux input
+layer, which supports many input devices (mouse, keyboard,
+joystick, gamepad, tablet) and busses (serial, PS/2, USB).
+
+It is advised to use GeneralHID instead, which wraps the HIDDeviceService functionality, and produces crossplatform compatible code.
+
+=====================================================================
+Opening a device
+=====================================================================
+
+Input devices are accessed through device nodes, typically
+/dev/input/event[0-9]. When using a userspace daemon like udev,
+meaningful names can be assigned to devices.
+
+raw device name:
+
+d = 
+LID("/dev/input/event4");
+
+
+symbolic device name
 d = LID("/dev/input/trackball");
 
-// device name relative to LID.deviceRoot
+
+device name relative to LID.deviceRoot
 d = LID("gamepad");
 
-// build a table of the available devices:
+build a list of the available devices:
 
-LID.buildDeviceTable
+LID.buildDeviceList
 
-// buildDeviceTable builds a table of the devices found in LID.deviceRoot+"/event",
-// trying to open all that it finds, looking up its name and closing them again.
-// the results is returned and can later be accessed by LID.deviceTable.
-// you can query another name than "/event" by passing an argument.
-// (the search will be: LID.deviceRoot++"/"++name++"*")
 
-LID.buildDeviceTable( "mouse" );
+buildDeviceList builds a table of the devices found in LID.deviceRoot+"/event",
+trying to open all that it finds, looking up its name and closing them again.
+The result is returned and can later be accessed by LID.deviceList.
 
-// is likely to give the info that the devices could not be opened, as "mouse"
-// uses another interface (you can of course access mice via the "event" interface)
+You can query another name than "/event" by passing an argument. (the search will be: LID.deviceRoot++"/"++name++"*")
 
-// =====================================================================
-// Querying device information
-// =====================================================================
+LID.buildDeviceList( "mouse" );
+Note: this is likely to give the info that the devices could not be opened, as "mouse"  uses another interface (you can of course access mice via the "event" interface)
+
+Note: if you cannot open the devices at all, please look in the helpfile for: Linux_udev_setup
+
+=====================================================================
+Querying device information
+=====================================================================
+
 
 d.info;
 d.info.name;
 d.info.vendor.asHexString(4);
 d.info.product.asHexString(4);
 
-// =====================================================================
-// Querying device capabilities
-// =====================================================================
-//
-// Device capabilities are reported as event type and event code
-// mappings. Event type and event code constants can be found in
-// /usr/include/linux/input.h
+
+=====================================================================
+Querying device capabilities
+=====================================================================
+
+
+Device capabilities are reported as event type and event code mappings. Event type and event code constants can be found in /usr/include/linux/input.h
+
 
 d.caps;
 d.dumpCaps;
 
-// =====================================================================
-// Event actions (raw events)
-// =====================================================================
-//
-// The device's 'action' instance variable can be used for event
-// notifications. it is passed the event type, code and current value.
+
+=====================================================================
+Event actions (raw events)
+=====================================================================
+
+
+The device's 'action' instance variable can be used for event notifications. it is passed the event type, code and current value.
+
 
 (
 d.action = { | evtType, evtCode, evtValue |
@@ -73,21 +86,36 @@ d.action = { | evtType, evtCode, evtValue |
 
 d.action = nil;
 
-// =====================================================================
-// Event actions (raw slot events)
-// =====================================================================
-//
-// When 'action' is nil, actions can be bound to specific events.
+
+
+If a device is detached LID will detect this, and close the device. It will execute a closeAction, which can be defined by the user:
+
+
+d.closeAction = { "device was detached".postln; };
+
+
+
+=====================================================================
+Event actions (raw slot events)
+=====================================================================
+
+When 'action' is nil, actions can be bound to specific events.
 
 (
 d.slot(0x0001, 0x0120).action = { | slot |
 	[slot.type.asHexString(4), slot.code.asHexString(4), slot.rawValue].postln;
 }
 )
+Relative slots can have deltaActions:
+d.slot(0x0002, 0x0001).deltaAction = { | slot |
+	[slot.type.asHexString(4), slot.code.asHexString(4), slot.delta].postln;
+}
+)
 
-// =====================================================================
-// Device specs
-// =====================================================================
+
+=====================================================================
+Device specs
+=====================================================================
 //
 // Device specs are mappings between event codes and symbolic control
 // names. New specs can be added to LID.specs via LID>>*register.
@@ -177,3 +205,5 @@ d.close;
 LID.closeAll;
 
 // =====================================================================
+
+

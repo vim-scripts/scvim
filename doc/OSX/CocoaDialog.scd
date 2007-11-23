@@ -1,7 +1,8 @@
-CocoaDialogfile dialogs that utilize OS X Cocoa services.
+
+CocoaDialog 		file dialogs that utilize OS X Cocoa services.
 
 
-see also: [Cocoa]
+see also: Cocoa
 
 OSX only.
 
@@ -11,11 +12,11 @@ Displays an Open File Dialog. If ok is pressed then okFunc is evaluated with the
 
 (
 CocoaDialog.getPaths({ arg paths;
- paths.do({ arg p;
- p.postln;
- })
+	paths.do({ arg p;
+		p.postln;
+	})
 },{
- "cancelled".postln;
+	"cancelled".postln;
 });
 )
 
@@ -25,8 +26,10 @@ Displays a Save File Dialog. If ok is pressed then okFunc is evaluated with the 
 
 (
 CocoaDialog.savePanel({ arg path;
- path.postln;
+	path.postln;
 },{
- "cancelled".postln;
+	"cancelled".postln;
 });
 )
+
+

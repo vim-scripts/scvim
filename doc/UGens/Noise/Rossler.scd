@@ -1,5 +1,6 @@
 
-Rossler chaotic function
+
+Rossler				chaotic function
 
 Rossler.ar(chaosParam, dt, mul, add)
 
@@ -13,21 +14,23 @@ dt - time step parameter. Default is 0.04.
 
 (
 SynthDef("help-Rossler", { arg out=0;
- Out.ar(out, 
- Rossler.ar(4, 0.08)
- )
+	Out.ar(out,
+		Rossler.ar(4, 0.08)
+	)
 }).play;
 )
 
 (
 a = SynthDef("help-Rossler", { arg out=0, param=4, dt=0.04;
- Out.ar(out, 
- Rossler.ar(param, dt)
- )
+	Out.ar(out,
+		Rossler.ar(param, dt)
+	)
 }).play;
 )
 
 a.set(\param, 2.5);
 a.set(\dt, 0.02);
+
+
 
 

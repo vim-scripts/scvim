@@ -1,3 +1,4 @@
+
 RawArray
 
 Superclass: ArrayedCollection
@@ -19,4 +20,6 @@ Writes the array as a file.
 putFile(prompt, defaultName)
 
 Opens a save file dialog to save the array to a file.
+
+
 

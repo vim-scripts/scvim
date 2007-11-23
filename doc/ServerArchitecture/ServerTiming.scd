@@ -1,15 +1,16 @@
-Bundling latency 
 
-To ensure correct timing of events on the server, OSC messages may be sent with a time stamp, indicating the precise time the sound is expected to hit the hardware output. 
+Bundling latency
 
-In the SuperCollider language, the time stamp is generated behind the scenes based on a parameter called "latency." 
+To ensure correct timing of events on the server, OSC messages may be sent with a time stamp, indicating the precise time the sound is expected to hit the hardware output.
 
-To understand how latency works, we need to understand the concepts of logical time and physical time. 
+In the SuperCollider language, the time stamp is generated behind the scenes based on a parameter called "latency."
 
-Every clock in SuperCollider has both a logical time and physical time. 
+To understand how latency works, we need to understand the concepts of logical time and physical time.
 
-Physical time: always advances, represents real time. 
-Logical time: advances only when a scheduling thread wakes up. 
+Every clock in SuperCollider has both a logical time and physical time.
+
+Physical time: always advances, represents real time.
+Logical time: advances only when a scheduling thread wakes up.
 
 While a scheduled function or event is executing, logical time holds steady at the "expected" value. That is, if the event is scheduled for 60 seconds exactly, throughout the event's execution, the logical time will be 60 seconds. If the event takes 2 seconds to execute (very rare), at the end of the event, the logical time will still be 60 seconds but the physical time will be 62 seconds. If the next event is to happen 3 seconds after the first began, its logical time will be 63 seconds. Logical time is not affected by fluctuations in system performance.
 
@@ -18,58 +19,58 @@ This sequencing example illustrates the difference. It's written deliberately in
 s.boot;
 
 SynthDef(\sinGrain, { |out = 0, freq = 440, amp = 0.5, dur = 1|
- Out.ar(out, SinOsc.ar(freq, 0, amp) * EnvGen.kr(Env.sine(1), timeScale:dur, doneAction:2));
+	Out.ar(out, SinOsc.ar(freq, 0, amp) * EnvGen.kr(Env.sine(1), timeScale:dur, doneAction:2));
 }).send(s);
 
 2.do({ |chan|
- var rout;
- rout = Routine({
- var freq;
- { freq = 0;
- rrand(400, 1000).do({ freq = freq + 1 });
- [thisThread.clock.beats, thisThread.clock.elapsedBeats].postln;
- Synth(\sinGrain, [\out, chan, \freq, freq, \dur, 0.005]);
- 0.1.wait;
- }.loop;
- });
- TempoClock.default.schedAbs(TempoClock.default.elapsedBeats.roundUp(1), rout);
+	var rout;
+	rout = Routine({
+		var freq;
+		{	freq = 0;
+			rrand(400, 1000).do({ freq = freq + 1 });
+			[thisThread.clock.beats, thisThread.clock.elapsedBeats].postln;
+			Synth(\sinGrain, [\out, chan, \freq, freq, \dur, 0.005]);
+			0.1.wait;
+		}.loop;
+	});
+	TempoClock.default.schedAbs(TempoClock.default.elapsedBeats.roundUp(1), rout);
 });
 
 
- Left channel Right channel
-Logical vs Physical time Logical vs Physical time
-95 95.001466112 95 95.002988196
-95.1 95.101427968 95.1 95.103152311
-95.2 95.201250057 95.2 95.202905826
-95.3 95.301592755 95.3 95.303724638
-95.4 95.401475486 95.4 95.403289141
+  Left channel           Right channel
+Logical vs Physical time     Logical vs Physical time
+95     95.001466112     95     95.002988196
+95.1    95.101427968     95.1    95.103152311
+95.2    95.201250057     95.2    95.202905826
+95.3    95.301592755     95.3    95.303724638
+95.4    95.401475486     95.4    95.403289141
 
 Average physical latency:
-0.00144247559999830 .0032120224000039
+0.00144247559999830       .0032120224000039
 
-Notice that even though the left and right channel patterns were scheduled for exactly the same time, the events don't complete executing at the same time. Further, the Synth(...) call instructs the server to play the synth immediately on receipt, so the right channel will be lagging behind the left by about 2 ms each event--and not by the same amount each time. Timing, then, is always slightly imprecise. 
+Notice that even though the left and right channel patterns were scheduled for exactly the same time, the events don't complete executing at the same time. Further, the Synth(...) call instructs the server to play the synth immediately on receipt, so the right channel will be lagging behind the left by about 2 ms each event--and not by the same amount each time. Timing, then, is always slightly imprecise.
 
 This version is the same, but it generates each synth with a 1/4 second latency parameter:
 
 2.do({ |chan|
- var rout;
- rout = Routine({
- var freq;
- { freq = 0;
- rrand(400, 1000).do({ freq = freq + 1 });
- [thisThread.clock.beats, thisThread.clock.elapsedBeats].postln;
- s.makeBundle(0.25, { Synth(\sinGrain, [\out, chan, \freq, freq, \dur, 0.005]); });
- 0.1.wait;
- }.loop;
- });
- TempoClock.default.schedAbs(TempoClock.default.elapsedBeats.roundUp(1), rout);
+	var rout;
+	rout = Routine({
+		var freq;
+		{	freq = 0;
+			rrand(400, 1000).do({ freq = freq + 1 });
+			[thisThread.clock.beats, thisThread.clock.elapsedBeats].postln;
+			s.makeBundle(0.25, { Synth(\sinGrain, [\out, chan, \freq, freq, \dur, 0.005]); });
+			0.1.wait;
+		}.loop;
+	});
+	TempoClock.default.schedAbs(TempoClock.default.elapsedBeats.roundUp(1), rout);
 });
 
-By using makeBundle with a time argument of 0.25, the \s_new messages for the left and right channel are sent with the same timestamp: the clock's current logical time plus the time argument. Note in the table that both channels have the same logical time throughout, so the two channels are in perfect sync. 
+By using makeBundle with a time argument of 0.25, the \s_new messages for the left and right channel are sent with the same timestamp: the clock's current logical time plus the time argument. Note in the table that both channels have the same logical time throughout, so the two channels are in perfect sync.
 
-These routines are written deliberately badly. If they're made maximally efficient, the synchronization will be tighter even without the latency factor, but it can never be perfect. You'll also see this issue, however, if you have several routines executing and several of them are supposed to execute at the same time. Some will execute sooner than others, but their logical time will all be the same. If they're all using the same amount of latency, you will still hear them at the same time. 
+These routines are written deliberately badly. If they're made maximally efficient, the synchronization will be tighter even without the latency factor, but it can never be perfect. You'll also see this issue, however, if you have several routines executing and several of them are supposed to execute at the same time. Some will execute sooner than others, but their logical time will all be the same. If they're all using the same amount of latency, you will still hear them at the same time.
 
-In general, all synths that are triggered by live input (MIDI, GUI, HID) should specify no latency so that they execute as soon as possible. All sequencing routines should use latency to ensure perfect timing. 
+In general, all synths that are triggered by live input (MIDI, GUI, HID) should specify no latency so that they execute as soon as possible. All sequencing routines should use latency to ensure perfect timing.
 
 The latency value should allow enough time for the event to execute and generate the OSC bundle, and for the server to interpret the message and render the audio in time to reach the hardware output on time. If the client and server are on the same machine, this value can be quite low. Running over a network, you must allow more time. (Latency compensates for network timing jitter also.)
 
@@ -90,3 +91,5 @@ s.sendBundle(latency, synth.newMsg(target, arguments, addAction));
 // object style, using automatic bundling
 // like the previous example, when this finishes you'll have the Synth object in the synth variable
 s.makeBundle(latency, { synth = Synth(defName, arguments, target, addAction); });
+
+

@@ -1,16 +1,17 @@
-GbmanL gingerbreadman map chaotic generator
+
+GbmanL		gingerbreadman map chaotic generator
 
 GbmanL.ar(freq, xi, yi, mul, add)
 
-freq - iteration frequency in Hertz
-xi - initial value of x
-yi - initial value of y
+	freq - iteration frequency in Hertz
+	xi - initial value of x
+	yi - initial value of y
 
 A linear-interpolating sound generator based on the difference equations:
- 
- xn+1 = 1 - yn + |xn|
- yn+1 = xn
- 
+	
+	xn+1 = 1 - yn + |xn|
+	yn+1 = xn
+	
 The behavior of the system is dependent only on its initial conditions and cannot
 be changed once it's started.
 
@@ -29,3 +30,5 @@ Devaney, R. L. "The Gingerbreadman." Algorithm 3, 15-16, Jan. 1992.
 
 // as a frequency control
 { SinOsc.ar(GbmanL.ar(40)*400+500)*0.4 }.play(s);
+
+

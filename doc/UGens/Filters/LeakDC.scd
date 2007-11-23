@@ -1,16 +1,20 @@
-LeakDC remove DC
+
+LeakDC		remove DC
 
 LeakDC.ar(in, coef, mul, add)
+LeakDC.kr(in, coef, mul, add)
 
 This filter removes a DC offset from a signal.
 in - input signal.
-coef - leak coefficient.
+coef - leak coefficient. Defaults to 0.995 for audiorate and 0.9 for controlrate.
 
-(
-// this is really better with scope()
-play({
- var a;
- a = LFPulse.ar(800, 0.5, 0.5, 0.5);
- [a, LeakDC.ar(a, 0.995)]
-}))
+
+Server.internal.boot;
+({
+	var a;
+	a = LFPulse.ar(800, 0.5, 0.5, 0.5);
+	[a, LeakDC.ar(a, 0.995)]
+}.scope(bufsize: 22050)
+)
+
 

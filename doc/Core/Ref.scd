@@ -1,15 +1,16 @@
-Ref a reference to a value
+
+Ref			a reference to a value
 superclass: AbstractFunction
 
-A Ref instance is an object with a single slot named 'value' that serves as a holder of 
-an object. Ref.new(object) one way to create a Ref, but there is a syntactic shortcut. 
+A Ref instance is an object with a single slot named 'value' that serves as a holder of
+an object. Ref.new(object) one way to create a Ref, but there is a syntactic shortcut.
 The backquote ` is a unary operator that is equivalent to calling Ref.new(something).
 
 example: 
 
 x = Ref.new(nil);
-z = obj.method(x); // method puts something in reference
-x.value.doSomething; // retrieve value and use it
+z = obj.method(x);		// method puts something in reference
+x.value.doSomething;	// retrieve value and use it
 
 Ref is also used as a quoting device to protect against multi channel expansion in certain UGens that require Arrays.
 
@@ -48,4 +49,6 @@ Answer the value. This message is also defined in class Object where it just ret
 asRef
 
 Answers the receiver. In class Object this message is defined to create a Ref of the object.
+
+
 

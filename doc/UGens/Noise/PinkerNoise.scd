@@ -1,4 +1,5 @@
 
+
 PinkerNoise
 
 PinkerNoise.ar(mul, add)
@@ -10,8 +11,10 @@ This version gives 16 octaves of pink noise, whereas PinkNoise only gives 8 octa
 //not installed
 (
 SynthDef("help-PinkerNoise", { arg out=0;
- Out.ar(out, 
- PinkerNoise.ar(0.5)
- )
+	Out.ar(out,
+		PinkerNoise.ar(0.5)
+	)
 }).play;
 )
+
+

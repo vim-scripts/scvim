@@ -1,4 +1,5 @@
-Scheduler schedules functions to be evaluated in the future
+
+Scheduler			schedules functions to be evaluated in the future
 
 
 superclass: Object
@@ -7,29 +8,29 @@ superclass: Object
 
 
 *new(clock, drift)
-clock: a clock, like SystemClock.
-drift: if true, it will schedule the events relative to Main.elapsedTime,
- otherwise to the current seconds of the scheduler.
- 
+			clock: 	a clock, like SystemClock.
+			drift: 	if true, it will schedule the events relative to Main.elapsedTime,
+					otherwise to the current seconds of the scheduler.
+	
 play(aTask)
- schedules the task to play, with the delta time returned from it.
+			schedules the task to play, with the delta time returned from it.
 
 sched(delta, aTask)
- schedule the task 
+			schedule the task
 
 advance(bySeconds)
- advance time by n seconds. Any task that is scheduled within the new time,
- is evaluated, and, if it returns a new time, rescheduled.
+			advance time by n seconds. Any task that is scheduled within the new time,
+			is evaluated, and, if it returns a new time, rescheduled.
 
 seconds_(newSeconds)
- set new time. Any task that is scheduled within the new time,
- is evaluated, and, if it returns a new time, rescheduled.
- 
+			set new time. Any task that is scheduled within the new time,
+			is evaluated, and, if it returns a new time, rescheduled.
+			
 isEmpty
- returns whether the scheduling queue is empty.
- 
+			returns whether the scheduling queue is empty.
+			
 clear
-clear the scheduliong queue
+			clear the scheduling queue
 
 
 
@@ -61,7 +62,7 @@ a.advance(2);
 a.advance(2);
 
 // play a Routine or a task:
-a.play(Routine {?5.do { arg i; i.postln; 1.yield } });
+a.play(Routine {5.do { arg i; i.postln; 1.yield } });
 a.advance(0.9);
 
 
@@ -72,11 +73,11 @@ a.advance(0.9);
 (
 x = Scheduler(TempoClock.default);
 
-Task { 
- inf.do { |i|
- ("next " ++ i ++ " in task." + Main.elapsedTime).postln;
- 0.5.wait;
- }
+Task {
+	inf.do { |i|
+		("next " ++ i ++ " in task." + Main.elapsedTime).postln;
+		0.5.wait;
+	}
 }.play(x)
 )
 
@@ -87,15 +88,15 @@ x.seconds;
 
 (
 Routine {
- loop { x.advance(0.1); 0.1.wait }
+	loop { x.advance(0.1); 0.1.wait }
 }.play;
 )
 
 (
 Task { 5.do {
- x.advance(1);
- 2.0.rand.wait;
- }
+	x.advance(1);
+	2.0.rand.wait;
+	}
 }.play;
 )
 
@@ -105,9 +106,11 @@ Pbind(\degree, Pseries(0, 2, 8), \dur, 0.25).play(x);
 
 (
 Task { 5.do {
- x.advance(0.20);
- 1.0.wait;
- }
+	x.advance(0.20);
+	1.0.wait;
+	}
 }.play;
 )
+
+
 

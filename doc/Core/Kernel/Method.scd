@@ -1,3 +1,4 @@
+
 Method
 
 superclass: Function
@@ -18,4 +19,6 @@ primitiveName
 
 A Symbol which contains the name of the primitive function that implements the Method, if
 there is one.
+
+
 

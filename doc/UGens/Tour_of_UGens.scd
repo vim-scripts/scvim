@@ -1,23 +1,24 @@
+
 SIGNAL PROCESSING in SuperCollider
 
 1. A Tour of available Unit Generators.
- SuperCollider has over 250 unit generators. 
- If you count the unary and binary operators, there are over 300. 
- This tour covers many, but not all of them.
- 
- categories of unit generators: 
- sources: periodic, aperiodic 
- filters
- distortion 
- panning
- delays and buffer ugens
- control: envelopes, triggers, counters, gates, lags, decays
- spectral 
+	SuperCollider has over 250 unit generators.
+	If you count the unary and binary operators, there are over 300.
+	This tour covers many, but not all of them.
+	
+	categories of unit generators:
+		sources: periodic, aperiodic
+		filters
+		distortion
+		panning
+		delays and buffer ugens
+		control: envelopes, triggers, counters, gates, lags, decays
+		spectral
 
-2. Techniques 
- broadening a sound: 
- decorrelation, beat frequencies, delays.
- series and parallel structures.
+2. Techniques		
+	broadening a sound:
+		decorrelation, beat frequencies, delays.
+	series and parallel structures.
 
 
 (
@@ -100,7 +101,7 @@ arguments: syncFreq, sawFreq, mul, add
 Band Limited Oscillators
 
 SinOsc, FSinOsc, Blip, Saw, Pulse
-will not alias. 
+will not alias.
 
 SinOsc, FSinOsc
 arguments: frequency, phase, mul, add
@@ -111,7 +112,7 @@ arguments: frequency, phase, mul, add
 { SinOsc.ar(XLine.kr(100,15000,6),0,0.1) }.scope(1, zoom: 4);
 
 { FSinOsc.ar(800,0,0.1) }.scope(1, zoom: 4);
-// FSinOsc should not be frequency modulated. 
+// FSinOsc should not be frequency modulated.
 // Since it is based on a filter at the edge of stability, it will blow up:
 { FSinOsc.ar(FSinOsc.kr(FSinOsc.kr(0.2,0,8,10),0, 400,800),0,0.1) }.scope(1, zoom: 4);
 
@@ -198,12 +199,12 @@ arguments: buffer number, frequency, phase, mul, add.
 (
 // fill tables 80 to 87
 8.do({|i|
- var n, a;
- // generate array of harmonic amplitudes
- n = (i+1)**2; // num harmonics for each table: [1,4,9,16,25,36,49,64]
- a = {|j| ((n-j)/n).squared }.dup(n);
- // fill table
- s.listSendMsg([\b_gen, 80+i, \sine1, 7] ++ a);
+	var n, a;
+	// generate array of harmonic amplitudes
+	n = (i+1)**2; // num harmonics for each table: [1,4,9,16,25,36,49,64]
+	a = {|j| ((n-j)/n).squared }.dup(n);
+	// fill table
+	s.listSendMsg([\b_gen, 80+i, \sine1, 7] ++ a);
 });
 )
 
@@ -212,10 +213,10 @@ arguments: buffer number, frequency, phase, mul, add.
 (
 // allocate and fill tables 80 to 87
 8.do({|i|
- // generate array of harmonic amplitudes
- a = {1.0.rand2.cubed }.dup((i+1)*4);
- // fill table
- s.listSendMsg([\b_gen, 80+i, \sine1, 7] ++ a);
+	// generate array of harmonic amplitudes
+	a = {1.0.rand2.cubed }.dup((i+1)*4);
+	// fill table
+	s.listSendMsg([\b_gen, 80+i, \sine1, 7] ++ a);
 });
 )
 
@@ -361,7 +362,7 @@ Median, Slew
 { Slew.ar(Saw.ar(500, 0.1) + Dust2.ar(100, 0.9),1000,1000) }.scope(1);
 
 
-Formant Filter 
+Formant Filter
 Formlet - A filter whose impulse response is similar to a FOF grain.
 
 { Formlet.ar(Impulse.ar(MouseX.kr(2,300,1), 0, 0.4), 800, 0.01, 0.1) }.scope(1, zoom:4);
@@ -392,7 +393,7 @@ abs, max, squared, cubed
 { SinOsc.ar(300, 0).squared * 0.2 }.scope(1);
 { SinOsc.ar(300, 0).cubed * 0.2 }.scope(1);
 
-distort, softclip, clip2, fold2, wrap2, 
+distort, softclip, clip2, fold2, wrap2,
 
 { SinOsc.ar(300, 0, MouseX.kr(0.1,80,1)).distort * 0.2 }.scope(1);
 { SinOsc.ar(300, 0, MouseX.kr(0.1,80,1)).softclip * 0.2 }.scope(1);
@@ -409,18 +410,18 @@ waveshaping by phase modulating a 0 Hz sine oscillator
 (currently there is a limit of 8pi)
 
 (
-{ 
- var in;
- in = SinOsc.ar(300, 0, MouseX.kr(0.1,8pi,1));
- SinOsc.ar(0, in, 0.2); // 0 Hz sine oscillator
+{
+	var in;
+	in = SinOsc.ar(300, 0, MouseX.kr(0.1,8pi,1));
+	SinOsc.ar(0, in, 0.2); // 0 Hz sine oscillator
 }.scope(1);
 )
 
-Shaper 
+Shaper
 input is used to look up a value in a table.
 Chebyshev polynomials are typically used to fill the table.
 
-chebyshevpolynomials.gif 
+
 
 s.sendMsg(\b_alloc, 80, 1024); // allocate table
 // fill with chebyshevs
@@ -483,17 +484,17 @@ PanB2 and DecodeB2 - 2D ambisonics panner and decoder
 
 (
 {
- var w, x, y, p, lf, rf, rr, lr;
- 
- p = BrownNoise.ar; // source
- 
- // B-format encode
- #w, x, y = PanB2.ar(p, MouseX.kr(-1,1), 0.3); 
- 
- // B-format decode to quad. outputs in clockwise order
- #lf, rf, rr, lr = DecodeB2.ar(4, w, x, y);
- 
- [lf, rf, lr, rr] // reorder to my speaker arrangement: Lf Rf Lr Rr
+	var w, x, y, p, lf, rf, rr, lr;
+	
+	p = BrownNoise.ar; // source
+	
+	// B-format encode
+	#w, x, y = PanB2.ar(p, MouseX.kr(-1,1), 0.3);
+	
+	// B-format decode to quad. outputs in clockwise order
+	#lf, rf, rr, lr = DecodeB2.ar(4, w, x, y);
+	
+	[lf, rf, lr, rr] // reorder to my speaker arrangement: Lf Rf Lr Rr
 }.scope(4);
 )
 
@@ -501,12 +502,12 @@ Rotate2 - rotate a sound field of ambisonic or even stereo sound.
 
 (
 {
- // rotation of stereo sound via mouse 
- var x, y;
- x = Mix.fill(4, { LFSaw.ar(200 + 2.0.rand2, 0, 0.1) }); // left in
- y = WhiteNoise.ar * LFPulse.kr(3,0,0.7,0.2); // right in
- #x, y = Rotate2.ar(x, y, MouseX.kr(0,2));
- [x,y]
+	// rotation of stereo sound via mouse
+	var x, y;
+	x = Mix.fill(4, { LFSaw.ar(200 + 2.0.rand2, 0, 0.1) }); // left in
+	y = WhiteNoise.ar * LFPulse.kr(3,0,0.7,0.2); // right in
+	#x, y = Rotate2.ar(x, y, MouseX.kr(0,2));
+	[x,y]
 }.scope(2);
 )
 
@@ -520,7 +521,7 @@ C - cubic interpolation
 arguments: in, maximum delay time, current delay time, mul, add
 
 (
-// Dust randomly triggers Decay to create an exponential 
+// Dust randomly triggers Decay to create an exponential
 // decay envelope for the WhiteNoise input source
 {
 z = Decay.ar(Dust.ar(1,0.5), 0.3, WhiteNoise.ar);
@@ -540,10 +541,10 @@ feedback delays
 arguments: in, maximum delay time, current delay time, echo decay time, mul, add
 
 
-// used as an echo. 
+// used as an echo.
 { CombN.ar(Decay.ar(Dust.ar(1,0.5), 0.2, WhiteNoise.ar), 0.2, 0.2, 3) }.scope(1, zoom:4);
 
-// Comb used as a resonator. The resonant fundamental is equal to 
+// Comb used as a resonator. The resonant fundamental is equal to
 // reciprocal of the delay time.
 { CombN.ar(WhiteNoise.ar(0.02), 0.01, XLine.kr(0.0001, 0.01, 20), 0.2) }.scope(1);
 
@@ -570,13 +571,13 @@ arguments: in, maximum delay time, current delay time, echo decay time, mul, add
 
 (
 {
- var z;
- z = Decay.ar(Dust.ar(1,0.5), 0.1, WhiteNoise.ar);
- 8.do { z = AllpassL.ar(z, 0.04, 0.04.rand, 2) };
- z
+	var z;
+	z = Decay.ar(Dust.ar(1,0.5), 0.1, WhiteNoise.ar);
+	8.do { z = AllpassL.ar(z, 0.04, 0.04.rand, 2) };
+	z
 }.scope(1);
 )
- 
+	
 PlayBuf
 buffer playback
 arguments: numChannels, buffer number, rate, trigger, start pos, loop
@@ -593,54 +594,54 @@ b = Buffer.read(s, "sounds/a11wlk01.wav");
 // trigger one shot on each pulse
 (
 {
- var trig;
- trig = Impulse.kr(2.0);
- PlayBuf.ar(1,b.bufnum,BufRateScale.kr(b.bufnum),trig,0,0);
+	var trig;
+	trig = Impulse.kr(2.0);
+	PlayBuf.ar(1,b.bufnum,BufRateScale.kr(b.bufnum),trig,0,0);
 }.scope(1);
 )
 
 // trigger one shot on each pulse
 (
 {
- var trig;
- trig = Impulse.kr(XLine.kr(0.1,100,30));
- PlayBuf.ar(1,b.bufnum,BufRateScale.kr(b.bufnum),trig,5000,0);
+	var trig;
+	trig = Impulse.kr(XLine.kr(0.1,100,30));
+	PlayBuf.ar(1,b.bufnum,BufRateScale.kr(b.bufnum),trig,5000,0);
 }.scope(1);
 )
 
 // mouse control of trigger rate and startpos
 (
 {
- var trig;
- trig = Impulse.kr(MouseY.kr(0.5,200,1));
- PlayBuf.ar(1,b.bufnum,BufRateScale.kr(b.bufnum),trig,MouseX.kr(0,BufFrames.kr(b.bufnum)),1)
+	var trig;
+	trig = Impulse.kr(MouseY.kr(0.5,200,1));
+	PlayBuf.ar(1,b.bufnum,BufRateScale.kr(b.bufnum),trig,MouseX.kr(0,BufFrames.kr(b.bufnum)),1)
 }.scope(1);
 )
 
 // accelerating pitch
 (
 {
- var rate;
- rate = XLine.kr(0.1,100,60);
- PlayBuf.ar(1, b.bufnum, rate, 1.0,0.0, 1.0)
+	var rate;
+	rate = XLine.kr(0.1,100,60);
+	PlayBuf.ar(1, b.bufnum, rate, 1.0,0.0, 1.0)
 }.scope(1);
 )
 
 // sine wave control of playback rate. negative rate plays backwards
 (
 {
- var rate;
- rate = FSinOsc.kr(XLine.kr(0.2,8,30), 0, 3, 0.6);
- PlayBuf.ar(1,b.bufnum,BufRateScale.kr(b.bufnum)*rate,1,0,1)
+	var rate;
+	rate = FSinOsc.kr(XLine.kr(0.2,8,30), 0, 3, 0.6);
+	PlayBuf.ar(1,b.bufnum,BufRateScale.kr(b.bufnum)*rate,1,0,1)
 }.scope(1);
 )
 
-// zig zag around sound 
+// zig zag around sound
 (
 {
- var rate;
- rate = LFNoise2.kr(XLine.kr(1,20,60), 2);
- PlayBuf.ar(1,b.bufnum,BufRateScale.kr(b.bufnum) * rate,1,0,1)
+	var rate;
+	rate = LFNoise2.kr(XLine.kr(1,20,60), 2);
+	PlayBuf.ar(1,b.bufnum,BufRateScale.kr(b.bufnum) * rate,1,0,1)
 }.scope(1);
 )
 
@@ -658,47 +659,47 @@ b = Buffer.read(s, "sounds/a11wlk01.wav");
 
 (
 {
- var trate, dur;
- trate = MouseY.kr(2,200,1);
- dur = 4 / trate;
- TGrains.ar(2, Impulse.ar(trate), b.bufnum, 1, MouseX.kr(0,BufDur.kr(b.bufnum)), dur, 0, 0.1, 2);
+	var trate, dur;
+	trate = MouseY.kr(2,200,1);
+	dur = 4 / trate;
+	TGrains.ar(2, Impulse.ar(trate), b.bufnum, 1, MouseX.kr(0,BufDur.kr(b.bufnum)), dur, 0, 0.1, 2);
 }.scope(2, zoom: 4);
 )
 
 (
 {
- var trate, dur, clk, pos, pan;
- trate = MouseY.kr(8,120,1);
- dur = 12 / trate;
- clk = Impulse.kr(trate);
- pos = MouseX.kr(0,BufDur.kr(b.bufnum)) + TRand.kr(0, 0.01, clk);
- pan = WhiteNoise.kr(0.6);
- TGrains.ar(2, clk, b.bufnum, 1, pos, dur, pan, 0.1);
+	var trate, dur, clk, pos, pan;
+	trate = MouseY.kr(8,120,1);
+	dur = 12 / trate;
+	clk = Impulse.kr(trate);
+	pos = MouseX.kr(0,BufDur.kr(b.bufnum)) + TRand.kr(0, 0.01, clk);
+	pan = WhiteNoise.kr(0.6);
+	TGrains.ar(2, clk, b.bufnum, 1, pos, dur, pan, 0.1);
 }.scope(2, zoom: 4);
 )
 
 // 4 channels
 (
 {
- var trate, dur, clk, pos, pan;
- trate = MouseY.kr(8,120,1);
- dur = 12 / trate;
- clk = Impulse.kr(trate);
- pos = MouseX.kr(0,BufDur.kr(b.bufnum)) + TRand.kr(0, 0.01, clk);
- pan = WhiteNoise.kr(0.6);
- TGrains.ar(4, clk, b.bufnum, 1, pos, dur, pan, 0.1);
+	var trate, dur, clk, pos, pan;
+	trate = MouseY.kr(8,120,1);
+	dur = 12 / trate;
+	clk = Impulse.kr(trate);
+	pos = MouseX.kr(0,BufDur.kr(b.bufnum)) + TRand.kr(0, 0.01, clk);
+	pan = WhiteNoise.kr(0.6);
+	TGrains.ar(4, clk, b.bufnum, 1, pos, dur, pan, 0.1);
 }.scope(4, zoom: 4);
 )
 
 (
 {
- var trate, dur, clk, pos, pan;
- trate = MouseY.kr(8,120,1);
- dur = 4 / trate;
- clk = Dust.kr(trate);
- pos = MouseX.kr(0,BufDur.kr(b.bufnum)) + TRand.kr(0, 0.01, clk);
- pan = WhiteNoise.kr(0.6);
- TGrains.ar(2, clk, b.bufnum, 1, pos, dur, pan, 0.1);
+	var trate, dur, clk, pos, pan;
+	trate = MouseY.kr(8,120,1);
+	dur = 4 / trate;
+	clk = Dust.kr(trate);
+	pos = MouseX.kr(0,BufDur.kr(b.bufnum)) + TRand.kr(0, 0.01, clk);
+	pan = WhiteNoise.kr(0.6);
+	TGrains.ar(2, clk, b.bufnum, 1, pos, dur, pan, 0.1);
 }.scope(2, zoom: 4);
 )
 
@@ -706,50 +707,50 @@ b = Buffer.read(s, "sounds/a11wlk01.wav");
 
 (
 {
- var trate, dur, clk, pos, pan;
- trate = LinExp.kr(LFTri.kr(MouseY.kr(0.1,2,1)),-1,1,8,120);
- dur = 12 / trate;
- clk = Impulse.ar(trate);
- pos = MouseX.kr(0,BufDur.kr(b.bufnum));
- pan = WhiteNoise.kr(0.6);
- TGrains.ar(2, clk, b.bufnum, 1, pos, dur, pan, 0.1);
+	var trate, dur, clk, pos, pan;
+	trate = LinExp.kr(LFTri.kr(MouseY.kr(0.1,2,1)),-1,1,8,120);
+	dur = 12 / trate;
+	clk = Impulse.ar(trate);
+	pos = MouseX.kr(0,BufDur.kr(b.bufnum));
+	pan = WhiteNoise.kr(0.6);
+	TGrains.ar(2, clk, b.bufnum, 1, pos, dur, pan, 0.1);
 }.scope(2, zoom: 4);
 )
 
 
 (
 {
- var trate, dur, clk, pos, pan;
- trate = 12;
- dur = MouseY.kr(0.2,24,1) / trate;
- clk = Impulse.kr(trate);
- pos = MouseX.kr(0,BufDur.kr(b.bufnum)) + TRand.kr(0, 0.01, clk);
- pan = WhiteNoise.kr(0.6);
- TGrains.ar(2, clk, b.bufnum, 1, pos, dur, pan, 0.1);
+	var trate, dur, clk, pos, pan;
+	trate = 12;
+	dur = MouseY.kr(0.2,24,1) / trate;
+	clk = Impulse.kr(trate);
+	pos = MouseX.kr(0,BufDur.kr(b.bufnum)) + TRand.kr(0, 0.01, clk);
+	pan = WhiteNoise.kr(0.6);
+	TGrains.ar(2, clk, b.bufnum, 1, pos, dur, pan, 0.1);
 }.scope(2, zoom: 4);
 )
 
 (
 {
- var trate, dur, clk, pos, pan;
- trate = 100;
- dur = 8 / trate;
- clk = Impulse.kr(trate);
- pos = Integrator.kr(BrownNoise.kr(0.001));
- pan = WhiteNoise.kr(0.6);
- TGrains.ar(2, clk, b.bufnum, 1, pos, dur, pan, 0.1);
+	var trate, dur, clk, pos, pan;
+	trate = 100;
+	dur = 8 / trate;
+	clk = Impulse.kr(trate);
+	pos = Integrator.kr(BrownNoise.kr(0.001));
+	pan = WhiteNoise.kr(0.6);
+	TGrains.ar(2, clk, b.bufnum, 1, pos, dur, pan, 0.1);
 }.scope(2, zoom: 4);
 )
 
 (
 {
- var trate, dur, clk, pos, pan;
- trate = MouseY.kr(1,400,1);
- dur = 8 / trate;
- clk = Impulse.kr(trate);
- pos = MouseX.kr(0,BufDur.kr(b.bufnum));
- pan = WhiteNoise.kr(0.8);
- TGrains.ar(2, clk, b.bufnum, 2 ** WhiteNoise.kr(2), pos, dur, pan, 0.1);
+	var trate, dur, clk, pos, pan;
+	trate = MouseY.kr(1,400,1);
+	dur = 8 / trate;
+	clk = Impulse.kr(trate);
+	pos = MouseX.kr(0,BufDur.kr(b.bufnum));
+	pan = WhiteNoise.kr(0.8);
+	TGrains.ar(2, clk, b.bufnum, 2 ** WhiteNoise.kr(2), pos, dur, pan, 0.1);
 }.scope(2, zoom: 4);
 )
 
@@ -758,10 +759,10 @@ b = Buffer.read(s, "sounds/a11wlk01.wav");
 
 (
 {
- var trate, dur;
- trate = MouseY.kr(2,120,1);
- dur = 1.2 / trate;
- TGrains.ar(2, Impulse.ar(trate), b.bufnum, (1.2 ** WhiteNoise.kr(3).round(1)), MouseX.kr(0,BufDur.kr(b.bufnum)), dur, WhiteNoise.kr(0.6), 0.1);
+	var trate, dur;
+	trate = MouseY.kr(2,120,1);
+	dur = 1.2 / trate;
+	TGrains.ar(2, Impulse.ar(trate), b.bufnum, (1.2 ** WhiteNoise.kr(3).round(1)), MouseX.kr(0,BufDur.kr(b.bufnum)), dur, WhiteNoise.kr(0.6), 0.1);
 }.scope(2, zoom: 4);
 )
 
@@ -769,7 +770,7 @@ b = Buffer.read(s, "sounds/a11wlk01.wav");
 b.free;
 
 
- 
+	
 Control
 
 Filters for Controls
@@ -783,7 +784,7 @@ arguments: in, decay time, mul, add
 { SinOsc.ar(Decay.ar(Dust.ar(4), 0.5, 1000, 400), 0, 0.2) }.scope(1, zoom:4);
 
 Decay2
-triggered exponential attack and exponential decay 
+triggered exponential attack and exponential decay
 arguments: trigger, attack time, decay time, mul, add
 
 { WhiteNoise.ar * Decay2.ar(Impulse.ar(1), 0.2, 0.9, 0.2) }.scope(1, zoom:4);
@@ -816,11 +817,11 @@ delays a trigger. only delays one pending trigger at a time.
 arguments: trigger, delay time
 
 (
-{ 
- var trig;
- trig = Dust.ar(2);
- [(Trig1.ar(trig, 0.05) * FSinOsc.ar(600, 0, 0.2)),
- (Trig1.ar(TDelay.ar(trig, 0.1), 0.05) * FSinOsc.ar(800, 0, 0.2))]
+{
+	var trig;
+	trig = Dust.ar(2);
+	[(Trig1.ar(trig, 0.05) * FSinOsc.ar(600, 0, 0.2)),
+	(Trig1.ar(TDelay.ar(trig, 0.1), 0.05) * FSinOsc.ar(800, 0, 0.2))]
 }.scope(2, zoom:4);
 )
 
@@ -845,9 +846,9 @@ arguments: trigger, reset
 (
 {
 SinOsc.ar(
- PulseCount.ar(Impulse.ar(10), Impulse.ar(0.4)) * 200, 
- 0, 0.05
- )
+			PulseCount.ar(Impulse.ar(10), Impulse.ar(0.4)) * 200,
+			0, 0.05
+		)
 }.scope(2, zoom:4);
 )
 
@@ -855,13 +856,13 @@ PulseDivider
 arguments: trigger, div, start
 
 (
-{ 
- var p, a, b;
- p = Impulse.ar(8);
- a = SinOsc.ar(1200, 0, Decay2.ar(p, 0.005, 0.1));
- b = SinOsc.ar(600, 0, Decay2.ar(PulseDivider.ar(p, MouseX.kr(1,8).round(1)), 0.005, 0.5));
- 
- [a, b] * 0.4
+{	
+	var p, a, b;
+	p = Impulse.ar(8);
+	a = SinOsc.ar(1200, 0, Decay2.ar(p, 0.005, 0.1));
+	b = SinOsc.ar(600, 0, Decay2.ar(PulseDivider.ar(p, MouseX.kr(1,8).round(1)), 0.005, 0.5));
+	
+	[a, b] * 0.4
 }.scope(2, zoom:4);
 )
 
@@ -882,13 +883,13 @@ z.release;
 
 (
 // randomly generated envelope
-z = { arg gate=1; 
- var env, n=32;
- env = Env(
- [0]++{1.0.rand.squared}.dup(n-1) ++ [0], 
- {rrand(0.005,0.2)}.dup(n),
- \lin, n-8, 8 );
- EnvGen.kr(env, gate, doneAction: 2) * LFTri.ar(220,0,0.4) 
+z = { arg gate=1;
+	var env, n=32;
+	env = Env(
+				[0]++{1.0.rand.squared}.dup(n-1) ++ [0],
+				{rrand(0.005,0.2)}.dup(n),
+				\lin, n-8, 8 );
+	EnvGen.kr(env, gate, doneAction: 2) * LFTri.ar(220,0,0.4)
 }.scope(1, zoom:4);
 )
 z.release;
@@ -911,43 +912,43 @@ c = Buffer.read(s, "sounds/a11wlk01.wav");
 (
 // do nothing
 {
- var in, chain;
- in = PlayBuf.ar(1,c.bufnum, BufRateScale.kr(c.bufnum), loop:1);
- chain = FFT(b.bufnum, in);
- 0.5 * IFFT(chain);
+	var in, chain;
+	in = PlayBuf.ar(1,c.bufnum, BufRateScale.kr(c.bufnum), loop:1);
+	chain = FFT(b.bufnum, in);
+	0.5 * IFFT(chain);
 }.scope(1);
 )
 
 (
 // pass only magnitudes above a threshold
 {
- var in, chain;
- in = PlayBuf.ar(1,c.bufnum, BufRateScale.kr(c.bufnum), loop:1);
- chain = FFT(b.bufnum, in);
- chain = PV_MagAbove(chain, MouseX.kr(0.1,512,1)); 
- 0.5 * IFFT(chain);
+	var in, chain;
+	in = PlayBuf.ar(1,c.bufnum, BufRateScale.kr(c.bufnum), loop:1);
+	chain = FFT(b.bufnum, in);
+	chain = PV_MagAbove(chain, MouseX.kr(0.1,512,1));
+	0.5 * IFFT(chain);
 }.scope(1);
 )
 
 (
 // pass only magnitudes below a threshold
 {
- var in, chain;
- in = PlayBuf.ar(1,c.bufnum, BufRateScale.kr(c.bufnum), loop:1);
- chain = FFT(b.bufnum, in);
- chain = PV_MagBelow(chain, MouseX.kr(0.1,512,1)); 
- 0.5 * IFFT(chain);
+	var in, chain;
+	in = PlayBuf.ar(1,c.bufnum, BufRateScale.kr(c.bufnum), loop:1);
+	chain = FFT(b.bufnum, in);
+	chain = PV_MagBelow(chain, MouseX.kr(0.1,512,1));
+	0.5 * IFFT(chain);
 }.scope(1);
 )
 
 (
 // brick wall filter.
 {
- var in, chain;
- in = PlayBuf.ar(1,c.bufnum, BufRateScale.kr(c.bufnum), loop:1);
- chain = FFT(b.bufnum, in);
- chain = PV_BrickWall(chain, MouseX.kr(-1,1)); 
- 0.5 * IFFT(chain);
+	var in, chain;
+	in = PlayBuf.ar(1,c.bufnum, BufRateScale.kr(c.bufnum), loop:1);
+	chain = FFT(b.bufnum, in);
+	chain = PV_BrickWall(chain, MouseX.kr(-1,1));
+	0.5 * IFFT(chain);
 }.scope(1);
 )
 
@@ -955,33 +956,33 @@ c = Buffer.read(s, "sounds/a11wlk01.wav");
 // pass random frequencies. Mouse controls how many to pass.
 // trigger changes the frequencies periodically
 {
- var in, chain;
- in = PlayBuf.ar(1,c.bufnum, BufRateScale.kr(c.bufnum), loop:1);
- chain = FFT(b.bufnum, in);
- chain = PV_RandComb(chain, MouseX.kr(0,1), Impulse.kr(0.4));
- 0.5 * IFFT(chain);
+	var in, chain;
+	in = PlayBuf.ar(1,c.bufnum, BufRateScale.kr(c.bufnum), loop:1);
+	chain = FFT(b.bufnum, in);
+	chain = PV_RandComb(chain, MouseX.kr(0,1), Impulse.kr(0.4));
+	0.5 * IFFT(chain);
 }.scope(1);
 )
 
 (
 // rectangular comb filter
 {
- var in, chain;
- in = PlayBuf.ar(1,c.bufnum, BufRateScale.kr(c.bufnum), loop:1);
- chain = FFT(b.bufnum, in);
- chain = PV_RectComb(chain, 8, MouseY.kr(0,1), MouseX.kr(0,1));
- 0.5 * IFFT(chain);
+	var in, chain;
+	in = PlayBuf.ar(1,c.bufnum, BufRateScale.kr(c.bufnum), loop:1);
+	chain = FFT(b.bufnum, in);
+	chain = PV_RectComb(chain, 8, MouseY.kr(0,1), MouseX.kr(0,1));
+	0.5 * IFFT(chain);
 }.scope(1);
 )
 
 (
 // freeze magnitudes
 {
- var in, chain;
- in = PlayBuf.ar(1,c.bufnum, BufRateScale.kr(c.bufnum), loop:1);
- chain = FFT(b.bufnum, in);
- chain = PV_MagFreeze(chain, LFPulse.kr(1, 0.75));
- 0.5 * IFFT(chain);
+	var in, chain;
+	in = PlayBuf.ar(1,c.bufnum, BufRateScale.kr(c.bufnum), loop:1);
+	chain = FFT(b.bufnum, in);
+	chain = PV_MagFreeze(chain, LFPulse.kr(1, 0.75));
+	0.5 * IFFT(chain);
 }.scope(1);
 )
 
@@ -1003,9 +1004,9 @@ Building a sense of space into a sound by setting up phase differences between t
 
 // correlated
 (
-{ var x; 
- x = Klank.ar(`[[200, 671, 1153, 1723], nil, [1, 1, 1, 1]], PinkNoise.ar(7e-3)); 
- [x,x] 
+{ var x;
+	x = Klank.ar(`[[200, 671, 1153, 1723], nil, [1, 1, 1, 1]], PinkNoise.ar(7e-3));
+	[x,x]
 }.scope(2))
 // not correlated
 { Klank.ar(`[[200, 671, 1153, 1723], nil, [1, 1, 1, 1]], PinkNoise.ar([7e-3,7e-3])) }.scope(2);
@@ -1021,24 +1022,24 @@ Building a sense of space into a sound by setting up phase differences between t
 
 (
 // inter-speaker delays
-{ var x; x = LFTri.ar(1000,0,Decay2.ar(Impulse.ar(4,0,0.2),0.004,0.2)); 
- [DelayC.ar(x,0.01,0.01),DelayC.ar(x,0.02,MouseX.kr(0.02, 0))]
+{ var x; x = LFTri.ar(1000,0,Decay2.ar(Impulse.ar(4,0,0.2),0.004,0.2));
+	[DelayC.ar(x,0.01,0.01),DelayC.ar(x,0.02,MouseX.kr(0.02, 0))]
 }.scope(2);
 )
 
 (
 // mixing two delays together
 // you hear a phasing sound but the sound is still flat.
-{ var x; x = BrownNoise.ar(0.2); 
- x = Mix.ar([DelayC.ar(x,0.01,0.01),DelayC.ar(x,0.02,MouseX.kr(0,0.02))]);
- [x,x]
+{ var x; x = BrownNoise.ar(0.2);
+	x = Mix.ar([DelayC.ar(x,0.01,0.01),DelayC.ar(x,0.02,MouseX.kr(0,0.02))]);
+	[x,x]
 }.scope(2);
 )
 
 (
 // more spatial sounding. phasing causes you to perceive directionality
-{ var x; x = BrownNoise.ar(0.2); 
- [DelayC.ar(x,0.01,0.01),DelayC.ar(x,0.02,MouseX.kr(0.02, 0))]
+{ var x; x = BrownNoise.ar(0.2);
+	[DelayC.ar(x,0.01,0.01),DelayC.ar(x,0.02,MouseX.kr(0.02, 0))]
 }.scope(2);
 )
 
@@ -1047,66 +1048,68 @@ Parallel Structures
 
 (
 {
- // mixing sine oscillators in parallel
- var n = 16; // number of structures to make
- // mix together parallel structures
- Mix.fill(n, 
- // this function creates an oscillator at a random frequency
- { FSinOsc.ar(200 + 1000.0.rand) }
- ) / (2*n) // scale amplitude
+	// mixing sine oscillators in parallel
+	var n = 16; // number of structures to make
+	// mix together parallel structures
+	Mix.fill(n,		
+			// this function creates an oscillator at a random frequency
+			{ FSinOsc.ar(200 + 1000.0.rand) }
+	) / (2*n)			// scale amplitude
 }.scope(1);
 )
 
 (
 {
- // mixing sine oscillators in parallel
- var n = 16; // number of structures to make
- // mix together parallel structures
- Mix.fill(n, 
- // this function creates an oscillator at a random frequency
- { FSinOsc.ar(200 + 1000.0.rand + [0, 0.5]) }
- ) / (2*n) // scale amplitude
+	// mixing sine oscillators in parallel
+	var n = 16; // number of structures to make
+	// mix together parallel structures
+	Mix.fill(n,		
+			// this function creates an oscillator at a random frequency
+			{ FSinOsc.ar(200 + 1000.0.rand + [0, 0.5]) }
+	) / (2*n)			// scale amplitude
 }.scope(2);
 )
 
 (
 {
- // mixing sine oscillators in parallel
- var n = 16; // number of structures to make
- // mix together parallel structures
- Mix.fill(n, 
- { 
- var amp;
- amp = FSinOsc.kr(exprand(0.1,1),2pi.rand).max(0);
- Pan2.ar(
- FSinOsc.ar(exprand(100,1000.0), 0, amp),
- 1.0.rand2)
- }
- ) / (2*n) // scale amplitude
+	// mixing sine oscillators in parallel
+	var n = 16; // number of structures to make
+	// mix together parallel structures
+	Mix.fill(n,		
+			{
+				var amp;
+				amp = FSinOsc.kr(exprand(0.1,1),2pi.rand).max(0);
+				Pan2.ar(
+					FSinOsc.ar(exprand(100,1000.0), 0, amp),
+					1.0.rand2)
+			}
+	) / (2*n)			// scale amplitude
 }.scope(2);
 )
 
 
 (
 {
- var n;
- n = 8; // number of 'voices'
- Mix.ar( // mix all stereo pairs down.
- Pan2.ar( // pan the voice to a stereo position
- CombL.ar( // a comb filter used as a string resonator
- Dust.ar( // random impulses as an excitation function
- // an array to cause expansion of Dust to n channels
- // 1 means one impulse per second on average
- 1.dup(n), 
- 0.3 // amplitude
- ), 
- 0.01, // max delay time in seconds
- // array of different random lengths for each 'string'
- {0.004.rand+0.0003}.dup(n), 
- 4 // decay time in seconds
- ),
- {1.0.rand2}.dup(n) // give each voice a different pan position
- )
- )
+	var n;
+	n = 8; // number of 'voices'
+	Mix.ar( // mix all stereo pairs down.
+		Pan2.ar( // pan the voice to a stereo position
+			CombL.ar( // a comb filter used as a string resonator
+				Dust.ar( // random impulses as an excitation function
+					// an array to cause expansion of Dust to n channels
+					// 1 means one impulse per second on average
+					1.dup(n),
+					0.3 // amplitude
+				),
+				0.01, // max delay time in seconds
+				// array of different random lengths for each 'string'
+				{0.004.rand+0.0003}.dup(n),
+				4 // decay time in seconds
+			),
+			{1.0.rand2}.dup(n) // give each voice a different pan position
+		)
+	)
 }.scope(2, zoom:4);
 )
+
+

@@ -1,4 +1,5 @@
-ObjectTable associate objects with IDs
+
+ObjectTable			associate objects with IDs
 
 superclass: TwoWayIdentityDictionary
 
@@ -25,7 +26,7 @@ obj - the object to put in the table.
 
 *put(key, obj)
 
-Put an object in the main ObjectTable under a specific key. 
+Put an object in the main ObjectTable under a specific key.
 key - a Symbol.
 obj - the object to put in the table.
 
@@ -40,4 +41,6 @@ id - an Integer or Symbol.
 
 Get the ID of an object in the table.
 obj - an object in the table.
+
+
 

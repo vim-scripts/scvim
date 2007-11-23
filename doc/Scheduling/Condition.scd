@@ -1,20 +1,21 @@
-Conditionblock execution of a thread
+
+Condition			block execution of a thread
 
 
 superclass: Object
 
 
- *new(test) create a new instance, set the test variable.
- 
- test return the test variable (boolean)
- 
- wait wait until the condition is true and signalled
- 
- hang(val) wait for val time, regardless of test
- 
- signal if test is true, reschedule blocked threads
- 
- unhang resume threads
+	*new(test)	create a new instance, set the test variable.
+	
+	test			return the test variable (boolean)
+	
+	wait			wait until the condition is true and signalled
+	
+	hang(val)		wait for val time, regardless of test
+	
+	signal		if test is true, reschedule blocked threads
+	
+	unhang		resume threads
 
 
 
@@ -26,21 +27,21 @@ superclass: Object
 c = Condition.new(false);
 
 Routine {
- 1.wait;
- "waited for 1 second".postln;
- 1.wait;
- "waited for another second, now waiting for you ... ".postln;
- c.wait;
- "the condition has stopped waiting.".postln;
- 1.wait;
- "waited for another second".postln;
- "waiting for you ... ".postln;
- c.test = false;
- c.wait;
- "the condition has stopped waiting.".postln;
- 1.wait;
- "the end".postln;
-}.play; 
+	1.wait;
+	"waited for 1 second".postln;
+	1.wait;
+	"waited for another second, now waiting for you ... ".postln;
+	c.wait;
+	"the condition has stopped waiting.".postln;
+	1.wait;
+	"waited for another second".postln;
+	"waiting for you ... ".postln;
+		c.test = false;
+		c.wait;
+	"the condition has stopped waiting.".postln;
+	1.wait;
+	"the end".postln;
+}.play;
 )
 
 // continue
@@ -65,21 +66,23 @@ c.test = false;
 c = Condition.new;
 
 Routine {
- 1.wait;
- "waited for 1 second".postln;
- 1.wait;
- "waited for another second, now waiting for you ... ".postln;
- c.hang;
- "the condition has stopped waiting.".postln;
- 1.wait;
- "waited for another second".postln;
- "waiting for you ... ".postln;
- c.hang;
- "the condition has stopped waiting.".postln;
-}.play; 
+	1.wait;
+	"waited for 1 second".postln;
+	1.wait;
+	"waited for another second, now waiting for you ... ".postln;
+	c.hang;
+	"the condition has stopped waiting.".postln;
+	1.wait;
+	"waited for another second".postln;
+	"waiting for you ... ".postln;
+	c.hang;
+	"the condition has stopped waiting.".postln;
+}.play;
 )
 
 // continue
 c.unhang;
+
+
 
 

@@ -1,4 +1,5 @@
-Understanding errors 
+
+Understanding errors
 
 1. Reading error dumps
 2. Error objects and error handling
@@ -6,13 +7,13 @@ Understanding errors
 4. A common network error
 5. A common warning
 
-1. Reading error dumps 
+1. Reading error dumps
 
-When sc3 reports an error to the user, there are usually three parts: 
+When sc3 reports an error to the user, there are usually three parts:
 
 - the error text
 - a dump of the receiver of the method that caused the error, and/or any arguments of the method call
-- a dump of the call stack to the point of the error 
+- a dump of the call stack to the point of the error
 
 For example:
 
@@ -24,95 +25,95 @@ ERROR: Message 'blech' not understood.
 RECEIVER:
  Integer 1
 ARGS:
-Instance of Array { (02207560, gc=01, fmt=01, flg=11, set=00)
+Instance of Array {  (02207560, gc=01, fmt=01, flg=11, set=00)
  indexed slots [0]
 }
 // call stack
 CALL STACK:
- DoesNotUnderstandError-reportError
- arg this = <instance of DoesNotUnderstandError>
- Nil-handleError
- arg this = nil
- arg error = <instance of DoesNotUnderstandError>
- Object-throw
- arg this = <instance of DoesNotUnderstandError>
- Object-doesNotUnderstand
- arg this = 1
- arg selector = 'blech'
- arg args = [*0]
- < closed FunctionDef > (no arguments or variables)
- Interpreter-interpretPrintCmdLine
- arg this = <instance of Interpreter>
- var res = nil
- var func = <instance of Function>
- Process-interpretPrintCmdLine
- arg this = <instance of Main>
+	DoesNotUnderstandError-reportError
+		arg this = <instance of DoesNotUnderstandError>
+	Nil-handleError
+		arg this = nil
+		arg error = <instance of DoesNotUnderstandError>
+	Object-throw
+		arg this = <instance of DoesNotUnderstandError>
+	Object-doesNotUnderstand
+		arg this = 1
+		arg selector = 'blech'
+		arg args = [*0]
+	< closed FunctionDef > (no arguments or variables)
+	Interpreter-interpretPrintCmdLine
+		arg this = <instance of Interpreter>
+		var res = nil
+		var func = <instance of Function>
+	Process-interpretPrintCmdLine
+		arg this = <instance of Main>
 
-Each of these parts provides valuable information about the cause of the error. Debugging is much easier if you understand what the error output means. 
+Each of these parts provides valuable information about the cause of the error. Debugging is much easier if you understand what the error output means.
 
-Error text: A string describing the error. In this case, "Message 'xxx' not understood" means that you attempted to use the method xxx on a class that does not implement it. 
+Error text: A string describing the error. In this case, "Message 'xxx' not understood" means that you attempted to use the method xxx on a class that does not implement it.
 
-Receiver and arguments: The method was applied to an integer (1), with no arguments (the size of the arguments array is 0). 
+Receiver and arguments: The method was applied to an integer (1), with no arguments (the size of the arguments array is 0).
 
-Call stack: Order of execution in the call stack is in reverse: the top of the stack shows the most recent calls. 
+Call stack: Order of execution in the call stack is in reverse: the top of the stack shows the most recent calls.
 
-Most call stacks for errors will show the same top three calls as shown here (calling the method reportError on an error class, calling handleError on Nil, and calling throw on the error object). You can ignore these three calls. 
+Most call stacks for errors will show the same top three calls as shown here (calling the method reportError on an error class, calling handleError on Nil, and calling throw on the error object). You can ignore these three calls.
 
-Following is the meat: the error happened when an object was not understood. Continuing to read down, it happened inside a function definition. (Every time you highlight a block of code and press the enter key, the code is compiled into a function definition and executed. So, this function definition simply refers to the text submitted to the interpreter.) And, it all began with the instruction to interpret and print a command line. 
+Following is the meat: the error happened when an object was not understood. Continuing to read down, it happened inside a function definition. (Every time you highlight a block of code and press the enter key, the code is compiled into a function definition and executed. So, this function definition simply refers to the text submitted to the interpreter.) And, it all began with the instruction to interpret and print a command line.
 
 Here is a slightly more complex example, showing how you can use the variables listed for each call in the call stack to help locate the error.
 
 Routine({
- var a;
- a = 5;
- loop {
- var b;
- b = 20.rand;
- b.postln.ecky_ecky_phtang; // "NI!!!!"
- a.wait;
- }
+	var a;
+	a = 5;
+	loop {
+		var b;
+		b = 20.rand;
+		b.postln.ecky_ecky_phtang;  // "NI!!!!"
+		a.wait;
+	}
 }).play;
 
 ERROR: Message 'ecky_ecky_phtang' not understood.
 RECEIVER:
  Integer 6
 ARGS:
-Instance of Array { (02207560, gc=01, fmt=01, flg=11, set=00)
+Instance of Array {  (02207560, gc=01, fmt=01, flg=11, set=00)
  indexed slots [0]
 }
 CALL STACK:
- DoesNotUnderstandError-reportError
- arg this = <instance of DoesNotUnderstandError>
- Nil-handleError
- arg this = nil
- arg error = <instance of DoesNotUnderstandError>
- Object-throw
- arg this = <instance of DoesNotUnderstandError>
- Object-doesNotUnderstand
- arg this = 6
- arg selector = 'ecky_ecky_phtang'
- arg args = [*0]
- < FunctionDef in closed FunctionDef >
- var b = 6
- Function-loop
- arg this = <instance of Function>
- < FunctionDef in closed FunctionDef >
- var a = 5
- Routine-prStart
- arg this = <instance of Routine>
- arg inval = 1542.075067
+	DoesNotUnderstandError-reportError
+		arg this = <instance of DoesNotUnderstandError>
+	Nil-handleError
+		arg this = nil
+		arg error = <instance of DoesNotUnderstandError>
+	Object-throw
+		arg this = <instance of DoesNotUnderstandError>
+	Object-doesNotUnderstand
+		arg this = 6
+		arg selector = 'ecky_ecky_phtang'
+		arg args = [*0]
+	< FunctionDef in closed FunctionDef >
+		var b = 6
+	Function-loop
+		arg this = <instance of Function>
+	< FunctionDef in closed FunctionDef >
+		var a = 5
+	Routine-prStart
+		arg this = <instance of Routine>
+		arg inval = 1542.075067
 
-Reading from the bottom this time, to trace the flow in chronological order: this time, execution did not begin with the command line, but with a routine commencing within the scheduler (Routine({...}).play). Note that there are two calls identified as "FunctionDef in closed FunctionDef" and that they can be distinguished by the variables contained within. The earlier call (second from the bottom) defines the variable "a" while the other defines "b." To locate the error in the code, then, you should look for a function defining the variable "b" that is called within another function defining "a" inside a routine. 
+Reading from the bottom this time, to trace the flow in chronological order: this time, execution did not begin with the command line, but with a routine commencing within the scheduler (Routine({...}).play). Note that there are two calls identified as "FunctionDef in closed FunctionDef" and that they can be distinguished by the variables contained within. The earlier call (second from the bottom) defines the variable "a" while the other defines "b." To locate the error in the code, then, you should look for a function defining the variable "b" that is called within another function defining "a" inside a routine.
 
-What if the error occurred not inside a function definition that you wrote, but inside a method in the class library? There may be a bug in the method, or you may have thought the method took a certain kind of argument when in fact it expects something else. 
+What if the error occurred not inside a function definition that you wrote, but inside a method in the class library? There may be a bug in the method, or you may have thought the method took a certain kind of argument when in fact it expects something else.
 
 If you double click on the construction "ClassName-methodName" in the call stack, the whole thing is selected. Then you can press cmd-J to open the method definition and look at the source code.
 
-2. Error objects and error handling 
+2. Error objects and error handling
 
-sc3 implements error reporting using Error objects, which are instances of the class Error or one of its subclasses. Any code (whether in the class library or any user application) can throw an error any time as follows: 
+sc3 implements error reporting using Error objects, which are instances of the class Error or one of its subclasses. Any code (whether in the class library or any user application) can throw an error any time as follows:
 
-Error("This is a basic error.").throw; 
+Error("This is a basic error.").throw;
 
 You can also catch exceptions that occur within functions by executing the function with "try" or "protect" instead of "value."
 
@@ -134,12 +135,12 @@ ERROR: Message 'blech' not understood.
 RECEIVER:
  Integer 1
 ARGS:
-Instance of Array { (02207560, gc=01, fmt=01, flg=11, set=00)
+Instance of Array {  (02207560, gc=01, fmt=01, flg=11, set=00)
  indexed slots [0]
 }
 CALL STACK:
- DoesNotUnderstandError-reportError
- arg this = <instance of DoesNotUnderstandError>
+	DoesNotUnderstandError-reportError
+		arg this = <instance of DoesNotUnderstandError>
 
 
 Prior to August 2004, try and protect do not return the value of the function to the caller if there is no error.
@@ -158,30 +159,30 @@ try { 1+1 }
 try { 1+Point(0, 0) } { 2*5 }
 10
 
-3. Common primitive errors 
+3. Common primitive errors
 
-- operation cannot be called from this Process. 
+- operation cannot be called from this Process.
 
-This is usually the results of performing a GUI operation within a routine or scheduled function that is executing on some clock other than AppClock. AppClock is the only clock that can execute GUI manipulation because it is a lower priority thread. If the CPU is busy with audio synthesis or maintaining accurate scheduling for musical events, AppClock events will be delayed until the CPU is free enough. 
+This is usually the results of performing a GUI operation within a routine or scheduled function that is executing on some clock other than AppClock. AppClock is the only clock that can execute GUI manipulation because it is a lower priority thread. If the CPU is busy with audio synthesis or maintaining accurate scheduling for musical events, AppClock events will be delayed until the CPU is free enough.
 
 Solution: write your GUI updates as follows. defer schedules the function on AppClock.
 
-{ myGUIObject.value_(newValue) }.defer; 
+{ myGUIObject.value_(newValue) }.defer;
 
-- Attempted write to immutable object. 
+- Attempted write to immutable object.
 
 #[0, 1, 2].put(1, 3)
 
 ERROR: Primitive '_BasicPut' failed.
 Attempted write to immutable object.
 
-#[0, 1, 2] is a literal array. Literal arrays cannot be manipulated--they can only be indexed. They cannot be changed internally. 
+#[0, 1, 2] is a literal array. Literal arrays cannot be manipulated--they can only be indexed. They cannot be changed internally.
 
 Solution: copy the array first.
 
 #[0, 1, 2].copy.put(1, 3)
 
-[ 0, 3, 2 ] 
+[ 0, 3, 2 ]
 
 - Index not an Integer.
 
@@ -192,7 +193,7 @@ Index not an Integer
 
 Arrays can be indexed only with integers (or, in builds since August 2004, floats).
 
-Solution: use .asInteger?note that if the object cannot be converted into an integer, you'll get a "Does not understand" error!
+Solution: use .asIntegernote that if the object cannot be converted into an integer, you'll get a "Does not understand" error!
 
 #[0, 1, 2].at(\1.asInteger)
 1
@@ -204,7 +205,7 @@ Solution: use .asInteger?note that if the object cannot be converted into an int
 ERROR: Primitive '_BasicPut' failed.
 Index out of range.
 
-Arrays have a finite size. If you try to put an object into an array slot but the slot does not exist because the array is too small, you'll get this error. 
+Arrays have a finite size. If you try to put an object into an array slot but the slot does not exist because the array is too small, you'll get this error.
 
 Solution: extend the array.
 
@@ -242,7 +243,7 @@ This is because you have multiple servers running, left over from crashes, unexp
 One can't cause them to quit via OSC (the boot button).
 
 // use this to remove them:
-Server.killAll 
+Server.killAll
 
 
 
@@ -250,90 +251,92 @@ Server.killAll
 
 WARNING: FunctionDef contains variable declarations and so will not be inlined.
 
-This warning can be safely ignored. Your code will still run, even if you get this warning. 
+This warning can be safely ignored. Your code will still run, even if you get this warning.
 
-Inlining is a compiler optimization that takes the operations inside a function and places them in the main line of the containing function. For instance, 
+Inlining is a compiler optimization that takes the operations inside a function and places them in the main line of the containing function. For instance,
 
 // inlined
 { while { 0.9.coin } { 10.rand.postln }
 }.def.dumpByteCodes;
 
 BYTECODES: (16)
- 0 40 PushLiteral Float 0.9 3FECCCCC CCCCCCCD // { 0.9.coin }
- 1 0D 2C SendSpecialUnaryArithMsgX 'coin'
- 3 F9 00 09 JumpIfFalsePushNil 9 (15)
- 6 2C 0A PushInt 10 // { 10.rand.postln }
- 8 0D 25 SendSpecialUnaryArithMsgX 'rand'
- 10 C1 38 SendSpecialMsg 'postln'
- 12 FD 00 0D JumpBak 13 (0)
- 15 F2 BlockReturn
+ 0  40    PushLiteral Float 0.9  3FECCCCC CCCCCCCD // { 0.9.coin }
+ 1  0D 2C  SendSpecialUnaryArithMsgX 'coin'
+ 3  F9 00 09 JumpIfFalsePushNil 9 (15)
+ 6  2C 0A  PushInt 10							 // { 10.rand.postln }
+ 8  0D 25  SendSpecialUnaryArithMsgX 'rand'
+10  C1 38  SendSpecialMsg 'postln'
+12  FD 00 0D JumpBak 13 (0)
+15  F2    BlockReturn
 a FunctionDef in closed FunctionDef
 
-This function contains two other functions. One is the condition for the while loop; the other is the while loop's action. The compiler renders this into a single code block, using jump instructions to handle the looping and exit. 
+This function contains two other functions. One is the condition for the while loop; the other is the while loop's action. The compiler renders this into a single code block, using jump instructions to handle the looping and exit.
 
-If, however, one of the functions defines a variable, then that function requires a separate execution frame. In this case, it's necessary for the compiler to push function definition objects onto the stack. 
+If, however, one of the functions defines a variable, then that function requires a separate execution frame. In this case, it's necessary for the compiler to push function definition objects onto the stack.
 
 // not inlined
 { while { 0.9.coin } {
- var a; // variable here prevents optimization
- a = 10.rand;
- a.postln
+  var a;	// variable here prevents optimization
+  a = 10.rand;
+  a.postln
  }
 }.def.dumpByteCodes;
 
 BYTECODES: (7)
- 0 04 00 PushLiteralX instance of FunctionDef in closed FunctionDef
- 2 04 01 PushLiteralX instance of FunctionDef in closed FunctionDef
- 4 C2 0C SendSpecialMsg 'while'
- 6 F2 BlockReturn
+ 0  04 00  PushLiteralX instance of FunctionDef in closed FunctionDef
+ 2  04 01  PushLiteralX instance of FunctionDef in closed FunctionDef
+ 4  C2 0C  SendSpecialMsg 'while'
+ 6  F2    BlockReturn
 a FunctionDef in closed FunctionDef
 
-Inlined code will run faster, because pushing and using different execution frames is extra work for the virtual machine. If you're very concerned about speed, you can use this warning as an indicator that you might be able to optimize something in your code further. 
+Inlined code will run faster, because pushing and using different execution frames is extra work for the virtual machine. If you're very concerned about speed, you can use this warning as an indicator that you might be able to optimize something in your code further.
 
-Sometimes, there's no way around un-optimized code. To wit, 
+Sometimes, there's no way around un-optimized code. To wit,
 
 // inlined, optimized, but you'll get stuck notes
 Routine({
  var synth;
  { synth = Synth("someSynth", [...args...]);
- thisThread.clock.sched(10, {
- synth.free;
- });
- 2.wait;
+  thisThread.clock.sched(10, {
+   synth.free;
+  });
+  2.wait;
  }.loop;
 }).play;
 
 // not inlined, but no stuck notes
 Routine({
  { var synth;
- synth = Synth("someSynth", [...args...]);
- thisThread.clock.sched(10, {
- synth.free;
- });
- 2.wait;
+  synth = Synth("someSynth", [...args...]);
+  thisThread.clock.sched(10, {
+   synth.free;
+  });
+  2.wait;
  }.loop;
 }).play;
 
-The first routine can be optimized because there is no variable declaration inside the loop. But, the synth variable changes on each iteration, meaning that by the time the first release happens, you don't have access anymore to the first note. Thus the first note will never terminate. 
+The first routine can be optimized because there is no variable declaration inside the loop. But, the synth variable changes on each iteration, meaning that by the time the first release happens, you don't have access anymore to the first note. Thus the first note will never terminate.
 
 In the second case, each note has its own synth variable, so the notes will be terminated as expected. You get a warning, but it's better because the results are correct.
 
 
-A solution to the above problem is to use a function with local variables. 
+A solution to the above problem is to use a function with local variables.
 
 (
 Routine({
- var func;
- func = { 
- var synth; // this variable is local to the function
- synth = Synth("default");
- [\play, synth].postln;
- thisThread.clock.sched(4.5, { 
- synth.free;
- [\free, synth].postln; 
- });
- };
- { func.value; 1.wait; }.loop
+	var func;
+	func = {
+		var synth; // this variable is local to the function
+  		synth = Synth("default");
+  		[\play, synth].postln;
+  		thisThread.clock.sched(4.5, {
+  			synth.free;
+  			[\free, synth].postln; 
+  		});
+  	};
+  	{ func.value; 1.wait; }.loop
 }).play;
 )
+
+
 

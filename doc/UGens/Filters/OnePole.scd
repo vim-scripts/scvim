@@ -1,6 +1,7 @@
 
 
-OnePole one pole filter
+
+OnePole			one pole filter
 
 OnePole.ar(in, coef, mul, add)
 
@@ -16,5 +17,7 @@ coef - feedback coefficient. Should be between -1 and +1
 { OnePole.ar(WhiteNoise.ar(0.5), -0.95) }.play
 
 { OnePole.ar(WhiteNoise.ar(0.5), Line.kr(-0.99, 0.99, 10)) }.play
+
+
 
 

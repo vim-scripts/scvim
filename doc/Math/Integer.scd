@@ -1,3 +1,4 @@
+
 Integer
 
 superclass: SimpleNumber
@@ -36,8 +37,20 @@ Answer a Char which has the ASCII value of the receiver.
 
 asDigit
 
-Answer a Char which represents the receiver as an ASCII digit. For example 
+Answer a Char which represents the receiver as an ASCII digit. For example
 5.asDigit returns $5.
+
+asBinaryDigits(numDigits)
+
+Answer an array with the binary digits (integer 0 or 1). numDigits defaults to 8.
+
+asDigits(base, numDigits)
+
+Answer an array with the n-ary digits, base defaults to 10.
+See also the complementary method SequenceableCollection convertDigits.
+
+2007.asDigits;
+2007.asDigits(2);
 
 
 Random Numbers
@@ -95,6 +108,15 @@ Answer whether the receiver is prime.
 25.isPrime.postln;
 13.isPrime.postln;
 
+indexOfPrime
+
+Answer the index of a prime number less than or equal to the receiver up to 65521.
+If the receiver is not a prime, the answer is nil.
+
+23.indexOfPrime;
+25.indexOfPrime;
+
+
 Misc
 
 getKeys
@@ -102,3 +124,5 @@ getKeys
 Returns the bits from the Macintosh GetKeys() Toolbox call. Receiver should be 0 to 3.
 
 [0.getKeys, 1.getKeys, 2.getKeys, 3.getKeys].postln;
+
+

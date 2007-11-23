@@ -1,5 +1,6 @@
 
-Impulse impulse oscillator
+
+Impulse		impulse oscillator
 
 Impulse.ar(freq, phase, mul, add)
 
@@ -14,3 +15,5 @@ phase - phase offset in cycles ( 0..1 )
 modulate phase:
 
 { Impulse.ar(4, [0, MouseX.kr(0, 1)], 0.2) }.play;
+
+

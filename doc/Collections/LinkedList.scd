@@ -1,3 +1,4 @@
+
 LinkedList
 
 Superclass: SequenceableCollection
@@ -38,15 +39,17 @@ Return the last item in the list.
 
 at(index)
 
-Return the item at the given index in the list. 
+Return the item at the given index in the list.
 This requires a scan of the list and so is O(n).
 
 put(index, obj)
 
-Put the item at the given index in the list. 
+Put the item at the given index in the list.
 This requires a scan of the list and so is O(n).
 
 removeAt(index)
 
 Remove and return the item at the given index in the list.
 This requires a scan of the list and so is O(n).
+
+

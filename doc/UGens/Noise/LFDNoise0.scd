@@ -1,18 +1,19 @@
-LFDNoise0 dynamic step noise
+
+LFDNoise0					dynamic step noise
 
 LFDNoise0.ar(freq, mul, add)
 
-Like LFNoise0, it generates random values at a rate given 
+Like LFNoise0, it generates random values at a rate given
 by the freq argument, with two differences:
 
--no time quantization 
+-no time quantization
 -fast recovery from low freq values.
 
 (LFNoise0,1,2 quantize to the nearest integer division of the samplerate,
-and they poll the freq argument only when scheduled, and thus seem 
+and they poll the freq argument only when scheduled, and thus seem
 to hang when freqs get very low).
 
-If you don't need very high or very low freqs, or use fixed freqs, 
+If you don't need very high or very low freqs, or use fixed freqs,
 LFNoise0 is more efficient.
 
 freq - rate at which to generate random values.
@@ -39,6 +40,8 @@ freq - rate at which to generate random values.
 { LFDNoise0.ar(XLine.kr(1000, 20000, 10), 0.1) }.scope;
 
 { LFNoise2.ar(1000, 0.25) }.play;
+
+
 
 
 

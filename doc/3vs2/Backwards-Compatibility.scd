@@ -1,3 +1,4 @@
+
 Backwards Compatibility
 
 There are a number of classes and methods that have been added to allow for backwards compatibility with SC2 code. The most notable of these is Synth.play, which is basically a wrapper for Function.play.
@@ -9,18 +10,18 @@ Both of these will create synth nodes on the default server. Note that neither r
 
 Synth.play({ Out.ar(1, SinOsc.ar(440, 0, 0.5)) });
 
-In general, one should be aware of this distinction when using this code. When copying such code for reuse with other SC3 classes (for example in a reusable SynthDef), it will usually be necessary to add an Out.ar. Although useful for quick testing these methods are generally inferior to SynthDef.play, as the latter is more direct, requires no modifications for general reuse, has greater general flexibility and has slightly less overhead. (Although this is insignificant in most cases, it could be relevant when large numbers of defs or nodes are being created.) 
+In general, one should be aware of this distinction when using this code. When copying such code for reuse with other SC3 classes (for example in a reusable SynthDef), it will usually be necessary to add an Out.ar. Although useful for quick testing these methods are generally inferior to SynthDef.play, as the latter is more direct, requires no modifications for general reuse, has greater general flexibility and has slightly less overhead. (Although this is insignificant in most cases, it could be relevant when large numbers of defs or nodes are being created.)
 
 Like SynthDef.play, Function.play returns a Synth object which can then be messaged, etc. However, since Function.play creates an arbitrarily named SynthDef, one cannot reuse the resulting def, at least not without reading its name from the post window, or getting it from the Synth object.
 
 //The following examples are functionally equivalent
-x = { arg freq = 440; Out.ar(1, SinOsc.ar(freq, 0, 0.5)) }.play(fadeTime: 0); 
-x.set(\freq, 880); // you can set arguments
-y = Synth.new(x.defName); // get the arbitrary defname from x
+x = { arg freq = 440; Out.ar(1, SinOsc.ar(freq, 0, 0.5)) }.play(fadeTime: 0);
+x.set(\freq, 880); 		// you can set arguments
+y = Synth.new(x.defName); 	// get the arbitrary defname from x
 x.free;
 y.free;
 
-x = SynthDef("backcompat-sine", { arg freq = 440; Out.ar(1, SinOsc.ar(freq, 0, 0.5)) }).play; 
+x = SynthDef("backcompat-sine", { arg freq = 440; Out.ar(1, SinOsc.ar(freq, 0, 0.5)) }).play;
 x.set(\freq, 880);
 y = Synth.new("backcompat-sine");
 x.free;
@@ -30,11 +31,13 @@ Function.play is in general superior to both its SC2 equivalent and Synth.play. 
 
 A number of other classes and methods have also been added to improve compatibility. These are listed below. In general there are equivalent or better ways of doing the same things in SC3.
 
-Synth *play use Function.play or SynthDef.play
-GetFileDialog use CocoaDialog
+Synth *play			use Function.play or SynthDef.play
+GetFileDialog 			use CocoaDialog
 GetStringDialog
-Synth *stop use Server.freeAll
-Synth *isPlaying Server.numSynths (this will include non-running nodes)
-Mix *ar *arFill  use Mix *new and *fill
+Synth *stop			use Server.freeAll
+Synth *isPlaying		Server.numSynths (this will include non-running nodes)
+Mix *ar *arFill			use Mix *new and *fill
 SimpleNumber.rgb
 Rawarray.write
+
+

@@ -1,3 +1,4 @@
+
 Interval
 
 superclass: Collection
@@ -14,15 +15,15 @@ Interval.new(10, 30, 4).postln;
 
 Instance Variables
 
-<>start 
+<>start
 
 The starting value of the interval.
 
-<>end 
+<>end
 
 The ending value of the interval.
 
-<>step 
+<>step
 
 The step value of the interval.
 
@@ -49,5 +50,7 @@ Evaluates function for each item in the interval.
 The function is passed two arguments, the item and an integer index.
 
 Interval.new(10, 30, 4).do({ arg item, i; item.postln });
+
+
 
 

@@ -1,4 +1,5 @@
-MidEQ parametric filter
+
+MidEQ			parametric filter
 
 MidEQ.ar(in, freq, rq, db, mul, add)
 
@@ -6,7 +7,7 @@ Attenuates or boosts a frequency band.
 
 in - input signal to be processed
 freq - center frequency of the band in Hertz.
-rq - the reciprocal of Q. bandwidth / cutoffFreq. 
+rq - the reciprocal of Q. bandwidth / cutoffFreq.
 db - amount of boost (db > 0) or attenuation (db < 0) of the frequency band. 
 
 
@@ -16,9 +17,9 @@ db - amount of boost (db > 0) or attenuation (db < 0) of the frequency band.
 
 // notch filter
 (
-{ var in; 
+{ var in;
  in = PinkNoise.ar(0.2) + SinOsc.ar(600, 0, 0.1);
- MidEQ.ar(in, SinOsc.kr(0.2, 0.5pi) * 2 + 600, 0.01, -24) 
+ MidEQ.ar(in, SinOsc.kr(0.2, 0.5pi) * 2 + 600, 0.01, -24)
 }.play
 )
 
@@ -26,19 +27,21 @@ db - amount of boost (db > 0) or attenuation (db < 0) of the frequency band.
 // first start the synth
 (
 x = {| freq=400, db=0, rq=0.1 |
- var in;
- in = SinOsc.ar([ 400, 420 ], 0, 0.4); 
- MidEQ.ar(in, freq, Lag.kr(rq, 0.3), db)
- }.play
+	 var in;
+	 in = SinOsc.ar([ 400, 420 ], 0, 0.4);
+	 MidEQ.ar(in, freq, Lag.kr(rq, 0.3), db)
+	}.play
 )
 
-// now play with its parameters to hear how the filter affects two frequencies 
+// now play with its parameters to hear how the filter affects two frequencies
 // that are very close to each other
 
 x.set(\db, -12)
-x.set(\rq, 0.1) 
-x.set(\rq, 0.03) 
-x.set(\freq, 410) 
-x.set(\freq, 420) 
-x.set(\freq, 400) 
-x.set(\freq, 500) 
+x.set(\rq, 0.1)
+x.set(\rq, 0.03)
+x.set(\freq, 410)
+x.set(\freq, 420)
+x.set(\freq, 400)
+x.set(\freq, 500)
+
+

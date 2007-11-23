@@ -1,8 +1,9 @@
+
 Gendy3
 
-See Gendy1 help file for background. This variant of GENDYN normalises the durations in each period to force oscillation at the desired pitch. The breakpoints still get perturbed as in Gendy1. 
+See Gendy1 help file for background. This variant of GENDYN normalises the durations in each period to force oscillation at the desired pitch. The breakpoints still get perturbed as in Gendy1.
 
-There is some glitching in the oscillator caused by the stochastic effects- control points as they vary cause big local jumps of amplitude. Put ampscale and durscale low to minimise the rate of this. 
+There is some glitching in the oscillator caused by the stochastic effects- control points as they vary cause big local jumps of amplitude. Put ampscale and durscale low to minimise the rate of this.
 
 Class Methods
 
@@ -10,7 +11,7 @@ Class Methods
 
 All parameters can be modulated at control rate except for initCPs which is used only at initialisation.
 
-ampdist - Choice of probability distribution for the next perturbation of the amplitude of a control point. 
+ampdist - Choice of probability distribution for the next perturbation of the amplitude of a control point.
 
 The distributions are (adapted from the GENDYN program in Formalized Music):
 0- LINEAR
@@ -22,7 +23,7 @@ The distributions are (adapted from the GENDYN program in Formalized Music):
 6- SINUS
 Where the sinus (Xenakis' name) is in this implementation taken as sampling from a third party oscillator. See example below.
 
-durdist- Choice of distribution for the perturbation of the current inter control point duration. 
+durdist- Choice of distribution for the perturbation of the current inter control point duration.
 
 adparam- A parameter for the shape of the amplitude probability distribution, requires values in the range 0.0001 to 1 (there are safety checks in the code so don't worry too much if you want to modulate!)
 
@@ -34,18 +35,18 @@ ampscale- Normally 0.0 to 1.0, multiplier for the distribution's delta value for
 
 durscale- Normally 0.0 to 1.0, multiplier for the distribution's delta value for duration. An ampscale of 1.0 allows the full range of -1 to 1 for a change of duration.
 
-initCPs- Initialise the number of control points in the memory. Xenakis specifies 12. There would be this number of control points per cycle of the oscillator, though the oscillator's period will constantly change due to the duration distribution. 
+initCPs- Initialise the number of control points in the memory. Xenakis specifies 12. There would be this number of control points per cycle of the oscillator, though the oscillator's period will constantly change due to the duration distribution.
 
 knum- Current number of utilised control points, allows modulation. 
 
 
 Examples
- 
- 
-//warning- if you have lots of CPs and you have fast frequencies, the CPU cost goes up a lot because a new CP move happens every sample! 
+	
+	
+//warning- if you have lots of CPs and you have fast frequencies, the CPU cost goes up a lot because a new CP move happens every sample!	
 
- 
-//LOUD! defaults like a rougher Gendy1 
+	
+//LOUD! defaults like a rougher Gendy1	
 {Pan2.ar(Gendy3.ar(mul:0.5))}.play
 
 {Pan2.ar(Gendy3.ar(freq:MouseX.kr(220,880,'exponential'), durscale:0.01, ampscale:0.02, mul:0.2))}.play
@@ -66,7 +67,7 @@ MouseY.kr(10,10000,'exponential'),0.05)
 )
 
 
-//concrete pH? 
+//concrete pH?
 (
 {Pan2.ar(
 Mix.new(Gendy3.ar(freq:([1,1.2,1.3,1.76,2.3]*MouseX.kr(3,17,'exponential')),mul:0.2)))}.play
@@ -78,16 +79,16 @@ Mix.new(Gendy3.ar(freq:([1,1.2,1.3,1.76,2.3]*MouseX.kr(3,17,'exponential')),mul:
 Mix.new(Gendy3.ar(3,5,1.0,1.0,(Array.fill(5,{LFNoise0.kr(1.3.rand,1,2)})*MouseX.kr(100,378,'exponential')),MouseX.kr(0.01,0.05),MouseY.kr(0.001,0.016),5,mul:0.1)))}.play
 )
 
-//play me 
+//play me	
 {Pan2.ar(RLPF.ar(Gendy3.ar(1,3,freq:MouseX.kr(100,1000), durscale:0.0, ampscale:MouseY.kr(0.0,0.1), initCPs:7, knum: MouseY.kr(7,2)), 500,0.3, 0.2), 0.0)}.play
 
 
 
-//used as an LFO 
+//used as an LFO	
 (
 {Pan2.ar(SinOsc.ar(Gendy3.kr(2,5,SinOsc.kr(0.1,0,0.49,0.51),SinOsc.kr(0.13,0,0.49,0.51), 0.34, SinOsc.kr(0.17,0,0.49,0.51), SinOsc.kr(0.19,0,0.49,0.51),10,10,mul:50, add:350), 0, 0.3), 0.0)}.play
 )
- 
+	
 //buzzpipes
 {Pan2.ar(Mix.new(Gendy3.ar(0, 0, SinOsc.kr(0.1, 0, 0.1, 0.9),1.0, [100,205,410], 0.011,0.005, 12, 12, 0.12)), 0.0)}.play
 
@@ -106,7 +107,7 @@ Mix.new(Gendy3.ar(3,5,1.0,1.0,(Array.fill(5,{LFNoise0.kr(1.3.rand,1,2)})*MouseX.
 {Pan2.ar(Gendy3.ar(1,2,freq:Gendy2.ar(maxfreq:Gendy1.kr(5,4,0.3, 0.7, 0.1, MouseY.kr(0.1,10), 1.0, 1.0, 5,5, 25,26),minfreq:24, knum:MouseX.kr(1,13),mul:150, add:200), durscale:0.01, ampscale:0.01, mul:0.1), 0.0)}.play
 )
 
-//use SINUS to track any oscillator and take CP positions from it, use adparam and ddparam as the inputs to sample 
+//use SINUS to track any oscillator and take CP positions from it, use adparam and ddparam as the inputs to sample
 {Pan2.ar(Gendy3.ar(6,6,LFPulse.kr(LFNoise0.kr(19.0,0.5,0.6), 0, 0.4, 0.5), Gendy1.kr(durscale:0.01,ampscale:0.01), MouseX.kr(10,100),mul:0.2), 0.0)}.play
 
 
@@ -176,3 +177,5 @@ Pan2.ar(Gendy3.ar(6.rand,6.rand,1.0.rand,1.0.rand,freq, 1.0.rand, 1.0.rand, numc
 
 
 //SuperCollider implementation by Nick Collins (sicklincoln.org)
+
+

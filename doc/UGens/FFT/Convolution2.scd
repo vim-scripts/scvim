@@ -1,10 +1,11 @@
-Convolution2 real-time convolver
+
+Convolution2			real-time convolver
 
 Convolution2.ar(in, bufnum, trigger, framesize, mul, add)
 
 Strict convolution with fixed kernel which can be updated using a trigger signal.
 
-//see ch18 "http://www.dspguide.com/ch18.htm" Steven W Smith
+//see ch18 http://www.dspguide.com/ch18.htm Steven W Smith
 
 in - processing target
 bufnum - buffer index for the fixed kernel, may be modulated in combination with the trigger
@@ -32,12 +33,12 @@ d.zero;
 
 (
 SynthDef( "conv-test", { arg kernel, trig=0;
- var input;
- 
- input=Impulse.ar(1);
+	var input;
+		
+	input=Impulse.ar(1);
 
- //must have power of two framesize
- Out.ar(0,Convolution2.ar(input,kernel,trig,2048, 0.5));
+	//must have power of two framesize
+	Out.ar(0,Convolution2.ar(input,kernel,trig,2048, 0.5));
 }).send(s)
 
 )
@@ -69,13 +70,13 @@ x.set(\trig,1); // after this trigger, the change will take effect.
 b = Buffer.read(s,"sounds/a11wlk01.wav");
 
 (
- { var input, kernel;
- 
- input=AudioIn.ar(1);
+	{ var input, kernel;
+		
+	input=AudioIn.ar(1);
 
- //must have power of two framesize
- Out.ar(0,Convolution2.ar(input,b.bufnum,0,512, 0.5));
- }.play;
+	//must have power of two framesize
+	Out.ar(0,Convolution2.ar(input,b.bufnum,0,512, 0.5));
+	 }.play;
 
 )
 
@@ -86,7 +87,7 @@ b = Buffer.read(s,"sounds/a11wlk01.wav");
 //must have power of two framesize- FFT size will be sorted by Convolution2 to be double this
 //maximum is currently a=8192 for FFT of size 16384
 a=2048;
-s = Server.local; 
+s = Server.local;
 //kernel buffer
 g = Buffer.alloc(s,a,1);
 )
@@ -99,16 +100,16 @@ g.set(0,1.0);
 (
 //random impulse response
 
- {
- var input,inputAmp,threshhold,gate;
+	{
+	var input,inputAmp,threshhold,gate;
 
-input = AudioIn.ar(1); 
+input = AudioIn.ar(1);
 inputAmp = Amplitude.kr(input);
-threshhold = 0.02; // noise gating threshold
-gate = Lag.kr(inputAmp > threshhold, 0.01); 
- 
- Out.ar(0,Convolution2.ar(input*gate,g.bufnum,0, a, 0.5));
- }.play;
+threshhold = 0.02;	// noise gating threshold
+gate = Lag.kr(inputAmp > threshhold, 0.01);	
+	
+	Out.ar(0,Convolution2.ar(input*gate,g.bufnum,0, a, 0.5));
+	 }.play;
 
 )
 
@@ -124,13 +125,15 @@ b.sine1(1.0/[1,2,3,4,5,6], true, true, true);
 )
 
 (
- { var input, kernel;
- 
- input=AudioIn.ar(1);
+	{ var input, kernel;
+		
+	input=AudioIn.ar(1);
 
- //must have power of two framesize
- Out.ar(0,Convolution2.ar(input,b.bufnum,0, 512, 0.5));
- }.play;
+	//must have power of two framesize
+	Out.ar(0,Convolution2.ar(input,b.bufnum,0, 512, 0.5));
+	 }.play;
 
 )
+
+
 

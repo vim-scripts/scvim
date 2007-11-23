@@ -1,6 +1,7 @@
+
 SynthDefs versus Synths
 
-In SC2 Synth.play was the standard way to compile a ugenGraphFunc and play it. Each time you executed Synth.play, or Spawned a new event, that function was compiled anew. SC3 on the other hand, makes use of what are called SynthDefs. A SynthDef takes a ugenGraphFunc and compiles it to a kind of bytecode (sort of like Java bytecode) which can be understood by the server app. The server reads the SynthDef and creates a synth node based upon it. 
+In SC2 Synth.play was the standard way to compile a ugenGraphFunc and play it. Each time you executed Synth.play, or Spawned a new event, that function was compiled anew. SC3 on the other hand, makes use of what are called SynthDefs. A SynthDef takes a ugenGraphFunc and compiles it to a kind of bytecode (sort of like Java bytecode) which can be understood by the server app. The server reads the SynthDef and creates a synth node based upon it.
 
 SynthDefs can be precompiled and saved to disk. Any def saved in the synthdefs/ directory (or in any directory set in the environment variable SC_SYNTHDEF_PATH) will be loaded into memory by a local Server when it is booted. If the def being used in a new Synth is already compiled and loaded, there is much less of a CPU spike when creating a new Synth than there was in SC2.
 
@@ -22,57 +23,59 @@ s.boot;
 )
 
 // Compile a SynthDef and write it to disk
- (
- SynthDef("Help-SynthDef", 
- { arg out=0;
- Out.ar(out, PinkNoise.ar(0.1))
- }).writeDefFile;
- )
+	(
+	SynthDef("Help-SynthDef",
+		{ arg out=0;
+			 Out.ar(out, PinkNoise.ar(0.1))
+		}).writeDefFile;
+	)
 
 // Compile, write, and load it to the server
- (
- SynthDef("Help-SynthDef", 
- { arg out=0;
- Out.ar(out, PinkNoise.ar(0.1))
- }).load(s);
- )
- 
+	(
+	SynthDef("Help-SynthDef",
+		{ arg out=0;
+			 Out.ar(out, PinkNoise.ar(0.1))
+		}).load(s);
+	)
+	
 // Load it to the server without writing to disk
- (
- SynthDef("Help-SynthDef", 
- { arg out=0;
- Out.ar(out, PinkNoise.ar(0.1))
- }).send(s);
- )
- 
+	(
+	SynthDef("Help-SynthDef",
+		{ arg out=0;
+			 Out.ar(out, PinkNoise.ar(0.1))
+		}).send(s);
+	)
+	
 // Create a Synth with it
- x = Synth.new("Help-SynthDef", s);
- x.free;
- 
-// Shorthand method to compile and write a SynthDef, and then play it in a Synth when done. 
+	x = Synth.new("Help-SynthDef", s);
+	x.free;
+	
+// Shorthand method to compile and write a SynthDef, and then play it in a Synth when done.
 // Look familiar?
- (
-x = SynthDef("Help-SynthDef", 
- { arg out=0;
- Out.ar(out, PinkNoise.ar(0.1))
- }).play(s); 
- )
- // The above only starts the new Synth after the def has been sent to the server.
- // Note that SynthDef.play returns a Synth object!
- 
- x.set(\out, 1); // change one of the arguments
- x.free;
- 
+	(
+	x = SynthDef("Help-SynthDef",
+		{ arg out=0;
+			 Out.ar(out, PinkNoise.ar(0.1))
+		}).play(s);
+	)
+	// The above only starts the new Synth after the def has been sent to the server.
+	// Note that SynthDef.play returns a Synth object!
+		
+	x.set(\out, 1); // change one of the arguments
+	x.free;
+	
 // SynthDef with a parameter that will be randomly determined each time a new Synth is created
 // (try it several times to hear the differences)
 
- (
- SynthDef("help-RandFreq", { arg out=0;
- Out.ar(out, 
- FSinOsc.ar(
- Rand(200.0, 400.0), // frequency between 200 and 400 Hz
- 0, Line.kr(0.2, 0, 1, doneAction:2))
- )
- }).play(s);
- )
- 
+	(
+	SynthDef("help-RandFreq", { arg out=0;
+		Out.ar(out,
+			FSinOsc.ar(
+				Rand(200.0, 400.0), // frequency between 200 and 400 Hz
+				0, Line.kr(0.2, 0, 1, doneAction:2))
+		)
+	}).play(s);
+	)
+	
+
+

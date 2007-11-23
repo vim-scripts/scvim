@@ -1,5 +1,6 @@
 
-BRZ2 two zero fixed midcut
+
+BRZ2					two zero fixed midcut
 
 BRZ2.ar(in, mul, add)
 
@@ -13,4 +14,6 @@ Compare:
 { WhiteNoise.ar(0.25) }.play;
 
 { BRZ2.ar(WhiteNoise.ar(0.25)) }.play;
+
+
 

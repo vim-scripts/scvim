@@ -1,4 +1,5 @@
 
+
 PinkNoise
 
 PinkNoise.ar(mul, add)
@@ -9,8 +10,10 @@ This version gives 8 octaves of pink noise.
 
 (
 SynthDef("help-PinkNoise", { arg out=0;
- Out.ar(out, 
- PinkNoise.ar(0.4)
- )
+	Out.ar(out,
+		PinkNoise.ar(0.4)
+	)
 }).play;
 )
+
+

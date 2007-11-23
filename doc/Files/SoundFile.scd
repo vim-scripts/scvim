@@ -1,6 +1,7 @@
+
 SoundFile
 
-In most cases you will wish to send commands to the server to get it to load SoundFiles directly into Buffers. You will not use this class for this. See Server-Command-Reference. 
+In most cases you will wish to send commands to the server to get it to load SoundFiles directly into Buffers. You will not use this class for this. See Server-Command-Reference.
 
 This class is used to check the size, format, channels etc. when the client needs this information about a SoundFile.
 
@@ -23,10 +24,65 @@ f.close;
 
 Creating
 
-new
+*new
 
-Creates a new SoundFile instance. 
+Creates a new SoundFile instance.
 
+*collect(pattern = "sounds/*")
+
+Returns an array of SoundFile objects whose paths match the pattern. 
+(The associated files are closed. These objects can be used to cue playback buffers)
+
+Playback
+
+cue(event | Nil, playNow = false)
+
+Allocates a buffer and cues the SoundFile for playback. Returns an event parameterized to play that buffer.
+(See NodeEvent for a description of how events can be used to control running synths.)
+The event responds to play, stop, pause, resume, keeping both the file and buffer open.
+The file is closed and the buffer is freed when the event is sent a close message.
+
+arguments
+	event | Nil
+	An event can passed as an argument allowing playback to be customized using the following keys:
+	
+		key			default value			what it does
+		
+		// buffer and playback position:	
+		bufferSize		65536
+		firstFrame		0					first frame to play
+		lastFrame		nil					last frame to play (nil plays to end of file)
+	
+		// synth parameters
+		out:			0					sets output bus
+		server:		Server.default			which server
+		group:		1					what target
+		addAction:	0					head/tail/before/after
+		amp:			1					amplitude
+	
+		instrument:	nil					if nil SoundFile:cue determines the SynthDef
+										(one of diskIn1, diskIn2, ...diskIn16)
+										
+		Here is the default SynthDef used for stereo files:
+	
+		SynthDef("diskIn2", { | bufnum, out, gate = 1, sustain, amp = 1, ar = 0, dr = 0.01 |
+			Out.ar(out, DiskIn.ar(2, bufnum)
+			* Linen.kr(gate, ar, 1, dr, 2)
+			* EnvGen.kr(Env.linen(0, sustain - ar - dr max: 0 ,dr),1, doneAction: 2) * amp)
+		});
+		
+		The control sustain determines playback duration based on the firstFrame and lastFrame.
+		The control gate allows early termination of the playback
+		
+	playNow
+		This is a boolean that determines whether the file is to be played immediately after cueing.
+			
+		example:
+		f = SoundFile.collect("sounds/*")
+		e = f[1].cue;
+		
+		e = f[1].cue( (addAction: 2, group: 1) );	// synth will play ahead of the default group
+		
 Read/Write
 
 openRead(inPathname)
@@ -62,9 +118,9 @@ Example:
 (
 f = SoundFile.new.headerFormat_("AIFF").sampleFormat_("int16").numChannels_(1);
 f.openWrite("sounds/sfwrite.aiff");
- // sawtooth
+	// sawtooth
 b = Signal.sineFill(100, (1..20).reciprocal);
- // write multiple cycles (441 * 100 = 1 sec worth)
+	// write multiple cycles (441 * 100 = 1 sec worth)
 441.do({ f.writeData(b) });
 f.close;
 )
@@ -80,11 +136,11 @@ the duration in seconds of the file
 
 Normalizing
 
-*normalize(path, outPath, newHeaderFormat, newSampleFormat, startFrame, numFrames, maxAmp, linkChannels, chunkSize)
+*normalize(path, outPath, newHeaderFormat, newSampleFormat, startFrame, numFrames, maxAmp, linkChannels, chunkSize, threaded)
 
-normalize(outPath, newHeaderFormat, newSampleFormat, startFrame, numFrames, maxAmp, linkChannels, chunkSize)
+normalize(outPath, newHeaderFormat, newSampleFormat, startFrame, numFrames, maxAmp, linkChannels, chunkSize, threaded)
 
-Normalizes a soundfile to a level set by the user. The normalized audio will be written into a second file. 
+Normalizes a soundfile to a level set by the user. The normalized audio will be written into a second file.
 
 Note: While the normalizer is working, there is no feedback to the user. It will look like SuperCollider is hung, but it will eventually complete the operation.
 
@@ -98,7 +154,8 @@ startFrame: an index to the sample frame to start normalizing (default 0)
 numFrames: the number of sample frames to copy into the destination file (default nil, or entire soundfile)
 maxAmp: the desired maximum amplitude. Provide a floating point number or, if desired, an array to specify a different level for each channel. The default is 1.0.
 linkChannels: a Boolean specifying whether all channels should be scaled by the same amount. The default is true, meaning that the peak calculation will be based on the largest sample in any channel. If false, each channel's peak will be calculated independently and all channels will be scaled to maxAmp (this would alter the relative loudness of each channel).
-chunkSize: how many samples to read at once (default is 4194304, or 16 MB) 
+chunkSize: how many samples to read at once (default is 4194304, or 16 MB)
+threaded: if true, the normalization runs in a routine so that SC can respond (intermittently) while processing. Prevents OSX beachballing. Default is false.
 
 Using the class method (SoundFile.normalize) will automatically open the source file for you. You may also openRead the SoundFile yourself and call normalize on it. In that case, the source path is omitted because the file is already open.
 
@@ -114,28 +171,28 @@ Get the pathname of the file. This variable is set via the openRead or openWrite
 
 This is a String indicating the header format which was read by openRead and will be written by openWrite. In order to write a file with a certain header format you set this variable.
 
- Sound File Format symbols:
- header formats:
- read/write formats:
- "AIFF", - Apple's AIFF
- "WAV","RIFF" - MicrosSoft .WAV
- "Sun", - NeXT/Sun
- "IRCAM", - old IRCAM format
- "none" - no header = raw data
- A huge number of other formats are supported read only.
- 
+	Sound File Format symbols:
+		header formats:
+			read/write formats:
+				"AIFF", 	- Apple's AIFF
+				"WAV","RIFF" 	- MicrosSoft .WAV
+				"Sun", 	- NeXT/Sun
+				"IRCAM", 	- old IRCAM format
+				"none"	- no header = raw data
+			A huge number of other formats are supported read only.
+			
 
 
 <>sampleFormat
 
-A String indicating the format of the sample data which was read by openRead and will be written by openWrite. Not all header formats support all sample formats. The possible header formats are:
+A String indicating the format of the sample data which was read by openRead and will be written by openWrite. libsndfile determines which header formats support which sample formats. This information is detailed at http://www.mega-nerd.com/libsndfile. The possible header formats are:
 
- sample formats:
- "int8", "int16", "int24", "int32"
- "mulaw", "alaw",
- "float32"
- 
- not all header formats support all sample formats.
+		sample formats:
+			"int8", "int16", "int24", "int32"
+			"mulaw", "alaw",
+			"float"
+			
+		not all header formats support all sample formats.
 
 
 <numFrames
@@ -149,4 +206,6 @@ The number of channels in the file.
 <>sampleRate
 
 The sample rate of the file.
+
+
 

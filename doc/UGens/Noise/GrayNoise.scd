@@ -1,4 +1,5 @@
 
+
 GrayNoise
 
 GrayNoise.ar(mul, add)
@@ -10,8 +11,10 @@ The spectrum is emphasized towards lower frequencies.
 
 (
 SynthDef("help-GrayNoise", { arg out=0;
- Out.ar(out, 
- GrayNoise.ar(0.1)
- )
+	Out.ar(out,
+		GrayNoise.ar(0.1)
+	)
 }).play;
 )
+
+

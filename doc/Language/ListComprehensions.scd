@@ -1,7 +1,8 @@
+
 List Comprehensions
 
 List comprehensions are a syntactic feature of functional programming languages like Miranda, Haskell, and Erlang which were later copied into Python.
-You can search the web for "list comprehensions" or "generator expressions" to learn more. 
+You can search the web for "list comprehensions" or "generator expressions" to learn more.
 Basically list comprehensions are for getting a series of solutions to a problem.
 
 in SC these are just a syntax macro for a longer expression.
@@ -44,10 +45,10 @@ all {:y, x <- (1..4), y <- (x..1) }
 var intervals;
 // a function to generate intervals between all pairs of notes in a chord voicing
 intervals = {|chord|
- all {: chord[i+gap] - chord[i], 
- gap <- (1 .. chord.lastIndex), 
- i <- (0 .. chord.lastIndex - gap) 
- }
+	all {: chord[i+gap] - chord[i],
+		gap <- (1 .. chord.lastIndex),
+		i <- (0 .. chord.lastIndex - gap)
+	}
 };
 
 intervals.([0,4,7,10]).postln;
@@ -70,7 +71,7 @@ There are several types of qualifier clauses that can appear after the body.
 
 generator clause
 
-The basic clause is the generator clause. Its syntax is 
+The basic clause is the generator clause. Its syntax is
 
 name <- expr
 
@@ -109,7 +110,7 @@ all {: x, x <- (1..3), y <- (1..4-x) }
 
 guard clause
 
-A guard clause is simply an expression. It should return a boolean value. 
+A guard clause is simply an expression. It should return a boolean value.
 
 expr
 
@@ -181,18 +182,18 @@ Where does everyone live?
 
 (
 z = {: [baker, cooper, fletcher, miller, smith] ,
- var floors = (1..5),
- baker <- floors, baker != 5, // Baker does not live on the top floor.
- // remove baker's floor from the list. var creates a new scope, so the 'floors' on the left is a new binding.
- var floors = floors.removing(baker), 
- cooper <- floors, cooper != 1, // Cooper does not live on the bottom floor.
- var floors = floors.removing(cooper), // remove cooper's floor from the list.
- fletcher <- floors, (fletcher != 5) && (fletcher != 1) // Fletcher does not live on either the top or the bottom floor.
- && (absdif(fletcher, cooper) > 1), // Fletcher does not live on a floor adjacent to Cooper's.
- var floors = floors.removing(fletcher), // remove fletcher's floor
- miller <- floors, miller > cooper, // Miller lives on a higher floor than does Cooper.
- var floors = floors.removing(miller), // remove miller's floor
- smith <- floors, absdif(fletcher, smith) > 1 // Smith does not live on a floor adjacent to Fletcher's.
+	var floors = (1..5),
+	baker <- floors, baker != 5, // Baker does not live on the top floor.
+	// remove baker's floor from the list. var creates a new scope, so the 'floors' on the left is a new binding.
+	var floors = floors.removing(baker),
+	cooper <- floors, cooper != 1, // Cooper does not live on the bottom floor.
+	var floors = floors.removing(cooper), // remove cooper's floor from the list.
+	fletcher <- floors, (fletcher != 5) && (fletcher != 1) // Fletcher does not live on either the top or the bottom floor.
+					&& (absdif(fletcher, cooper) > 1), // Fletcher does not live on a floor adjacent to Cooper's.
+	var floors = floors.removing(fletcher), // remove fletcher's floor
+	miller <- floors, miller > cooper, // Miller lives on a higher floor than does Cooper.
+	var floors = floors.removing(miller), // remove miller's floor
+	smith <- floors, absdif(fletcher, smith) > 1 // Smith does not live on a floor adjacent to Fletcher's.
 };
 )
 
@@ -261,4 +262,6 @@ expr ; ..next qualifier..
 termination:
 
 if (expr) { ..next qualifier.. }{ nil.alwaysYield }
+
+
 

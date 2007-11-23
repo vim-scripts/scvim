@@ -1,5 +1,6 @@
 
-Ringz ringing filter
+
+Ringz			ringing filter
 
 Ringz.ar(in, freq, decaytime, mul, add)
 
@@ -26,13 +27,15 @@ decaytime - the 60 dB decay time of the filter
 
 
 (
-{ 
- var exciter;
- exciter = WhiteNoise.ar(0.001);
- Mix.arFill(10, {
- Ringz.ar(exciter, 
- XLine.kr(exprand(100.0,5000.0), exprand(100.0,5000.0), 20),
- 0.5)
- })
+{
+	var exciter;
+	exciter = WhiteNoise.ar(0.001);
+	Mix.arFill(10, {
+		Ringz.ar(exciter,
+			XLine.kr(exprand(100.0,5000.0), exprand(100.0,5000.0), 20),
+			0.5)
+	})
 }.play
 )
+
+

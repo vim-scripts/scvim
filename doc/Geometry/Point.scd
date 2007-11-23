@@ -1,4 +1,5 @@
-Point Cartesian point
+
+Point		Cartesian point
 
 Superclass: Object
 
@@ -126,4 +127,6 @@ return a short string representing the receiver.
 paramsCompileString
 
 represent parameters to 'new' as compileable strings. (See Object::asCompileString)
+
+
 

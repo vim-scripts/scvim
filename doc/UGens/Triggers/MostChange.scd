@@ -1,4 +1,6 @@
-MostChange output most changed
+
+MostChange 			output most changed
+
 
 MostChange.ar(in1, in2)
 MostChange.kr(in1, in2)
@@ -7,35 +9,44 @@ output the input that changed most
 
 in1, in2 - inputs
 
-//doesn't work yet.
 
-d = SynthDef("help-MostChange", { arg amp=1.0;
- var out, in1, in2;
- in1 = LFNoise1.ar(800, amp);
- in2 = SinOsc.ar(800);
- out = MostChange.ar(in1, in2) * 0.1;
- Out.ar(0, out)
-}).play;
+
+
+(
+d = { arg amp=1.0;
+	var out, in1, in2;
+	in1 = LFNoise1.ar(800, amp);
+	in2 = SinOsc.ar(800);
+	out = MostChange.ar(in1, in2) * 0.1;
+	Out.ar(0, out)
+}.play;
+)
 
 d.set(\amp, 0.1);
 d.set(\amp, 0);
 d.set(\amp, 3);
 d.free;
 
-the control that changed most is used for output:
 
-d = SynthDef("help-MostChange", { arg freq=440;
- var out, internalFreq;
- internalFreq = LFNoise0.ar(0.3, 300, 800);
- out = SinOsc.ar(
- MostChange.kr(freq, internalFreq)
- );
- Out.ar(0, out * 0.1)
-}).play;
+the control that changed most is used as output:
+
+
+(
+d = { arg freq=440;
+	var out, internalFreq;
+	internalFreq = LFNoise0.ar(0.3, 300, 800);
+	out = SinOsc.ar(
+			MostChange.kr(freq, internalFreq) // two sources of change: one external, one internal
+	);
+	Out.ar(0, out * 0.1)
+}.play
+);
 
 d.set(\freq, 800);
-d.set(\freq, 800); //nothing changed
+d.set(\freq, 800); // nothing changed in this input
 d.set(\freq, 900);
 d.free;
+
+
 
 

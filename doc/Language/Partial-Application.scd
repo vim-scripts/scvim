@@ -1,4 +1,5 @@
 
+
 Function Creation via Partial Application
 
 Partial application is a way to create a function by passing only some arguments to a method. The _ character stands in for missing arguments and becomes an argument to the created function. It only applies to a single method, list, or dictionary call, not to a more complex nested expression.
@@ -45,8 +46,8 @@ Here are some example usages of this in a collect message. Below each is written
 (1..8).collect {|x| (1..x) };
 
 f = (a:_, b:_); // f is a two argument function
-g = f.(_, 5); // g is a partial application of f
-g.(7); // get the answer
+g = f.(_, 5);  // g is a partial application of f
+g.(7);     // get the answer
 
 // equivalent to this:
 f = {|x, y| (a:x, b:y) }
@@ -60,4 +61,6 @@ An example of what you can't do:
 // only the * gets partially applied, not the surrounding expression.
 
 (1..8).collect {|x| Point(100 * x, 50) }; // need to use a function for this.
+
+
 

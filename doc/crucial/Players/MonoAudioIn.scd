@@ -1,4 +1,0 @@
-MonoAudioIn
-
-
-MonoAudioIn.new.gui

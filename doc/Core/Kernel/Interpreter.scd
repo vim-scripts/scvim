@@ -1,3 +1,4 @@
+
 Interpreter
 
 superclass: Object
@@ -11,7 +12,7 @@ this.postln
 
 Accessing
 
-The interpreter defines instance variables 'a' through 'z' which are always available in the interpreter. By convention, the variable 's' is used to hold the default Server. Assigning another value to 's' may cause some of the examples in the documentation to fail. 
+The interpreter defines instance variables 'a' through 'z' which are always available in the interpreter. By convention, the variable 's' is used to hold the default Server. Assigning another value to 's' may cause some of the examples in the documentation to fail.
 
 clearAll
 
@@ -52,13 +53,15 @@ z.value;
 
 compileFile(pathName)
 
-Reads the file at pathName, compiles it and returns a Function. 
+Reads the file at pathName, compiles it and returns a Function.
 The file must contain a valid SuperCollider expression, naturally.
 This will not compile class definitions, only expressions.
 
 executeFile(pathName)
 
-Reads the file at pathName, compiles it and executes it, returning the result. 
+Reads the file at pathName, compiles it and executes it, returning the result.
 The file must contain a valid SuperCollider expression, naturally.
 This will not compile class definitions, only expressions.
+
+
 

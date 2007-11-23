@@ -1,4 +1,5 @@
-LPZ2 two zero fixed lowpass
+
+LPZ2					two zero fixed lowpass
 
 LPZ2.ar(in, mul, add)
 
@@ -11,4 +12,6 @@ Compare:
 { WhiteNoise.ar(0.25) }.play;
 
 { LPZ2.ar(WhiteNoise.ar(0.25)) }.play;
+
+
 

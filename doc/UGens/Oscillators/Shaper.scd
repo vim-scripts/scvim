@@ -1,5 +1,6 @@
 
-Shaper wave shaper
+
+Shaper		wave shaper
 
 Shaper.ar(bufnum, in, mul, add)
 
@@ -10,12 +11,14 @@ in - the input signal.
 Server.default = s = Server.internal; s.boot;
 b = Buffer.alloc(s, 512, 1, {arg buf; buf.chebyMsg([1,0,1,1,0,1])});
 (
-scope({ 
- Shaper.ar(
- b.bufnum, 
- SinOsc.ar(300, 0, Line.kr(0,1,6)),
- 0.5
- ) 
+scope({
+	Shaper.ar(
+		b.bufnum,
+		SinOsc.ar(300, 0, Line.kr(0,1,6)),
+		0.5
+	)
 });
 )
+
+
 

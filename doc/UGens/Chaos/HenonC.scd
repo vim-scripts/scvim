@@ -1,17 +1,18 @@
-HenonC h?non map chaotic generator
+
+HenonC		hnon map chaotic generator
 
 HenonC.ar(freq, a, b, x0, x1, mul, add)
 
-freq - iteration frequency in Hertz
-a, b - equation variables
-x0 - initial value of x
-x1 - second value of x
+	freq - iteration frequency in Hertz
+	a, b - equation variables
+	x0 - initial value of x
+	x1 - second value of x
 
 A cubic-interpolating sound generator based on the difference equation:
- 
- xn+2 = 1 - axn+12 + bxn
- 
-This equation was discovered by French astronomer Michel H?non while studying the orbits of stars
+	
+	xn+2 = 1 - axn+1<sup>2</sup> + bxn
+	
+This equation was discovered by French astronomer Michel Hnon while studying the orbits of stars
 in globular clusters.
 
 
@@ -24,11 +25,13 @@ in globular clusters.
 // randomly modulate params
 (
 { HenonC.ar(
- SampleRate.ir/8, 
- LFNoise2.kr(1, 0.2, 1.2), 
- LFNoise2.kr(1, 0.15, 0.15)
+	SampleRate.ir/8,
+	LFNoise2.kr(1, 0.2, 1.2),
+	LFNoise2.kr(1, 0.15, 0.15)
 ) * 0.2 }.play(s);
 )
 
 // as a frequency control
 { SinOsc.ar(HenonC.ar(40, MouseX.kr(1,1.4), MouseY.kr(0,0.3))*800+900)*0.4 }.play(s);
+
+

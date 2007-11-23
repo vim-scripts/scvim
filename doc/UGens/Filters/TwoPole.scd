@@ -1,9 +1,10 @@
 
-TwoPole two pole filter
+
+TwoPole			two pole filter
 
 TwoPole.ar(in, freq, radius, mul, add)
 
-A two pole filter. This provides lower level access to setting of pole location. 
+A two pole filter. This provides lower level access to setting of pole location.
 For general purposes Resonz is better.
 
 in - input signal to be processed
@@ -19,3 +20,5 @@ radius - radius of pole. Should be between 0 and +1
 { TwoPole.ar(WhiteNoise.ar(0.005), XLine.kr(800,8000,8), 0.95) }.play
 
 { TwoPole.ar(WhiteNoise.ar(0.005), MouseX.kr(800,8000,1), 0.95) }.play
+
+

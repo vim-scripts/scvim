@@ -1,3 +1,4 @@
+
 Complex
 
 superclass: Number
@@ -18,7 +19,7 @@ Accessing
 
 The real part of the number.
 
-<>imag 
+<>imag
 
 The imaginary part of the number.
 
@@ -91,4 +92,6 @@ Answer real part as Integer.
 asFloat
 
 Answer real part as Float.
+
+
 

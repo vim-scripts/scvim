@@ -1,4 +1,5 @@
-fold2 bilateral folding
+
+fold2			bilateral folding
 
 BinaryOperator
 
@@ -9,4 +10,6 @@ a.fold2(b)
 folds input wave a to +/- b
 
 { FSinOsc.ar(1000).fold2(Line.kr(0,1,8)) }.scope;
+
+
 

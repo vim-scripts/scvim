@@ -1,5 +1,5 @@
 
-Stepper pulse counter
+Stepper		pulse counter
 
 Stepper.kr(trig, reset, min, max, step, resetval)
 
@@ -13,30 +13,30 @@ step - step value each trigger. May be negative.
 resetval - value to which the counter is reset when it receives a reset trigger. If nil, then this is patched to min.
 
 SynthDef("help-Stepper",{ arg out=0;
- Out.ar(out,
- SinOsc.ar(
- Stepper.kr(Impulse.kr(10), 0, 4, 16, 1) * 100, 
- 0, 0.05
- )
- )
+	Out.ar(out,
+		SinOsc.ar(
+			Stepper.kr(Impulse.kr(10), 0, 4, 16, 1) * 100,
+			0, 0.05
+		)
+	)
 }).play;
 
 SynthDef("help-Stepper",{ arg out=0;
- Out.ar(out,
- SinOsc.ar(
- Stepper.kr(Impulse.kr(10), 0, 4, 16, -3) * 100, 
- 0, 0.05
- )
- )
+	Out.ar(out,
+		SinOsc.ar(
+			Stepper.kr(Impulse.kr(10), 0, 4, 16, -3) * 100,
+			0, 0.05
+		)
+	)
 }).play;
 
 SynthDef("help-Stepper",{ arg out=0;
- Out.ar(out,
- SinOsc.ar(
- Stepper.kr(Impulse.kr(10), 0, 4, 16, 4) * 100, 
- 0, 0.05
- )
- )
+	Out.ar(out,
+		SinOsc.ar(
+			Stepper.kr(Impulse.kr(10), 0, 4, 16, 4) * 100,
+			0, 0.05
+		)
+	)
 }).play;
 
 
@@ -56,39 +56,39 @@ s.performList(\sendMsg, \b_setn, 10, 0, a.size, a);
 
 (
 SynthDef(\stepper, {
- var rate, clock, index, freq, ffreq, env, out, rev, lfo;
- 
- rate = MouseX.kr(1,5,1);
- clock = Impulse.kr(rate);
- env = Decay2.kr(clock, 0.002, 2.5);
- index = Stepper.kr(clock, 0, 0, 15, 1, 0);
- freq = BufRd.kr(1, 10, index, 1, 1);
- freq = Lag2.kr(freq) + [0,0.3];
- ffreq = MouseY.kr(80,1600,1) * (env * 4 + 2);
- out = Mix.ar(LFPulse.ar(freq * [1, 3/2, 2], 0, 0.3));
- out = RLPF.ar(out, ffreq, 0.3, env);
- out = RLPF.ar(out, ffreq, 0.3, env);
- out = out * 0.02;
- 
- // echo
- out = CombL.ar(out, 1, 0.66/rate, 2, 0.8, out); 
- 
- // reverb
- rev = out;
- 5.do { rev = AllpassN.ar(rev, 0.05, {0.05.rand}.dup, rrand(1.5,2.0)) };
- out = out + (0.3 * rev);
- 
- out = LeakDC.ar(out);
- 
- // flanger
- lfo = SinOsc.kr(0.2, [0,0.5pi], 0.0024, 0.0025);
- 1.do { out = DelayL.ar(out, 0.1, lfo, 1, out) };
- 
- // slight bass emphasis
- out = OnePole.ar(out, 0.9);
+	var rate, clock, index, freq, ffreq, env, out, rev, lfo;
+	
+	rate = MouseX.kr(1,5,1);
+	clock = Impulse.kr(rate);
+	env = Decay2.kr(clock, 0.002, 2.5);
+	index = Stepper.kr(clock, 0, 0, 15, 1, 0);
+	freq = BufRd.kr(1, 10, index, 1, 1);
+	freq = Lag2.kr(freq) + [0,0.3];
+	ffreq = MouseY.kr(80,1600,1) * (env * 4 + 2);
+	out = Mix.ar(LFPulse.ar(freq * [1, 3/2, 2], 0, 0.3));
+	out = RLPF.ar(out, ffreq, 0.3, env);
+	out = RLPF.ar(out, ffreq, 0.3, env);
+	out = out * 0.02;
+	
+	// echo
+	out = CombL.ar(out, 1, 0.66/rate, 2, 0.8, out);	
+	
+	// reverb
+	rev = out;
+	5.do { rev = AllpassN.ar(rev, 0.05, {0.05.rand}.dup, rrand(1.5,2.0)) };
+	out = out + (0.3 * rev);
+	
+	out = LeakDC.ar(out);
+	
+	// flanger
+	lfo = SinOsc.kr(0.2, [0,0.5pi], 0.0024, 0.0025);
+	1.do { out = DelayL.ar(out, 0.1, lfo, 1, out) };
+	
+	// slight bass emphasis
+	out = OnePole.ar(out, 0.9);
 
- Out.ar(0, out);
- 
+	Out.ar(0, out);
+	
 }).send(s);
 )
 
@@ -107,4 +107,6 @@ s.performList(\sendMsg, \b_setn, 10, 0, a.size, a);
 )
 
 s.sendMsg(\n_free, 1000);
+
+
 

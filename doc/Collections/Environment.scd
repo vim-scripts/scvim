@@ -1,3 +1,4 @@
+
 Environment
 
 superclass: IdentityDictionary
@@ -25,7 +26,7 @@ and:
 ~myvariable.postln;
 
 is equivalent to:
- 
+
 currentEnvironment.at(\myvariable).postln;
 
 Making an Environment
@@ -35,9 +36,9 @@ Environment has a class method make which can be used to create an Environment a
 (
 var a;
 a = Environment.make({
- ~a = 100;
- ~b = 200;
- ~c = 300;
+	~a = 100;
+	~b = 200;
+	~c = 300;
 });
 a.postln;
 )
@@ -49,12 +50,12 @@ The instance method use lets you temporarily replace the current Environment wit
 (
 var a;
 a = Environment.make({
- ~a = 10;
- ~b = 200;
- ~c = 3000;
+	~a = 10;
+	~b = 200;
+	~c = 3000;
 });
 a.use({
- ~a + ~b + ~c
+	~a + ~b + ~c
 }).postln;
 )
 
@@ -63,10 +64,10 @@ There is also a use class method for when you want to make and use the result fr
 (
 var a;
 a = Environment.use({
- ~a = 10;
- ~b = 200;
- ~c = 3000;
- ~a + ~b + ~c
+	~a = 10;
+	~b = 200;
+	~c = 3000;
+	~a + ~b + ~c
 }).postln;
 )
 
@@ -81,20 +82,20 @@ var f;
 f = { arg x, y, z; [x, y, z].postln; };
 
 Environment.use({
- ~x = 7;
- ~y = 8;
- ~z = 9;
- 
- f.valueEnvir(1, 2, 3); // all values supplied
- f.valueEnvir(1, 2); // z is looked up in the current Environment
- f.valueEnvir(1); // y and z are looked up in the current Environment 
- f.valueEnvir; // all arguments are looked up in the current Environment
- f.valueEnvir(z: 1); // x and y are looked up in the current Environment
+	~x = 7;
+	~y = 8;
+	~z = 9;
+	
+	f.valueEnvir(1, 2, 3);	// all values supplied
+	f.valueEnvir(1, 2);	// z is looked up in the current Environment
+	f.valueEnvir(1);		// y and z are looked up in the current Environment
+	f.valueEnvir;			// all arguments are looked up in the current Environment
+	f.valueEnvir(z: 1);	// x and y are looked up in the current Environment
 });
 )
 
 Now here is how this can be used with an instrument function. Environments allow you to define instruments without having to worry about argument ordering conflicts. Even though the three functions below have the freq, amp and pan args declared in different orders it does not matter, because valueEnvir looks them up in the
-environment. 
+environment.
 
 s.boot;
 
@@ -102,32 +103,34 @@ s.boot;
 var a, b, c, orc;
 
 a = { arg freq, amp, pan;
- Pan2.ar(SinOsc.ar(freq), pan, amp);
+	Pan2.ar(SinOsc.ar(freq), pan, amp);
 };
 b = { arg amp, pan, freq;
- Pan2.ar(RLPF.ar(Saw.ar(freq), freq * 6, 0.1), pan, amp);
+	Pan2.ar(RLPF.ar(Saw.ar(freq), freq * 6, 0.1), pan, amp);
 };
 c = { arg pan, freq, amp;
- Pan2.ar(Resonz.ar(GrayNoise.ar, freq * 2, 0.1), pan, amp * 2);
+	Pan2.ar(Resonz.ar(GrayNoise.ar, freq * 2, 0.1), pan, amp * 2);
 };
 orc = [a, b, c];
 // 'reverb'
 { var in; in = In.ar(0, 2); CombN.ar(in, 0.2, 0.2, 3, 1, in); }.play(addAction: \addToTail);
 
 { loop({
-Environment.use({
- // set values in the environment
-~freq = exprand(80, 600);
-~amp = 0.1;
-~pan = 1.0.rand2;
-
- // call a randomly chosen instrument function 
- // with values from the environment
-
- x = { orc.choose.valueEnvir; }.play(fadeTime: 0.2, addAction: \addToHead); 
- 0.2.wait; 
- x.release(0.2); 
-});
+	Environment.use({
+			// set values in the environment
+		~freq = exprand(80, 600);
+		~amp = 0.1;
+		~pan = 1.0.rand2;
+		
+			// call a randomly chosen instrument function
+			// with values from the environment
+		
+		 x = { orc.choose.valueEnvir; }.play(fadeTime: 0.2, addAction: \addToHead);
+		 0.2.wait;
+		 x.release(0.2);
+	});
 }) }.fork;
- 
+	
 )
+
+

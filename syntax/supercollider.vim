@@ -1,8 +1,25 @@
+"Copyright 2007 Alex Norman
+"
+"This file is part of SCVIM.
+"
+"SCVIM is free software: you can redistribute it and/or modify
+"it under the terms of the GNU General Public License as published by
+"the Free Software Foundation, either version 3 of the License, or
+"(at your option) any later version.
+"
+"SCVIM is distributed in the hope that it will be useful,
+"but WITHOUT ANY WARRANTY; without even the implied warranty of
+"MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+"GNU General Public License for more details.
+"
+"You should have received a copy of the GNU General Public License
+"along with SCVIM.  If not, see <http://www.gnu.org/licenses/>.
+"
 " Vim syntax file
 " Language:	supercollider	
-" Maintainer:	alex norman <alex@neisis.net>
+" Maintainer:	alex norman <alex@x37v.info>
 " Version:	0.1
-" Last change:	2005-01-15
+" Last change:	2007-11-21
 
 syn clear
 
@@ -12,6 +29,7 @@ syn match	scAoperator	"}"
 "syn	match	scVariable	"\%(var.*\)\@<=\(\l\w*\)" "lowercase followed by wordchar
 syn	match	scGlobvariable	"\~\l\w*" "~ followed by lowercase followed by wordchar
 syn	match scVar "\s*var\s"
+syn	match scVar "\s*classvar\s"
 syn	match scArg "\s*arg\s"
 
 " symbols, strings, etc
@@ -29,7 +47,8 @@ syn match	scChar	"\$\\\\"
 syn match	scChar	"\$\\\w"
 
 "syn match	scString "\".\{-}\""
-syn region	scString start=+\v\\@<!"+ end=+\v\\@<!"+ 
+"syn region	scString start=+\v\\@<!"+ end=+\v\\@<!"+ 
+syn region  scString start=+"+ skip=+\\\\\|\\"+ end=+"+
 
 "syn match	scClass "\u\w*"	"upper case followed by any wordchar
 

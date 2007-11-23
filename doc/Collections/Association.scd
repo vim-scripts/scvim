@@ -1,8 +1,9 @@
+
 Association
 
 superclass: Magnitude
 
-Associates a key with a value. 
+Associates a key with a value.
 Associations can be created via the -> operator which is defined in class Object.
 
 (
@@ -27,7 +28,7 @@ Creation
 *new(key, value)
 
 Create an Association between two objects.
-key - any object. 
+key - any object.
 value - any object.
 
 
@@ -55,4 +56,6 @@ Write a string representation to the stream.
 storeOn(stream)
 
 Write a compileable string representation to the stream.
+
+
 

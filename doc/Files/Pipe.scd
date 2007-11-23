@@ -1,3 +1,4 @@
+
 Pipe
 
 superclass: UnixFILE
@@ -12,22 +13,36 @@ for now one has to quit the server, otherwise sc crashes.
 
 *new(commandLine, mode)
 
- commandLine - A String representing a valid shell command.
-mode - A string representing the mode. Valid modes are "w" (pipe to stdin) and "r" (pipe from stdout).
- 
+	commandLine - A String representing a valid shell command.
+	mode - A string representing the mode. Valid modes are "w" (pipe to stdin) and "r" (pipe from stdout).
+	
 close
-Closes the pipe. You must do this explicitly before the Pipe object is garbage collected.
- 
+	Closes the pipe. You must do this explicitly before the Pipe object is garbage collected.
+	
 Examples
- 
+	
 // quit the server
 s.quit;
 
 // this pipes in stdout from ls
 (
 var p, l;
-p = Pipe.new("ls -l", "r"); // list directory contents in long format
-l = p.getLine; // get the first line
-while({l.notNil}, {l.postln; l = p.getLine; }); // post until l = nil
-p.close; // close the pipe to avoid that nasty buildup
+p = Pipe.new("ls -l", "r");						// list directory contents in long format
+l = p.getLine;								// get the first line
+while({l.notNil}, {l.postln; l = p.getLine; });	// post until l = nil
+p.close;										// close the pipe to avoid that nasty buildup
 )
+
+
+A more time-intensive request:
+(
+var p, l;
+p = Pipe.new("ping -c10 sourceforge.net", "r");						// list directory contents in long format
+l = p.getLine;								// get the first line
+while({l.notNil}, {l.postln; l = p.getLine; });	// post until l = nil
+p.close;										// close the pipe to avoid that nasty buildup
+)
+
+
+
+

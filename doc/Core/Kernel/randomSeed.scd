@@ -1,13 +1,14 @@
+
 random generator seed
 
 
 
 
- Every Thread in sclang has a (pseudo-) random number generator that is responsible for all randomization within this thread. Each randgen has its own seed (starting point) from which the series of values is generated. This seed can be set and after that, the randgen (being strictly deterministic) produces exactly the same numbers again. 
+	Every Thread in sclang has a (pseudo-) random number generator that is responsible for all 	randomization within this thread. Each randgen has its own seed (starting point) from which the series of 	values is generated. This seed can be set and after that, the randgen (being strictly deterministic) 	produces exactly the same numbers again.
 
- In order to save diskspace, you can reproduce any sequence of randomized data just by one integer number that you can write down in your notebook..
+	In order to save diskspace, you can reproduce any sequence of randomized data just by one integer 	number that you can write down in your notebook..
 
- see also: [RandSeed][Pseed]
+	see also: [RandSeed][Pseed]
 
 
 
@@ -15,7 +16,7 @@ random generator seed
 //every thread, also a Routine, has a random generator seed:
 (
 r = Routine({
- loop({#[1,2,3,4,5].choose.yield })
+	loop({#[1,2,3,4,5].choose.yield })
 });
 r.randSeed = 1923;
 )
@@ -35,8 +36,8 @@ Array.fill(7, r);
 
 Inheriting Seeds
 
- Also it is possible to set the seed of the running thread that 
- all threads started within will inherit.
+	Also it is possible to set the seed of the running thread that
+	all threads started within will inherit.
 
 
 thisThread.randSeed = 1923;
@@ -44,7 +45,7 @@ thisThread.randSeed = 1923;
 //create a function that returns a routine
 
 r = { Routine({
- loop({#[1,2,3,4,5].choose.yield })
+	loop({#[1,2,3,4,5].choose.yield })
 }) };
 
 Array.fill(7, r.value);
@@ -57,16 +58,16 @@ Array.fill(7, r.value);
 //use the seed to completely reproduce a sound:
 (
 SynthDef("help-randomSeed", { arg out=0, freq=440;
- Out.ar(out,
- Line.kr(1, 0, 0.3, doneAction:2) * 
- Resonz.ar(
- Dust2.ar([10, 10], 270) + WhiteNoise.ar(4),
- freq, 0.01) 
- )
+	Out.ar(out,
+		Line.kr(1, 0, 0.3, doneAction:2) *
+		Resonz.ar(
+			 Dust2.ar([10, 10], 270) + WhiteNoise.ar(4),
+		freq, 0.01)
+	)
 }).send(s);
 
 SynthDef("help-setRandomSeed", { arg seed=1956, tbus=0.0;
- RandSeed.kr(tbus, seed);
+		RandSeed.kr(tbus, seed);
 }).send(s);
 )
 
@@ -74,10 +75,10 @@ SynthDef("help-setRandomSeed", { arg seed=1956, tbus=0.0;
 (
 x = Synth("help-setRandomSeed");
 r = Routine({
- loop({
- Synth("help-randomSeed", [\freq, rrand(440, 700)]);
- 0.25.wait;
- })
+	loop({
+		Synth("help-randomSeed", [\freq, rrand(440, 700)]);
+		0.25.wait;
+	})
 }).play;
 )
 
@@ -86,12 +87,12 @@ r = Routine({
 (
 d = 1250;//seed
 t = Task({
- loop({
- x.set(\seed, d, \tbus, 1.0); r.randSeed = d;
- 0.1.wait;
- x.set(\tbus, 0.0);
- 1.9.wait;
- })
+	loop({
+		x.set(\seed, d, \tbus, 1.0); r.randSeed = d;
+		0.1.wait;
+		x.set(\tbus, 0.0);
+		1.9.wait;
+	})
 });
 )
 
@@ -104,5 +105,7 @@ d = 1925;
 
 //sound is just like random again, not interested in anything..
 t.stop;
+
+
 
 

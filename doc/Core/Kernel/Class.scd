@@ -1,3 +1,4 @@
+
 Class
 
 superclass: Object
@@ -113,4 +114,6 @@ An Array of the initial values of class variables.
 filenameSymbol
 
 A Symbol which is a path to the file which defines the Class.
+
+
 

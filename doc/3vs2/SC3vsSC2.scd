@@ -1,3 +1,4 @@
+
 SuperCollider 3 versus SuperCollider 2
 
 There are a number of ways in which SuperCollider 3 (or SCServer) is very different from SC2.
@@ -17,3 +18,5 @@ Backwards-Compatibility - A discussion some classes and methods which have been 
 (Select the bold text and type cmd-shift-? to open the corresponding file.)
 
 Note that these documents are not intended to be exhaustive tutorials, just an introduction to some of the differences. Close examination of the helpfiles of relevant classes should help to fill in the details. These files may be of some use to beginners as well.
+
+

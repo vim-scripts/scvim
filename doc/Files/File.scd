@@ -1,3 +1,4 @@
+
 File
 
 Superclass: UnixFILE
@@ -6,75 +7,75 @@ A class for reading and writing files. Not sound files.
 
 see also the superclass for further docs.
 
- *new(pathname, mode)
+	*new(pathname, mode)
+	
+		Create a File instance and open the file. If the open fails, isOpen will return false.
+	
+	pathname
+	
+		a String containing the path name of the file to open.
+	
+	mode
+		a String indicating one of the following modes:
+	
+		"r" - read only text
+		"w" - read and write text
+		"a" - read and append text
+		"rb" - read only binary
+		"wb" - read and write binary
+		"ab" - read and append binary
+		
+		"r+" - read only text
+		"w+" - read and write text
+		"a+" - read and append text
+		"rb+" - read only binary
+		"wb+" - read and write binary
+		"ab+" - read and append binary
+	
+	open
+	
+		Open the file. Files are automatically opened upon creation, so this call is only necessary
+		if you are closing and opening the same file object repeatedly.
+	
+		NOTE: it is possible when saving files with a standard file dialog to elect to "hide the extension"
+		and save it as RTF. When opening the file you must specify the real filename: "filename.rtf",
+		even though you can't see in file load dialogs or in the Finder.
+	
+	
+	close
+		Close the file.
 
- Create a File instance and open the file. If the open fails, isOpen will return false.
- 
-pathname
 
- a String containing the path name of the file to open.
- 
-mode
- a String indicating one of the following modes:
- 
- "r" - read only text
- "w" - read and write text
- "a" - read and append text
- "rb" - read only binary
- "wb" - read and write binary
- "ab" - read and append binary
- 
- "r+" - read only text
- "w+" - read and write text
- "a+" - read and append text
- "rb+" - read only binary
- "wb+" - read and write binary
- "ab+" - read and append binary
-
-open
- 
- Open the file. Files are automatically opened upon creation, so this call is only necessary 
- if you are closing and opening the same file object repeatedly.
- 
- NOTE: it is possible when saving files with a standard file dialog to elect to "hide the extension" 
- and save it as RTF. When opening the file you must specify the real filename: "filename.rtf", 
- even though you can't see in file load dialogs or in the Finder.
- 
-
- close
- Close the file.
-
-
- *exists(pathName)
- answers if a file exists at that path.
- 
- 
-*delete(pathName)
- deletes the file at that path.
- use only for good, never for evil.
- 
- 
-*openDialog(prompt,sucessFunc,cancelFunc)
-
- 
-*saveDialog("hello",{},{})
- not yet implemented
- 
- 
-*getcwd
- POSIX standard 'get current working directory'.
-
- // example;
- File.getcwd
- 
-*use(function)
- open the file, evaluate the function with the file and close it.
- 
-readAllString
- Reads the entire file as a String.
- 
-readAllStringRTF
- Reads the entire file as a String, stripping RTF formatting.
+	*exists(pathName)
+		answers if a file exists at that path.
+	
+	
+	*delete(pathName)
+		deletes the file at that path.
+		use only for good, never for evil.
+	
+	
+	*openDialog(prompt,sucessFunc,cancelFunc)
+	
+		
+	*saveDialog("hello",{},{})
+		not yet implemented
+	
+	
+	*getcwd
+		POSIX standard 'get current working directory'.
+	
+		// example;
+		File.getcwd
+	
+	*use(function)
+		open the file, evaluate the function with the file and close it.
+		
+	readAllString
+		Reads the entire file as a String.
+		
+	readAllStringRTF
+		Reads the entire file as a String, stripping RTF formatting.
 
 Examples:
 
@@ -147,7 +148,7 @@ f.close;
 
 g = File("test3","rb");
 100.do({
- g.getFloat.postln;
+	g.getFloat.postln;
 });
 g.inspect;
 g.close;
@@ -165,5 +166,7 @@ f.close;
 
 
 )
+
+
 
 

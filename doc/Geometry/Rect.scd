@@ -1,4 +1,5 @@
-Rect rectangle
+
+Rect			rectangle
 
 Class methods:
 
@@ -127,5 +128,7 @@ sect(aRect)
 & aRect
 
 returns a new Rect which is the intersection of the receiver and aRect.
+
+
 
 

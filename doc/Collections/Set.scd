@@ -1,3 +1,4 @@
+
 Set
 
 Superclass: Collection
@@ -35,6 +36,8 @@ Evaluates function for each item in the Set.
 The function is passed two arguments, the item and an integer index.
 
 Set[1, 2, 3, 300].do({ arg item, i; item.postln });
+
+
 
 
 

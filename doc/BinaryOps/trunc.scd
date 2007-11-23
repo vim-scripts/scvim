@@ -1,4 +1,5 @@
-trunc truncation
+
+trunc		truncation
 
 BinaryOperator
 
@@ -7,3 +8,5 @@ a trunc: b
 a.trunc(b)
 
 Truncate a to a multiple of b.
+
+

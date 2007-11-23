@@ -1,3 +1,4 @@
+
 String
 
 Superclass: RawArray
@@ -42,7 +43,7 @@ postln
 
 Prints the string and a carriage return to the current post window.
 
-postc postcln
+postc 	postcln
 
 As post and postln above, but formatted as a comment.
 
@@ -64,6 +65,25 @@ Returns a formatted string with arguments. The % character in the format string 
 format("this % a %. pi = %, list = %\n", "is", "test", pi.round(1e-4), (1..4))
 
 this is a test. pi = 3.1416, list = [ 1, 2, 3, 4 ]
+
+matchRegexp(string, start, end)
+
+POSIX regular expression matching.
+Returns true if the receiver (a regular expression pattern) matches the string passed to it.
+The start is an offset where to start searching in the string (default: 0), end where to stop.
+
+"c".matchRegexp("abcdefg", 2, 5); // true
+"c".matchRegexp("abcdefg", 4, 5); // false
+
+"behaviou?r".matchRegexp("behavior"); // true
+"behaviou?r".matchRegexp("behaviour"); // true
+"behaviou?r".matchRegexp("behavir"); // false
+"b.h.v.r".matchRegexp("behavor"); // true
+"b.h.vi*r".matchRegexp("behaviiiiir"); // true
+"(a|u)nd".matchRegexp("und"); // true
+"(a|u)nd".matchRegexp("and"); // true
+"[a-c]nd".matchRegexp("ind"); // false
+"[a-c]nd".matchRegexp("bnd"); // true
 
 
 error
@@ -147,6 +167,22 @@ Return a Float derived from the String. Strings beginning with non-numeric chara
 
 "4.3".asFloat.postln;
 
+asSecs
+
+Return a Float based on converting a time string in format (dd):hh:mm:ss.s.
+This is the inverse method to SimpleNumber:asTimeString.
+
+(45296.asTimeString).asSecs;
+"32.1".asSecs;
+"62.1".asSecs;		// warns
+"0:0:59.9".asSecs;
+"1:1:1.1".asSecs;
+"-1".asSecs;			// neg sign supported
+"-12:34:56".asSecs;
+"12:-34:56".asSecs;	// warns
+"-23:12.3456".asSecs;	//
+"-1:00:00:00".asSecs;	// days too.
+
 catArgs(... args)
 
 Concatenate this string with the following args.
@@ -165,9 +201,9 @@ Same as catArgs, but with commas in between.
 
 "a String".ccatArgs(\fish, SinOsc.ar, {4 + 3}).postln;
 
-catList(list) scatList(list) ccatList(list)
+catList(list)	scatList(list)	ccatList(list)
 
-As catArgs, scatArgs and ccatArgs above, but takes a Collection (usually a List or an Array) as an argument. 
+As catArgs, scatArgs and ccatArgs above, but takes a Collection (usually a List or an Array) as an argument.
 
 "a String".ccatList([\fish, SinOsc.ar, {4 + 3}]).postln;
 
@@ -178,14 +214,22 @@ Returns an Array of Strings split at the separator. The separator is a Char, and
 "This/could/be/a/Unix/path".split.postln;
 "These are several words".split($ ).postln;
 
-find(string)
+find(string, ignoreCase, offset)
 
-Returns the index of the string in the receiver, or nil if not found.
+Returns the index of the string in the receiver, or nil if not found. If ignoreCase is true, find makes no difference between uppercase and lowercase letters. The offset is the point in the string where the search begins.
 
 "These are several words".find("are").postln;
 "These are several words".find("fish").postln;
 
-findAll(string)
+findBackwards(string, ignoreCase, offset)
+
+Same like find, but starts at the end of the string.
+
+// compare:
+"These words are several words".find("words"); // 6
+"These words are several words".findBackwards("words"); // 24
+
+findAll(string, ignoreCase, offset)
 
 Returns the indices of the string in the receiver, or nil if not found.
 
@@ -225,7 +269,13 @@ tr(from, to)
 
 Transliteration. Replace all instances of from with to.
 
-":-(:-(:-(".tr($(, $)).postln; //turn the frowns upside down
+":-(:-(:-(".tr($(, $)); //turn the frowns upside down
+
+replace(find, replace)
+
+Like tr, but with strings as arguments.
+
+"Here are several words which are fish".replace("are", "were");
 
 printOn(stream)
 
@@ -290,7 +340,7 @@ setenv(value)
 Set the environment variable indicated in the string to equal the String value. This value will persist until it is changed or SC is quit. Note that if value is a path you may need to call standardizePath on it (see below).
 
 // all defs in this directory will be loaded when a local server boots
-"SC_SYNTHDEF_PATH".setenv("~/scwork/".standardizePath); 
+"SC_SYNTHDEF_PATH".setenv("~/scwork/".standardizePath);
 "echo $SC_SYNTHDEF_PATH".unixCmd;
 
 getenv
@@ -384,94 +434,96 @@ Drawing Support
 
 The following methods must be called within an SCWindow-drawHook or a SCUserView-drawFunc function, and will only be visible once the window or the view is refreshed. Each call to SCWindow-refresh SCUserView-refresh will 'overwrite' all previous drawing by executing the currently defined function.
 
-See also: [SCWindow], [SCUserView], [Color], and [Pen].
+See also: SCWindow, SCUserView, Color, and Pen.
 
 draw
- 
-Draws the String at the current 0@0 [Point]. If not transformations of the graphics state have taken place this will be the upper left corner of the window. See also [Pen].
+	
+Draws the String at the current 0@0 Point. If not transformations of the graphics state have taken place this will be the upper left corner of the window. See also Pen.
 
 (
 w = SCWindow.new.front;
 w.view.background_(Color.white);
 w.drawHook = {
- "abababababa\n\n\n".scramble.draw
+	"abababababa\n\n\n".scramble.draw
 };
 w.refresh
 )
 
 drawAtPoint(point, font, color)
 
-Draws the String at the given [Point] using the [Font] and [Color] specified.
+Draws the String at the given Point using the Font and Color specified.
 
 (
 w = SCWindow.new.front;
 w.view.background_(Color.white);
 w.drawHook = {
- "abababababa\n\n\n".scramble.drawAtPoint(
- 100@100, 
- Font("Gadget", 30), 
- Color.blue(0.3, 0.5))
+	"abababababa\n\n\n".scramble.drawAtPoint(
+		100@100,
+		Font("Gadget", 30),
+		Color.blue(0.3, 0.5))
 };
 w.refresh
 )
 
 drawInRect(rect, font, color)
 
-Draws the String into the given [Rect] using the [Font] and [Color] specified.
+Draws the String into the given Rect using the Font and Color specified.
 
 (
 w = SCWindow.new.front;
 r = Rect(100, 100, 100, 100);
 w.view.background_(Color.white);
 w.drawHook = {
- "abababababa\n\n\n".scramble.drawInRect(r, Font("Gadget", 30), Color.blue(0.3, 0.5));
- Pen.strokeRect(r);
+	"abababababa\n\n\n".scramble.drawInRect(r, Font("Gadget", 30), Color.blue(0.3, 0.5));
+	Pen.strokeRect(r);
 };
 w.refresh
 )
 
-// drawCenteredIn(inRect)
- draws the String into the center of the given rect with font and color into the window.
- Unfortunately does not work for now...
+//	drawCenteredIn(inRect)
+	draws the String into the center of the given rect with font and color into the window.
+	Unfortunately does not work for now...
 (
 w = SCWindow.new.front;
 w.view.background_(Color.white);
 w.drawHook = {
- "abababababa\n\n\n".scramble.drawCenteredIn(
- Rect(100, 100, 100, 100), 
- Font("Gadget", 30), 
- Color.blue(0.3, 0.5)
- )
+	"abababababa\n\n\n".scramble.drawCenteredIn(
+		Rect(100, 100, 100, 100),
+		Font("Gadget", 30),
+		Color.blue(0.3, 0.5)
+	)
 };
 w.refresh
 )
 
-// drawLeftJustIn(inRect)
- Unfortunately does not work for now...
+//	drawLeftJustIn(inRect)
+	Unfortunately does not work for now...
 (
 w = SCWindow.new.front;
 w.view.background_(Color.white);
 w.drawHook = {
- "abababababa\n\n\n".scramble.drawLeftJustIn(
- Rect(100, 100, 100, 100), 
- Font("Gadget", 30), 
- Color.blue(0.3, 0.5)
- )
+	"abababababa\n\n\n".scramble.drawLeftJustIn(
+		Rect(100, 100, 100, 100),
+		Font("Gadget", 30),
+		Color.blue(0.3, 0.5)
+	)
 };
 w.refresh
 )
 
-// drawRightJustIn(inRect)
- Unfortunately does not work for now...
+//	drawRightJustIn(inRect)
+	Unfortunately does not work for now...
 (
 w = SCWindow.new.front;
 w.view.background_(Color.white);
 w.drawHook = {
- "abababababa\n\n\n".scramble.drawLeftJustIn(
- Rect(100, 100, 100, 100), 
- Font("Gadget",30), 
- Color.blue(0.3, 0.5)
- )
+	"abababababa\n\n\n".scramble.drawLeftJustIn(
+		Rect(100, 100, 100, 100),
+		Font("Gadget", 30),
+		Color.blue(0.3, 0.5)
+	)
 };
 w.refresh
 )
+
+

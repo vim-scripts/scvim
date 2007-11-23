@@ -1,5 +1,6 @@
 
-MantissaMask reduce precision
+
+MantissaMask				reduce precision
 
 MantissaMask.ar(in, bits, mul, add)
 
@@ -17,15 +18,15 @@ bits - the number of mantissa bits to preserve. a number from 0 to 23.
 
 // the difference.
 (
-{ 
- var in;
- in = SinOsc.ar(SinOsc.kr(0.2,0,400,500), 0, 0.4);
- Out.ar(0, in - MantissaMask.ar(in, 3));
+{
+	var in;
+	in = SinOsc.ar(SinOsc.kr(0.2,0,400,500), 0, 0.4);
+	Out.ar(0, in - MantissaMask.ar(in, 3));
 }.play
 )
 
 
-// preserve 7 bits of mantissa. 
+// preserve 7 bits of mantissa.
 // This makes the lower 16 bits of the floating point number become zero.
 { MantissaMask.ar(SinOsc.ar(SinOsc.kr(0.2,0,400,500), 0, 0.4), 7) }.play
 
@@ -34,11 +35,13 @@ bits - the number of mantissa bits to preserve. a number from 0 to 23.
 
 // the difference.
 (
-{ 
- var in;
- in = SinOsc.ar(SinOsc.kr(0.2,0,400,500), 0, 0.4);
- Out.ar(0, in - MantissaMask.ar(in, 7));
+{
+	var in;
+	in = SinOsc.ar(SinOsc.kr(0.2,0,400,500), 0, 0.4);
+	Out.ar(0, in - MantissaMask.ar(in, 7));
 }.play
 )
+
+
 
 

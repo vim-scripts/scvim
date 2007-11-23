@@ -1,3 +1,4 @@
+
 MIDI
 
 MIDIClient
@@ -26,8 +27,8 @@ MIDIClient.init;
 MIDIIn.connect(0, 0);
 //set the action:
 MIDIIn.control = {arg src, chan, num, val;
- val.postln;
- };
+			val.postln;
+			};
 )
 
 MIDIOut
@@ -37,7 +38,9 @@ example:
 MIDIClient.init;
 m = MIDIOut(0, MIDIClient.destinations.at(0).uid);
 m.noteOn(0, 60, 60);
-) 
+)
 
 
 )
+
+

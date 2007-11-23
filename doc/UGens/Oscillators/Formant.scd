@@ -1,11 +1,15 @@
-Formant formant oscillator
 
-Formant.ar(kfundfreq, kformfreq, kwidthfreq, mul, add)
+Formant			formant oscillator
+
+Formant.ar(fundfreq, formfreq, bwfreq, mul, add)
 
 Generates a set of harmonics around a formant frequency at a given fundamental frequency.
-kfundfreq - fundamental frequency in Hertz.
-kformfreq - formant frequency in Hertz.
-kwidthfreq - pulse width frequency in Hertz. Controls the bandwidth of the formant.
+
+The frequency inputs are read at control rate only, so if you plug in an audio rate UGen as an input, it will only be sampled at the start of each audio synthesis block.
+
+fundfreq - fundamental frequency in Hertz (control rate)
+formfreq - formant frequency in Hertz (control rate)
+bwfreq - pulse width frequency in Hertz. Controls the bandwidth of the formant (control rate)
 Widthfreq must be greater than or equal fundfreq.
 
 // modulate fundamental frequency, formant freq stays constant
@@ -16,3 +20,5 @@ Widthfreq must be greater than or equal fundfreq.
 
 // modulate width frequency, other freqs stay constant
 { Formant.ar(400, 2000, XLine.kr(800, 8000, 8), 0.125) }.play
+
+

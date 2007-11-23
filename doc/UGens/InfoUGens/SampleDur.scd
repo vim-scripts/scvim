@@ -1,10 +1,13 @@
-SampleDurduration of one sample 
+
+SampleDur			duration of one sample
 
 superclass: InfoUGenBase
 
 returns the current sample duration of the server
 
- *ir
- 
+	*ir
+			
 
 equivalent to 1 / SampleRate
+
+

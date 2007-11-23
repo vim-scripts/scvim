@@ -1,12 +1,13 @@
+
 More on Getting Help
 
-SuperCollider 3 is a work in progress. As such much is undocumented. Many of the helpfiles have been copied over from SC2, and have unworking examples, etc. These are in the process of being updated. 
+SuperCollider 3 is a work in progress. As such, some things are undocumented, and there are still a few helpfiles which have unworking examples, etc. These are in the process of being updated.
 
 Below are listed a few techniques for tracking down documentation and functionality. Note: If some of the terms used below (e.g. class, method, inheritance, etc.) are unclear to you, you may wish to read the Language helpfiles which are listed in the main help window for detail on some of these concepts. Reading a general tutorial on Object Oriented Programming at some point could also be useful, as could reading a FAQ, etc. about Smalltalk. Smalltalk is the general purpose OOP language upon which the the design of the SuperCollider language is based. It's syntax is different than SC's, but conceptually it has much in common.
 
 NB: Be sure to check out the Further Info section at the bottom of this page.
 
-Basics 
+Basics				
 
 As you've probably already learned selecting any text and pressing Cmd-Shift-? will open the corresponding helpfile. Usually helpfiles are either concept related, or document particular classes. In the SC language classes begin with capital letters. Try Cmd-Shift-? on the following (double click on the first word; the stuff after the two slashes is a comment):
 
@@ -16,7 +17,7 @@ A few methods also have helpfiles. Methods begin with lower-case letters, as do 
 
 play // Cmd-shift-? on this will open a helpfile detailing different implementations of this method
 
-In addition there are a many helpfiles which explain important concepts. Most of these are listed in the main help window (Help.help.rtf, which will open if you press Cmd-Shift-? with no text selected), or in the overviews listed there. Cmd-Shift-? on this text for an example: Tutorial
+In addition there are a many helpfiles which explain important concepts. Most of these are listed in the main help window (Help.html, which will open if you press Cmd-Shift-? with no text selected), or in the overviews listed there. The file called Tutorial is one example.
 
 A convention of the documentation is that text in bold face or between brackets [] refers to other helpfiles. Double-click to select that text and press Cmd-Shift-? to open the corresponding helpfile. An example is the text Undocumented-Classes in the next section.
 
@@ -49,7 +50,7 @@ Array.dumpFullInterface;
 This can be a lot of information, so dumpAllMethods or class.dumpAllMethods will show only instance and class methods respectively.
 
 Array.class.dumpAllMethods; // Only class methods that this responds to (including inherited ones)
-Array.dumpAllMethods; // Only instance methods (including inherited ones)
+Array.dumpAllMethods; 		// Only instance methods (including inherited ones)
 
 There is also a graphical Class browser which will show all methods, arguments, subclasses, instance variables and class variables. (Currently this is only OSX.) Using the browser's buttons you can easily navigate to the class' superclass, subclasses, class source, method source, helpfile (if there is one), check references or implementation of methods, or even open a web browser to view the corresponding entry in the online CVS repository. (Note that the web repository is a backup often a day or two behind the status of what is available to developers.)
 
@@ -62,7 +63,7 @@ select // try it on this method
 Similarly, selecting any text and typing shift-cmd-y will open a window showing all references to the selected text, i.e. each place it is used within the class library. (This will not find methods calls compiled with special byte codes like 'value'.)
 
 // try it on these
-asStream 
+asStream
 SCWindow
 
 In the resulting window selecting any class and method and pressing Cmd-j will take you to that method definition in that class definition. For example try selecting Pattern-select in the window resulting from the previous example. Note that SC supports defining methods in separate files, so a class' methods may be defined in more than one place. If you try Cmd-j on the following you will see that it will open a file called dumpFullInterface.sc rather than one called Class.sc (its main class definition file). The + Class {.... syntax indicates that these are additional methods.
@@ -85,7 +86,7 @@ A good starting place for figuring out how to do something are the numerous file
 
 http://swiki.hfbk-hamburg.de:8888/MusicTechnology/6
 
-To edit or add pages on the swiki use: username: sc password: sc
+To edit or add pages on the swiki use: 	username: sc 	password: sc
 
 Further help can be obtained by subscribing and sending questions to the sc-users mailing list:
 
@@ -96,3 +97,5 @@ An archive of the list can be searched from this page:
 http://swiki.hfbk-hamburg.de:8888/MusicTechnology/437
 
 Requests for documentation of undocumented methods or classes, as well as reports of errata, omissions, etc. in helpfiles can be sent to: mullmusik@users.sourceforge.net or to the user's list above.
+
+

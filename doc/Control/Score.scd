@@ -1,4 +1,5 @@
-Score score of timed OSC commands
+
+Score			score of timed OSC commands
 
 
 
@@ -36,13 +37,13 @@ Class Methods
 *writeFromFile(path, oscFilePath, clock) - as *write but reads the list from a file. Use clock as a tempo base. TempoClock.default if clock is nil.
 
 *recordNRT(list, oscFilePath, outputFilePath, inputFilePath, sampleRate, headerFormat, sampleFormat, options) - a convenience method to synthesize list in non-realtime. This method writes an OSC file to oscFilePath (you have to do your own cleanup if desired) and then starts a server app to synthesize it. For details on valid headerFormats and sampleFormats see SoundFile. Use TempoClock.default as a tempo base. Does not return an instance.
- oscFilePath - the path to which the binary OSC file will be written.
-outputFilePath - the path of the resultant soundfile.
- inputFilePath - an optional path for an input soundfile.
-sampleRate - the sample rate at which synthesis will occur.
-headerFormat - the header format of the output file. The default is 'AIFF'.
-sampleFormat - the sample format of the output file. The default is 'int16'.
-options - an instance of ServerOptions. If not supplied the options of the default Server will be used.
+	oscFilePath - the path to which the binary OSC file will be written.
+	outputFilePath - the path of the resultant soundfile.
+	inputFilePath - an optional path for an input soundfile.
+	sampleRate - the sample rate at which synthesis will occur.
+	headerFormat - the header format of the output file. The default is 'AIFF'.
+	sampleFormat - the sample format of the output file. The default is 'int16'.
+	options - an instance of ServerOptions. If not supplied the options of the default Server will be used.
 
 Instance Methods
 
@@ -58,9 +59,9 @@ score_(list) - set the list.
 
 add(bundle) - adds bundle to the list.
 
-sort - sort the score time order. 
- This is recommended to do beforerecordNRT or write when 
- you are not sure about the packet order
+sort - sort the score time order.
+		This is recommended to do before recordNRT or write when
+		you are not sure about the packet order
 
 recordNRT(oscFilePath, outputFilePath, inputFilePath, sampleRate, headerFormat, sampleFormat, options) - synthesize the score in non-realtime. For details of the arguments see *recordNRT above.
 
@@ -73,9 +74,9 @@ NRT Examples:
 // A sample synthDef
 (
 SynthDef("helpscore",{ arg freq = 440;
- Out.ar(0,
- SinOsc.ar(freq, 0, 0.2) * Line.kr(1, 0, 0.5, doneAction: 2)
- )
+	Out.ar(0,
+		 SinOsc.ar(freq, 0, 0.2) * Line.kr(1, 0, 0.5, doneAction: 2)
+	)
 }).load(s);
 )
 
@@ -84,10 +85,10 @@ SynthDef("helpscore",{ arg freq = 440;
 var f, g;
 TempoClock.default.tempo = 1;
 g = [
- [0.1, [\s_new, \helpscore, 1000, 0, 0, \freq, 440]], [0.2, [\s_new, \helpscore, 1001, 0, 0, \freq, 660]],
- [0.3, [\s_new, \helpscore, 1002, 0, 0, \freq, 220]],
- [1, [\c_set, 0, 0]] // finish
- ];
+	[0.1, [\s_new, \helpscore, 1000, 0, 0, \freq, 440]],	[0.2, [\s_new, \helpscore, 1001, 0, 0, \freq, 660]],
+	[0.3, [\s_new, \helpscore, 1002, 0, 0, \freq, 220]],
+	[1, [\c_set, 0, 0]] // finish
+	];
 f = File("score-test","w");
 f.write(g.asCompileString);
 f.close;
@@ -98,18 +99,18 @@ Score.writeFromFile("score-test", "test.osc");
 
 From the command line, the file can then be rendered from within the build directory:
 
-./scsynth -N test.osc _ test.aif 44100 AIFF int16 -o 1 
+./scsynth -N test.osc _ test.aif 44100 AIFF int16 -o 1
 
 Score also provides methods to do all this more directly:
 
 (
 var f, o;
 g = [
- [0.1, [\s_new, \helpscore, 1000, 0, 0, \freq, 440]], [0.2, [\s_new, \helpscore, 1001, 0, 0, \freq, 660], 
- [\s_new, \helpscore, 1002, 0, 0, \freq, 880]],
- [0.3, [\s_new, \helpscore, 1003, 0, 0, \freq, 220]],
- [1, [\c_set, 0, 0]] // finish
- ];
+	[0.1, [\s_new, \helpscore, 1000, 0, 0, \freq, 440]],	[0.2, [\s_new, \helpscore, 1001, 0, 0, \freq, 660],
+		[\s_new, \helpscore, 1002, 0, 0, \freq, 880]],
+	[0.3, [\s_new, \helpscore, 1003, 0, 0, \freq, 220]],
+	[1, [\c_set, 0, 0]] // finish
+	];
 o = ServerOptions.new.numOutputBusChannels = 1; // mono output
 Score.recordNRT(g, "help-oscFile", "helpNRT.aiff", options: o); // synthesize
 )
@@ -124,9 +125,9 @@ s.boot; // boot the default server
 // A sample synthDef
 (
 SynthDef("helpscore",{ arg freq = 440;
- Out.ar(0,
- SinOsc.ar(freq, 0, 0.2) * Line.kr(1, 0, 0.5, doneAction: 2)
- )
+	Out.ar(0,
+		 SinOsc.ar(freq, 0, 0.2) * Line.kr(1, 0, 0.5, doneAction: 2)
+	)
 }).load(s);
 )
 
@@ -135,11 +136,11 @@ SynthDef("helpscore",{ arg freq = 440;
 var f, g;
 TempoClock.default.tempo = 1;
 g = [
- [0.1, [\s_new, \helpscore, 1000, 0, 0, \freq, 440]], [0.2, [\s_new, \helpscore, 1001, 0, 0, \freq, 660], 
- [\s_new, \helpscore, 1002, 0, 0, \freq, 880]],
- [0.3, [\s_new, \helpscore, 1003, 0, 0, \freq, 220]],
- [1, [\c_set, 0, 0]] // finish
- ];
+	[0.1, [\s_new, \helpscore, 1000, 0, 0, \freq, 440]],	[0.2, [\s_new, \helpscore, 1001, 0, 0, \freq, 660],
+		[\s_new, \helpscore, 1002, 0, 0, \freq, 880]],
+	[0.3, [\s_new, \helpscore, 1003, 0, 0, \freq, 220]],
+	[1, [\c_set, 0, 0]] // finish
+	];
 f = File("score-test","w");
 f.write(g.asCompileString);
 f.close;
@@ -200,9 +201,9 @@ SynthDescLib.read;
 // new pattern
 (
 p = Pbind(
- 
- \dur, Prand([0.3, 0.5], inf),
- \freq, Prand([200, 300, 500],inf)
+	
+	\dur, Prand([0.3, 0.5], inf),
+	\freq, Prand([200, 300, 500],inf)
 );
 )
 
@@ -220,6 +221,8 @@ rendering a pattern to sound file directly:
 // render the pattern to aiff (4 beats)
 
 p.render("asScore-Help.aif", 4.0);
+
+
 
 
 

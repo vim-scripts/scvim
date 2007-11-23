@@ -1,10 +1,11 @@
+
 Process
 
 superclass: Object
 
 A Process is the runtime environment for the virtual machine and interpreter.
 It has a subclass named Main which is where you should override the methods
-of Process. There are two methods of interest. One is named 'startUp' and is 
+of Process. There are two methods of interest. One is named 'startUp' and is
 called after the class library has been compiled. The other is named 'run' and
 is called when the user chooses the Run menu command.
 
@@ -23,3 +24,5 @@ Returns a Boolean indicating whether tail call optimization is on. The default i
 *tailCallOptimize_(aBoolean)
 
 Turns tail call optimization on or off. Setting this to false can help with debugging by including intermediate levels in an error backtrace.
+
+

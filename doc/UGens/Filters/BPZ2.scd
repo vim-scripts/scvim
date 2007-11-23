@@ -1,5 +1,6 @@
 
-BPZ2 two zero fixed midpass
+
+BPZ2					two zero fixed midpass
 
 BPZ2.ar(in, mul, add)
 
@@ -13,4 +14,6 @@ Compare:
 { WhiteNoise.ar(0.25) }.play;
 
 { BPZ2.ar(WhiteNoise.ar(0.25)) }.play;
+
+
 

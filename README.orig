@@ -1,16 +1,17 @@
 SCVIM is written by Alex Norman, it is in its early stages, use at your own risk
-this is SCVIM beta 8
+this is SCVIM beta 11
 the webpage is here:
-http://www.neisis.net/~alex/scvim/
+http://www.x37v.info/scvim/
 
 if you have improvements/suggestions email alex at neisis dot net
 
 requirements:
-vim/gvim (with the ruby interpreter built in)
-bash
+vim/gvim
+sh
 supercollider (sclang)
+
 to make help docs:
-unrtf and ruby
+unhtml or links, unrtf and ruby
 
 1) put this ("scvim") directory somewhere useful (I put it in /usr/local/share)
 
@@ -19,9 +20,12 @@ unrtf and ruby
 	export SCVIM_DIR=/usr/local/share/scvim
 
 3) add a line to your ~/.vimrc that sources scvimrc (i just copy $SCVIM_DIR/scvimrc to ~/.scvimrc
-	and put so ~/.scvimrc in my ~/.vimrc)
+	and put 'source ~/.scvimrc' in my ~/.vimrc)
 	(you can edit ~/.scvimrc to change keybindings etc)
 
+4) edit the line in scvimrc: 
+	let g:sclangrundir = "/path/to/the/rundir/of/sclang"
+	so that the path is correct for your system [the directory you want sclang to run in]
 
 EXTRA: 
 	1) I put this in my ~/.sclang.sc so that each time I start sclang I have
@@ -35,8 +39,8 @@ EXTRA:
 	2) this aliasing this to scvim or something is convenient
 	vim -c "source $SCVIM_DIR/ftplugin/supercollider.vim | SClangStart"
 	ie:
-	alias scvim='vim -c "source $SCVIM_DIR/ftplugin/supercollider.vim | SClangStart"'
-	alias gscvim='gvim -c "source $SCVIM_DIR/ftplugin/supercollider.vim | SClangStart"'
+	alias scvim='vim -c "set filetype=supercollider" -c "source $SCVIM_DIR/ftplugin/supercollider.vim | SClangStart"'
+	alias gscvim='gvim -c "set filetype=supercollider" -c "source $SCVIM_DIR/ftplugin/supercollider.vim | SClangStart"'
 
 
 Now you should be ready to use scvim
@@ -66,7 +70,7 @@ HELP DOCS:
 you can use scvim_make_help to format the help files in such a way that scvim
 can use them [remove rtf formatting], the most simple way to do this is to do
 something like:
-./scvim_make_help -c -s /usr/local/share/SuperCollider/Help
+./scvim_make_help.rb -c -s /usr/local/share/SuperCollider/Help
 this will delete any help docs that are in your scvim/docs dir, and copy in the
 more up to date [hopefully] docs from /usr/local/share/SuperCollider/Help to
 that dir [after they are formatted].  If you have help docs in more than one
@@ -81,4 +85,6 @@ symbols and chars variations on the same color but all look different.  Feel
 free to use/modify it to your liking.
 
 Thanks:
-John Yates for providing the indent functionality [which i have changed slightly]
+John Yates for providing the indent functionality [which i have changed slightly] and
+	help with the help file processor
+Andrzej Kopec for work on removing html from help [though scvim ended up using unhtml]

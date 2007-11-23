@@ -1,3 +1,4 @@
+
 NSObjectHolder
 
 
@@ -8,5 +9,7 @@ o.do("makeKeyAndOrderFront:",[0]);
 o.do("close");
 
 o.dealloc;
+
+
 
 

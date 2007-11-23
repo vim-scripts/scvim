@@ -1,10 +1,11 @@
+
 PriorityQueue
 
 superclass: Object
 
 PriorityQueue implements a priority queue data structure, which is
 used to build schedulers.
-It allows you to put in items at some arbitrary time and pop them in 
+It allows you to put in items at some arbitrary time and pop them in
 time order.
 
 Instance Methods:
@@ -47,7 +48,7 @@ p.put(0.2, \d);
 p.put(1.0, \e);
 
 while ({ p.notEmpty },{
- [p.topPriority, p.pop].postln;
+	[p.topPriority, p.pop].postln;
 });
 
 
@@ -65,5 +66,7 @@ p.pop.postln;
 nil
 nil
 nil
+
+
 
 

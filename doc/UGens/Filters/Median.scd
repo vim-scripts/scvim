@@ -1,8 +1,9 @@
-Median median filter
+
+Median				median filter
 
 Median.ar(length, in, mul, add)
 
-Returns the median of the last length input points. 
+Returns the median of the last length input points.
 This non linear filter is good at reducing impulse noise from a signal.
 length - number of input points in which to find the median. Must be an odd number from 1 to 31.
 If length is 1 then Median has no effect.
@@ -27,9 +28,9 @@ in - input signal to be processed
 
 // long Median filters begin chopping off the peaks of the waveform
 (
-{ 
- x = SinOsc.ar(1000, 0, 0.2);
- [x, Median.ar(31, x)]
+{
+	x = SinOsc.ar(1000, 0, 0.2);
+	[x, Median.ar(31, x)]
 }.play;
 )
 
@@ -42,7 +43,9 @@ Synth.play({ Median.ar(31, WhiteNoise.ar(0.1) + SinOsc.ar(800,0,0.1)) });
 
 (
 // use LeakDC for low frequency noise
-Synth.play({ 
- LeakDC.ar(Median.ar(31, WhiteNoise.ar(0.1) + SinOsc.ar(800,0,0.1)), 0.9)
+Synth.play({
+	LeakDC.ar(Median.ar(31, WhiteNoise.ar(0.1) + SinOsc.ar(800,0,0.1)), 0.9)
 });
 )
+
+

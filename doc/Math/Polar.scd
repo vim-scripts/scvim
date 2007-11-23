@@ -1,3 +1,4 @@
+
 Polar
 
 superclass: Number
@@ -13,7 +14,7 @@ Create a new polar coordinate with the given radius, rho, and angle in radians, 
 
 Math
 
-+ - * /
++  -  *  /
 
 The math operations of addition, subtraction, multiplication and division are accomplished by
 first converting to complex numbers.
@@ -60,4 +61,6 @@ Convert to Complex
 asPoint
 
 Convert to Point
+
+
 

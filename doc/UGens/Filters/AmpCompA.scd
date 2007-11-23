@@ -1,30 +1,31 @@
-AmpCompAANSI A-weighting curve
- basic psychoacoustic amplitude compensation
+
+AmpCompA			ANSI A-weighting curve
+						basic psychoacoustic amplitude compensation
 
 
 superclass: UGen
 
- 
- Higher frequencies are normally perceived as louder, which AmpCompA compensates. 
- Following the measurings by Fletcher and Munson, the ANSI standard describes 
- a function for loudness vs. frequency. 
- Note that this curve is only valid for standardized amplitude. [1]
- 
- For a simpler but more flexible curve, see [AmpComp]
- 
+	
+	Higher frequencies are normally perceived as louder, which AmpCompA compensates.
+	Following the measurings by Fletcher and Munson, the ANSI standard describes
+	a function for loudness vs. frequency.
+	Note that this curve is only valid for standardized amplitude. [1]
+	
+	For a simpler but more flexible curve, see AmpComp
+	
 
- *ar(freq, root, minAmp, rootAmp)
- *kr(freq, root, minAmp, rootAmp)
- *ir(freq, root, minAmp, rootAmp)
- 
-freq input frequency value. For freq == root, the output is rootAmp. (default freq 0 Hz)
-root root freq relative to which the curve is calculated (usually lowest freq) (default 0 Hz)
- default value: C (60.midicps)
- 
-minAmp amplitude at the minimum point of the curve (around 2512 Hz) (default -10dB)
-rootAmp amplitude at the root frequency. (default 1)
- 
-apart from freq, the values are not modulatable
+	*ar(freq, root, minAmp, rootAmp)
+	*kr(freq, root, minAmp, rootAmp)
+	*ir(freq, root, minAmp, rootAmp)
+	
+	freq 			input frequency value. For freq == root, the output is rootAmp. (default freq 0 Hz)
+	root			root freq relative to which the curve is calculated (usually lowest freq) (default 0 Hz)
+				default value: C (60.midicps)
+				
+	minAmp		amplitude at the minimum point of the curve (around 2512 Hz) (default -10dB)
+	rootAmp		amplitude at the root frequency. (default 1)
+				
+	apart from freq, the values are not modulatable
 
 
 
@@ -35,22 +36,22 @@ apart from freq, the values are not modulatable
 
 // with one that uses amplitude compensation
 (
-{ 
- var freq;
- freq = MouseX.kr(300, 15000, 1);
- SinOsc.ar(freq) * 0.3 * AmpCompA.kr(freq) 
+{
+	var freq;
+	freq = MouseX.kr(300, 15000, 1);
+	SinOsc.ar(freq) * 0.3 * AmpCompA.kr(freq)
 }.play;
 )
 
 
-// adjust the minimum and root amp 
-// (in this way one can flatten out the curve for higher amplitudes) 
+// adjust the minimum and root amp
+// (in this way one can flatten out the curve for higher amplitudes)
 
 (
-{ 
- var freq;
- freq = MouseX.kr(300, 18000, 1);
- Formant.ar(300, freq, 20, 0.1) * AmpCompA.kr(freq, 300, 0.6, 0.3)
+{
+	var freq;
+	freq = MouseX.kr(300, 18000, 1);
+	Formant.ar(300, freq, 20, 0.1) * AmpCompA.kr(freq, 300, 0.6, 0.3)
 }.play;
 )
 
@@ -74,32 +75,32 @@ apart from freq, the values are not modulatable
 
 // amplitude compensation in frequency modulation (using Fletscher-Munson curve)
 (
-{ 
- var freq;
- freq = MouseX.kr(300, 15000, 1);
- freq = freq * SinOsc.ar(MouseY.kr(3, 200, 1), 0, 0.5, 1);
- SinOsc.ar(freq) * 0.1 * AmpCompA.ar(freq, 300) 
+{
+	var freq;
+	freq = MouseX.kr(300, 15000, 1);
+	freq = freq * SinOsc.ar(MouseY.kr(3, 200, 1), 0, 0.5, 1);
+	SinOsc.ar(freq) * 0.1 * AmpCompA.ar(freq, 300)
 }.play;
 )
 
 // amplitude compensation in frequency modulation (using AmpComp exponential decay)
 (
-{ 
- var freq;
- freq = MouseX.kr(300, 15000, 1);
- freq = freq * SinOsc.ar(MouseY.kr(3, 200, 1), 0, 0.5, 1);
- SinOsc.ar(freq) * 0.1 * AmpComp.ar(freq, 300) 
+{
+	var freq;
+	freq = MouseX.kr(300, 15000, 1);
+	freq = freq * SinOsc.ar(MouseY.kr(3, 200, 1), 0, 0.5, 1);
+	SinOsc.ar(freq) * 0.1 * AmpComp.ar(freq, 300)
 }.play;
 )
 
 
 // without amplitude compensation
 (
-{ 
- var freq;
- freq = MouseX.kr(300, 15000, 1);
- freq = freq * SinOsc.ar(MouseY.kr(3, 200, 1), 0, 0.5, 1);
- SinOsc.ar(freq) * 0.1
+{
+	var freq;
+	freq = MouseX.kr(300, 15000, 1);
+	freq = freq * SinOsc.ar(MouseY.kr(3, 200, 1), 0, 0.5, 1);
+	SinOsc.ar(freq) * 0.1
 }.play;
 )
 
@@ -107,9 +108,9 @@ apart from freq, the values are not modulatable
 
 
 
-[1] Function freq -> dB, 
- derived from http://www.beis.de/Elektronik/AudioMeasure/WeightingFilters.html
- and modified to map freq -> amp
+[1] Function freq -> dB,
+	derived from http://www.beis.de/Elektronik/AudioMeasure/WeightingFilters.html
+	and modified to map freq -> amp
 
 (
 var k = 3.5041384e16;
@@ -126,6 +127,8 @@ f = {|f|
  var n4 = squared(c4 + r);
  var level = k * m1 / (n1 * n2 * n3 * n4);
  sqrt(level)
- };
+};
 )
+
+
 
