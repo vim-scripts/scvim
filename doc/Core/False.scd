@@ -1,6 +1,0 @@
-
-False
-
-see [Boolean]
-
-

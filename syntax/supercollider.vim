@@ -68,10 +68,14 @@ syn match scArate "\v\.@<=ar(\w)@!"
 syn match scKrate "\v\.@<=kr(\w)@!"
 
 " load list of all objects
-source	$SCVIM_DIR/syntax/supercollider_objects.vim
+if filereadable($SCVIM_CACHE_DIR . "/supercollider_objects.vim")
+	source	$SCVIM_CACHE_DIR/supercollider_objects.vim
+elseif filereadable($HOME . ".scvim/supercollider_objects.vim")
+	source	$HOME/.scvim/supercollider_objects.vim
+end
 " load all the language stuff
-source	$SCVIM_DIR/syntax/supercollider_lang.vim
-source	$SCVIM_DIR/syntax/supercollider_operators.vim
+runtime! syntax/supercollider_lang.vim
+runtime! syntax/supercollider_operators.vim
 
 " comments
 syn match	scComment	"//.*$"

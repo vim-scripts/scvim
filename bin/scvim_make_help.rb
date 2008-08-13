@@ -33,8 +33,19 @@
 #along with SCVIM.  If not, see <http://www.gnu.org/licenses/>.
 
 $uselinks = false
-scvim_dir = ENV["SCVIM_DIR"].sub(/\/$/,"")
-help_dest = File.join(scvim_dir, "/doc/")
+scvim_cache_dir = ENV["SCVIM_CACHE_DIR"]
+if !scvim_cache_dir or scvim_cache_dir==""
+  scvim_cache_dir = File.join(ENV["HOME"],".scvim")
+else
+  scvim_cache_dir.sub!(/\/$/,"")
+end
+
+#if the cache dir doesn't exist, create it
+if not File.exists?(scvim_cache_dir)
+  Dir.mkdir(scvim_cache_dir)
+end
+
+help_dest = File.join(scvim_cache_dir, "/doc/")
 help_tags_file = File.join(help_dest, "TAGS_HELP")
 help_completion_file = File.join(help_dest, "sc_help_completion")
 $unhtml = "unhtml"
@@ -52,10 +63,10 @@ helphash = Hash.new;
 def deleteRecursively(items_to_del)
   items_to_del.each {|x| 
     if File.stat(x).directory?
-      items_to_del = Dir.entries(x)
-      items_to_del.delete("."); items_to_del.delete("..")
-      items_to_del.collect! {|i| "#{x}/" + i }
-      deleteRecursively(items_to_del)
+      new_items_to_del = Dir.entries(x)
+      new_items_to_del.delete("."); new_items_to_del.delete(".."); new_items_to_del.delete(".svn")
+      new_items_to_del.collect! {|i| "#{x}/" + i }
+      deleteRecursively(new_items_to_del)
       Dir.unlink(x)
     else
       File.delete(x)
@@ -67,13 +78,13 @@ def deleteEmptyDirs(basedir)
   basedir.each {|x| 
     if File.stat(x).directory?
       items_to_del = Dir.entries(x)
-      items_to_del.delete("."); items_to_del.delete("..")
+      items_to_del.delete("."); items_to_del.delete(".."); items_to_del.delete(".svn")
       items_to_del.collect! {|i| "#{x}/" + i }
       #first check any subdirs if there are any
       if items_to_del != []
         deleteEmptyDirs(items_to_del)
         items_to_del = Dir.entries(x)
-        items_to_del.delete("."); items_to_del.delete("..")
+        items_to_del.delete("."); items_to_del.delete(".."); items_to_del.delete(".svn")
         if items_to_del == []
           Dir.unlink(x)
         end
@@ -102,10 +113,21 @@ def runhtml(file)
     stdin.close
     #grab the lines from unhtml
     #res = stdout.readlines
-    res = stdout.readlines.collect { |i| i.gsub(/[\x80-\xFF]/, '') }
+    res = stdout.readlines.collect { |i| 
+      i.gsub!(/[\x80-\xFF]/, '')
+      i.gsub!("&ndash;",'-')
+      i
+    }
+    tmp = Array.new
+    res.each { |i|
+      #remove html comments
+      if i !~ /^\s*<!--.*-->\s*$/
+        tmp << i
+      end
+    }
     #close everything
     stdout.close; stderr.close
-    return res
+    return tmp
   }
   return []
 end
@@ -262,6 +284,7 @@ end
 # process the parsed options
 
 clean = false
+confirmthings = true
 linksDefaultHtml = $uselinks
 opts = OptionParser.new do |opts|
   # Mandatory argument.
@@ -278,6 +301,11 @@ opts = OptionParser.new do |opts|
   # Boolean switch.
   opts.on("-c", "--clean", "Clean the Destination Directory before building the helpfiles") do |c|
     clean = c
+  end
+
+  # Boolean switch.
+  opts.on("-f", "--force", "Do not prompt to see if the user is sure about deleting files") do |y|
+    confirmthings = !y
   end
 
   if linksDefaultHtml
@@ -316,11 +344,13 @@ end
 
 #make sure the dest dir is valid
 if !File.exists?(help_dest) 
-  puts "Help Destination does not exist, should it be created? [yes/no]"
-  responce = STDIN.readline
-  responce.chomp!
-  responce.gsub!(/\s*/,"")
-  if responce == "y" || responce == "yes"
+  if(confirmthings)
+    puts "Help Destination does not exist, should it be created? [yes/no]"
+    responce = STDIN.readline
+    responce.chomp!
+    responce.gsub!(/\s*/,"")
+  end
+  if (!confirmthings) || responce == "y" || responce == "yes"
     newdirs = help_dest.split("/")
     if newdirs[0] = ""
       newdirs[1] = "/" + newdirs[1]
@@ -357,15 +387,18 @@ help_source_list.each { |help_source|
 
 #clean, removes everything from the help_destination, including the TAGS_HELP and sc_help_completion files
 if clean
-  puts "Clean option, will delete contents of #{help_dest}, are you sure you want to do this? [yes/no]"
-  responce = STDIN.readline
-  responce.chomp!
-  responce.gsub!(/\s*/,"")
-  if responce == "y" || responce == "yes"
+  if(confirmthings)
+    puts "Clean option, will delete contents of #{help_dest}, are you sure you want to do this? [yes/no]"
+    responce = STDIN.readline
+    responce.chomp!
+    responce.gsub!(/\s*/,"")
+  end
+  if (!confirmthings) || responce == "y" || responce == "yes"
     puts "Deleting contents of #{help_dest}"
     items_to_del = Dir.entries(help_dest)
     #remove . and .. and .svn
     items_to_del.delete('.'); items_to_del.delete('..') ; items_to_del.delete('.svn')
+    items_to_del.delete('SCVim.scd')
     #add the path to the file names
     items_to_del.collect! {|x| "#{help_dest}/" + x }
     deleteRecursively(items_to_del)
@@ -403,6 +436,11 @@ help_source_list.each { |help_source|
   Dir.chdir(orig_dir)
 }
 
+#add SCVim.scd into the help output if it doesn't already exist there
+if not helphash["SCVim"]
+  helphash["SCVim"] = "SCVim.scd"
+end
+
 #write out the tags and completion files
 completion = File.open(help_completion_file, "w")
 File.open(help_tags_file, "w"){ |tags_file|
@@ -418,7 +456,7 @@ completion.close
 #delete empty directories
 items_to_check = Dir.entries(help_dest)
 #remove . and ..
-items_to_check.delete("."); items_to_check.delete("..")
+items_to_check.delete("."); items_to_check.delete(".."); items_to_check.delete(".svn")
 items_to_check.collect! {|x| "#{help_dest}/" + x }
 deleteEmptyDirs(items_to_check)
 

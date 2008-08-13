@@ -18,17 +18,37 @@
 
 "au VimLeave
 
-if exists("$SCVIM_DIR") == 0
-	echo "$SCVIM_DIR must be defined for SCVIM to work"
-	finish
-endif
+"if exists("$SCVIM_DIR") == 0
+"	echo "$SCVIM_DIR must be defined for SCVIM to work"
+"	finish
+"endif
+
+
+"source the syntax file as it can change
+"so $SCVIM_DIR/syntax/supercollider.vim
+runtime! syntax/supercollider.vim
 
 if exists("loaded_scvim") || &cp
   finish
 endif
 let loaded_scvim = 1
 
-so $SCVIM_DIR/syntax/supercollider.vim
+"first if SCVIM_CACHE_DIR is defined, use that,
+"otherwise use ~/.scvim
+if exists("$SCVIM_CACHE_DIR") 
+	let s:scvim_cache_dir = $SCVIM_CACHE_DIR
+else
+	let s:scvim_cache_dir = $HOME . "/.scvim"
+	let $SCVIM_CACHE_DIR = s:scvim_cache_dir
+endif
+
+"source the scvimrc file if it exists
+"if filereadable($HOME . "/.scvimrc")
+"	source $HOME/.scvimrc
+"end
+
+"add the cache dir to 
+set runtimepath+=$SCVIM_CACHE_DIR
 
 if exists("g:sclangKillOnExit")
 	let s:sclangKillOnExit = g:sclangKillOnExit
@@ -59,7 +79,7 @@ endif
 if exists("g:sclangPipeApp")
 	let s:sclangPipeApp	= g:sclangPipeApp
 else
-	let s:sclangPipeApp	= "$SCVIM_DIR/bin/sclangpipe_app.sh"
+	let s:sclangPipeApp	= "sclangpipe_app.sh"
 endif
 
 "function SClangRunning()
@@ -249,57 +269,57 @@ function! SClang_block()
 endfunction
 
 function SCdef(subject)
-	let l:dontcare = system("grep SCDEF:" . a:subject . " $SCVIM_DIR/TAGS_SCDEF > $SCVIM_DIR/doc/tags")
-	exe "help SCdef:" . a:subject
+	let l:tagfile = s:scvim_cache_dir . "/TAGS_SCDEF"
+	let l:tagdest = s:scvim_cache_dir . "/doc/tags"
+
+	if !filereadable(l:tagfile)
+		echo "definition tag cache does not exist, you must run SCVim.updateCaches in supercollider"
+		let l:dontcare = system("echo 'SC:SCVim	SCVim.scd	/^' > " . l:tagdest)
+		exe "help SC:SCVim"
+	else
+		let l:dontcare = system("grep SCdef:" . a:subject . " " . l:tagfile . " > " . l:tagdest)
+		exe "help SCdef:" . a:subject
+	end
 endfun
 
-"function SCbrowse(dir)
-"	if a:dir == ""
-"		let l:dontcare = system("grep \"SCB:Top\" $SCVIM_DIR/doc/TAGS_BROWSER > $SCVIM_DIR/doc/tags")
-"		exe "help SCB:Top"
-"	else
-"		let l:dontcare = system("grep SCB:\"" . a:dir . "\" $SCVIM_DIR/doc/TAGS_BROWSER > $SCVIM_DIR/doc/tags")
-"		exe "help SCB:" . a:dir
-"	end
-"endfun
-
 function SChelp(subject)
-	"if we're in the help browser do something different
-	if a:subject =~ "|$"
-		let l:dir = substitute(a:subject, '|', '', 'g')
-		call SCbrowse(l:dir)
+	let l:tagfile = s:scvim_cache_dir . "/doc/TAGS_HELP"
+	let l:tagdest = s:scvim_cache_dir . "/doc/tags"
+	if !filereadable(l:tagfile)
+		echo "help tag cache does not exist, you must run SCVim.updateHelpCache in supercollider in order have help docs"
+		let l:dontcare = system("echo 'SC:SCVim	SCVim.scd	/^' > $SCVIM_CACHE_DIR/doc/tags")
+		exe "help SC:SCVim"
+		return
+	end
+
 	"the keybindings won't find * but will find ** for some reason
-	elseif a:subject == ""
-		let l:dontcare = system("grep \"SC:Help\" $SCVIM_DIR/doc/TAGS_HELP > $SCVIM_DIR/doc/tags")
+	if a:subject == ""
+		let l:dontcare = system("grep \"SC:Help\" " . l:tagfile . " > " . l:tagdest)
 		exe "help SC:Help"
 	elseif a:subject == "*"
-		let l:dontcare = system("grep \"SC:\\*\" $SCVIM_DIR/doc/TAGS_HELP > $SCVIM_DIR/doc/tags")
+		let l:dontcare = system("grep \"SC:\\*\" " . l:tagfile . " > " . l:tagdest)
 		exe "help SC:\*" . a:subject
 	elseif a:subject == "**"
-		let l:dontcare = system("grep \"SC:\\*\\*\" $SCVIM_DIR/doc/TAGS_HELP > $SCVIM_DIR/doc/tags")
+		let l:dontcare = system("grep \"SC:\\*\\*\" " . l:tagfile . " > " . l:tagdest)
 		exe "help SC:\*\*" . a:subject
 	else
-		let l:dontcare = system("grep SC:\"" . a:subject . "\" $SCVIM_DIR/doc/TAGS_HELP > $SCVIM_DIR/doc/tags")
+		let l:dontcare = system("grep SC:\"" . a:subject . "\" " . l:tagfile . " > " . l:tagdest)
 		exe "help SC:" . a:subject
 	endif
 endfun
 
 function ListSCObjects(A,L,P)
-	return system("cat $SCVIM_DIR/sc_object_completion")
+	return system("cat $SCVIM_CACHE_DIR/sc_object_completion")
 endfun
 
 function ListSCHelpItems(A,L,P)
-	return system("cat $SCVIM_DIR/doc/sc_help_completion")
+	return system("cat $SCVIM_CACHE_DIR/doc/sc_help_completion")
 endfun
 
-"function ListSCBrowserItems(A,L,P)
-"	return system("cat $SCVIM_DIR/doc/sc_browser_completion")
-"endfun
 
 "custom commands (SChelp,SCdef,SClangfree)
 com -complete=custom,ListSCHelpItems -nargs=? SChelp call SChelp("<args>")
 com -complete=custom,ListSCObjects -nargs=1 SCdef call SCdef("<args>")
-"com -complete=custom,ListSCBrowserItems -nargs=? SCbrowse call SCbrowse("<args>")
 com -nargs=1 SClangfree call SClang_free("<args>")
 com -nargs=0 SClangStart call SClangStart()
 com -nargs=0 SClangKill call SClangKill()
